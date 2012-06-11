@@ -189,6 +189,6 @@ class AutoAdminAccess
 	 */
 	public static function sqlAdminTableName($tableName)
 	{
-		return (!empty(Yii::app()->modules['autoadmin']['dbSchema']) ? Yii::app()->modules['autoadmin']['dbSchema'].'.' : '').Yii::app()->modules['autoadmin']['dbAdminTablePrefix'].$tableName;
+		return (!empty(Yii::app()->modules['autoadmin']['dbAdminSchema']) ? Yii::app()->modules['autoadmin']['dbAdminSchema'].'.' : '').Yii::app()->modules['autoadmin']['dbAdminTablePrefix'].$tableName;
 	}
 }

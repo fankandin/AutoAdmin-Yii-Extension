@@ -84,6 +84,11 @@ class AutoAdmin extends CWebModule
 	 *
 	 * @var string DB schema that contains AutoAdmin service tables.
 	 */
+	public $dbAdminSchema;
+	/**
+	 *
+	 * @var string DB schema that contains tables which are operated by a user.
+	 */
 	public $dbSchema;
 	/**
 	 *
@@ -269,6 +274,16 @@ class AutoAdmin extends CWebModule
 			$this->_tableName = $tableName;
 		else
 			throw new CException(Yii::t('AutoAdmin.errors', 'Wrong data for DB Table Name'));
+	}
+
+	/**
+	 * Gets the full composite table name for SQL queries using @link AutoAdmin::dbSchema.
+	 * @param string Custom table name that you can use instead of @link AutoAdmin::dbSchema.
+	 * @return string Full composite table name ready to use in SQL quiries.
+	 */
+	public function getFullTableName($tableName=null)
+	{
+		return ($this->dbSchema ? "{$this->dbSchema}." : '').($tableName ? $tableName : $this->_tableName);
 	}
 
 	/**
@@ -531,14 +546,14 @@ class AutoAdmin extends CWebModule
 							$joinF = 'join';
 						else
 							$joinF = strtolower($sqlModifing['join']['type'])."Join";
-						$q->{$joinF}($sqlModifing['join']['table'], $sqlModifing['join']['conditions'], (!empty($sqlModifing['join']['params']) ? $sqlModifing['join']['params'] : array()));
+						$q->{$joinF}($this->getFullTableName($sqlModifing['join']['table']), $sqlModifing['join']['conditions'], (!empty($sqlModifing['join']['params']) ? $sqlModifing['join']['params'] : array()));
 					}
 				}
 			}
 		}
 
 		$q->select($selectFields);
-		$q->from($this->_tableName);
+		$q->from($this->getFullTableName());
 	}
 
 	/**
@@ -768,7 +783,7 @@ class AutoAdmin extends CWebModule
 			try
 			{
 				$this->_trigger->execute(null, 'before', 'insert');
-				$affected = $q->insert($this->_tableName, $values);
+				$affected = $q->insert($this->getFullTableName(), $values);
 				if($affected)
 				{
 					$tableSchema = Yii::app()->{$this->dbConnection}->schema->getTable($this->_tableName);
@@ -800,7 +815,7 @@ class AutoAdmin extends CWebModule
 			try
 			{
 				$this->_trigger->execute($this->_data->pk, 'before', 'update');
-				$affected = $q->update($this->_tableName, $values, $where, $params);
+				$affected = $q->update($this->getFullTableName(), $values, $where, $params);
 				if($affected)
 				{
 					$pk = $this->_data->rowPK($values);
@@ -852,7 +867,7 @@ class AutoAdmin extends CWebModule
 		if($fileSQLf)
 		{	//Selecting data about deleting files from the deleting row
 			$q->select(array_keys($fileSQLf));
-			$q->from($this->_tableName);
+			$q->from($this->getFullTableName());
 			$q->where($where, $params);
 			$filesToDelete = $q->queryRow();
 			$q->reset();
@@ -998,7 +1013,7 @@ class AutoAdmin extends CWebModule
 		$q = Yii::app()->{$this->dbConnection}->createCommand();
 		foreach($this->_data->foreignLinks as $outAlias=>$link)
 		{
-			$q->from("{$link['linkTable']} AS t1, {$link['targetTable']} AS t2");
+			$q->from($this->getFullTableName($link['linkTable'])." AS t1, ".$this->getFullTableName($link['targetTable'])." AS t2");
 
 			//Collect fields for selection
 			$fields = array();
