@@ -1,0 +1,52 @@
+html {margin: 0; padding: 0; overflow-y: scroll;}
+
+body {margin: 0 auto; padding: 0;
+	background: #fff;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 130%;
+	color: #000;
+}
+::selection {background: #FDA214; color: #ffffff;}
+::-moz-selection {background: #FDA214; color: #ffffff;}
+
+div.br {clear: both; height: 1px;}
+
+.breadcrumbs {margin: 0 20px 12px 10px; font-size: 90%; color: #999;}
+.breadcrumbs a, .breadcrumbs a:visited {color: #999; text-decoration: underline;}
+.breadcrumbs a:hover {color: #FA5B00;}
+.breadcrumbs #home {background: url('../../i/ico/go-home-16.png') no-repeat; padding-left: 20px; height: 16px; margin-right: 3px; display: table-cell; float: left;}
+
+#content {}
+
+#copyright {margin: 40px 0 0 40px; width: 500px; float: left;}
+#footer a {color: #fff;}
+/* */
+h1 {font-size: 170%; font-weight: normal; color: #FA5B00; line-height: 130%; margin: 0 20px 0 0;}
+h2 {font-size: 130%; font-style: normal; font-weight: normal; color: #FB8744; margin: 7px 18px 20px 18px;}
+h3 {color: #FA5B00; font-size: 120%; margin: 10px 0 10px;}
+h4 {color: #FB8744; font-size: 100%; margin: 10px 0 5px;}
+a, a:visited {color: #F04200; text-decoration: underline;}
+a:hover {color: #08A300; text-decoration: underline;}
+hr {clear: both; border: none; background: #ddd; height: 1px; margin: 7px 16px;}
+
+input.button {padding: 3px 15px 7px; height: 35px;}
+textarea {font-family: Tahoma, Arial, Helvetica, sans-serif; font-size: 14px; line-height: 130%; color: #444;}
+
+#right h3 {color: #E63600; font-size: 140%; font-weight: normal; margin-bottom: 0;}
+#right h3.menu2 {color: #43ADDE; font-size: 18px; margin-bottom: 10px; margin-left: 20px;}
+.price_old {text-decoration: line-through; position: absolute; right: 0; top: 130px; font-size: 90%; float: right; color: #BCCB11;}
+.button {color: #fff; background: #FF5C00; border: 1px solid #C04500; border-radius: 5px 5px 5px 5px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.498); color: #FFFFFF; cursor: pointer; display: inline-block; font-size: 130%; overflow: visible; padding: 7px 12px 0 12px; position: relative; text-decoration: none; text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.247); text-align: center; height: 28px;}
+a.button:visited, a.button:hover {color: #fff; text-decoration: none;}
+a.button:hover {box-shadow: 0 1px 10px rgba(0, 0, 0, 0.498);}
+label.required {white-space: nowrap;}
+span.required {color: #FA5B00;}
+input.tip {color: #999; font-style: italic; font-size: 90%;}
+.hidden {display: none;}
+#footer h3 {color: #FDA214; font-size: 16px; font-weight: normal; margin: 3px 0 12px 0;}
+
+.msg {color: #FA0000; font-weight: bold;}
+p.msg, div.msg {margin: 20px 0;}
+.orderPanel select {font-size: 90%;}
+#iframe-content .nav-pages {width: 30% !important;}
+#iframe-content .panel-add a {background-image: url('../../i/ico/new-24.png'); height: 24px; padding-left: 28px; font-size: 120%; padding-top: 3px;}

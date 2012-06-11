@@ -1,0 +1,27 @@
+html {margin: 0; padding: 0; overflow-y: scroll;}
+
+body {margin: 0 auto; padding: 0;
+	background: #fff;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 130%;
+	color: #000;
+}
+::selection {background: #FDA214; color: #ffffff;}
+::-moz-selection {background: #FDA214; color: #ffffff;}
+
+h1 {font-size: 170%; font-weight: normal; color: #FA5B00; line-height: 130%; margin: 0 20px 10px 0;}
+h2 {font-size: 130%; font-style: normal; font-weight: normal; color: #FB8744; margin: 7px 18px 20px 18px;}
+h3 {color: #FA5B00; font-size: 120%; margin: 10px 0 10px;}
+h4 {color: #FB8744; font-size: 100%; margin: 10px 0 5px;}
+a, a:visited {color: #F04200; text-decoration: underline;}
+a:hover {color: #08A300; text-decoration: underline;}
+hr {clear: both; border: none; background: #ddd; height: 1px; margin: 7px 16px;}
+
+input.button {padding: 3px 15px 7px; height: 35px;}
+
+div.br {clear: both; height: 1px;}
+
+form {margin: 10px 20px;}
+form .item {margin: 0 0 10px 0;}
+form .item label {width: 130px; display: block; float: left;}

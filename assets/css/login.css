@@ -1,0 +1,11 @@
+#login-form {font-size: 120%; line-height: 130%;}
+#login-form .row  {margin-bottom: 10px; clear: both;}
+#login-form .row label {display: block; width: 120px; float: left; font-weight: bold; text-align: right; padding-right: 6px;}
+#login-form label span {display: block; font-weight: normal; font-size: 80%; margin-bottom: 7px;}
+#login-form label span.required {display: inline;}
+
+#login-form input[type=text], #login-form input[type=password] {width: 200px; font-size: 120%;}
+#login-form input[type=submit] {font-size: 130%; margin-left: 125px;}
+#login-form .errorMessage {color: #dd0000; margin-left: 125px;}
+p.greeting {margin: 20px;}
+p.greeting b {color: #DE2F0F;}
