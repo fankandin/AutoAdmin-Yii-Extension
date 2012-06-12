@@ -54,8 +54,10 @@ function foreignKeyQuery(request, response)
 
 function foreignKeySelected(event, ui)
 {
-	$(this).parent(0).prev('select').html('<option value="'+ ui.item.value +'">'+ ui.item.label +'</option>');
-	$(this).parent(0).parent(0).find('input[type=checkbox].nullf').attr('checked', true);
+	var $block = $(this).parents('div.item');
+	$block.find('select').not('[id^=foreignSearchBy]').html('<option value="'+ ui.item.value +'">'+ ui.item.label +'</option>');
+	$block.find('input[type=hidden]').val(ui.item.value);
+	$block.find('input[type=checkbox].nullf').attr('checked', true);
 	return false;
 }
 
