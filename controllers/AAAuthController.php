@@ -60,6 +60,7 @@ class AAAuthController extends CExtController
 	 */
 	public function actionUsers()
 	{
+		$this->module->dbSchema = '';
 		if(Yii::app()->user->isGuest && $this->isRootDefined())
 			Yii::app()->request->redirect('../login/');
 		elseif(!Yii::app()->user->isGuest && Yii::app()->user->level == 'user')
@@ -129,6 +130,7 @@ class AAAuthController extends CExtController
 	 */
 	public function actionSections()
 	{
+		$this->module->dbSchema = '';
 		if(Yii::app()->user->isGuest || !in_array(Yii::app()->user->level, array('root', 'admin')))
 			throw new CHttpException(403);
 			
@@ -155,6 +157,7 @@ class AAAuthController extends CExtController
 	 */
 	public function actionInterfaces()
 	{
+		$this->module->dbSchema = '';
 		if(Yii::app()->user->isGuest || !in_array(Yii::app()->user->level, array('root', 'admin')))
 			throw new CHttpException(403);
 		$bk = Yii::app()->request->getParam('bk', array('id'=>null));
@@ -229,6 +232,7 @@ class AAAuthController extends CExtController
 	 */
 	public function actionRights()
 	{
+		$this->module->dbSchema = '';
 		if(Yii::app()->user->isGuest || !in_array(Yii::app()->user->level, array('root', 'admin')))
 			throw new CHttpException(403);
 		$bkp = Yii::app()->request->getParam('bkp', array(0=>array('id'=>null), 1=>array('id'=>null)));

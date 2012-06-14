@@ -71,15 +71,16 @@ class AAFieldForeign extends AAField implements AAIField
 			$this->printFormNullCB();
 		$tagOptions['id'] = $inputID;
 		$value = (!is_null($this->value) ? $this->value : $this->defaultValue);
-		if($this->isReadonly)
+
+		if(!$this->isReadonly && $this->getPossibleValuesCount() <= $this->options['limit'])
 		{
-			echo CHtml::dropDownList('', $value, $this->getAllValues(), array('disabled'=>true));
-			echo CHtml::hiddenField($inputName, $value);
+			echo CHtml::dropDownList($inputName, $value, $this->getOptValues(), $tagOptions);
 		}
 		else
 		{
-			echo CHtml::dropDownList($inputName, $value, $this->getAllValues(), $tagOptions);
-			if(!empty($this->options['searchBy']))
+			echo CHtml::dropDownList('', $value, array($this->getTitleByFields($this->selectDefault())), array('disabled'=>true));
+			echo CHtml::hiddenField($inputName, $value);
+			if(!$this->isReadonly && !empty($this->options['searchBy']))
 			{
 				$options = array();
 				foreach($this->options['searchBy'] as $field=>$label)
@@ -107,6 +108,7 @@ class AAFieldForeign extends AAField implements AAIField
 							),
 						));
 					?>
+					<div class="tip"><?=Yii::t('AutoAdmin.form', 'You can use <b>*</b> to mark search not from beginning')?></div>
 				</div>
 				<?
 			}
@@ -162,75 +164,105 @@ class AAFieldForeign extends AAField implements AAIField
 	}
 
 	/**
+	 * Gets the number of possible values to select.
+	 * @return int The number of possible values.
+	 */
+	private function getPossibleValuesCount()
+	{
+		$q = Yii::app()->db->createCommand();
+		$q->from($this->options['table']);
+		$q->select(new CDbExpression('COUNT(*)'));
+		$qWhere = array();
+		$qParams = array();
+		if(!empty($this->options['conditions']))
+		{
+			$qWhere = array('AND', $this->options['conditions']);
+			if(!empty($this->options['params']))
+				$qParams = array_merge($qParams, $this->options['params']);
+			$q->where($qWhere, $qParams);
+		}
+		return (int)$q->queryScalar();
+	}
+
+	/**
+	 * Selects data by $this->value as PK.
+	 * @return array A row of data.
+	 */
+	private function selectDefault()
+	{
+		$q = Yii::app()->db->createCommand();
+		$q->from($this->options['table']);
+		if($this->options['select'])
+			$q->select(array_merge(array($this->options['pk']), array_keys($this->options['select'])));
+		$q->where("{$this->options['pk']} = :pk", array(':pk'=>(!is_null($this->value) ? $this->value : $this->defaultValue)));
+		return $q->queryRow();
+	}
+
+	/**
+	 * Converts the select row to a title.
+	 * @return string Title for <OPTION> or any alike.
+	 */
+	private function getTitleByFields($row)
+	{
+		return ($row ? implode(' - ', $row) : '');
+	}
+
+	/**
 	 * Gets a set of values for <select> from DB directly.
-	 * @param boolean $limited Whether to apply limit. (<select> cannot contain too a lot of <options>).
 	 * @return array An array of prepared values, ready for dropDownList().
 	 */
-	private function getAllValues($limited=true)
+	private function getOptValues()
 	{
 		$optValues = array();
 		$q = Yii::app()->db->createCommand();
-		if($limited)
-		{
-			$q->from($this->options['table']);
-			$q->select(new CDbExpression('COUNT(*)'));
-			$qWhere = array();
-			$qParams = array();
-			if(!empty($this->options['conditions']))
-			{
-				$qWhere = array('AND', $this->options['conditions']);
-				if(!empty($this->options['params']))
-					$qParams = array_merge($qParams, $this->options['params']);
-				$q->where($qWhere, $qParams);
-			}
+		$q->from($this->options['table']);
+		if($this->options['select'])
+			$q->select(array_merge(array($this->options['pk']), array_keys($this->options['select'])));
 
-			$overall = $q->queryScalar();
-			$q->reset();
-			if($overall <= $this->options['limit'])
-				$limited = false;
-		}
-		if(!$limited)
+		$qWhere = array();
+		$qParams = array();
+		if(!empty($this->options['conditions']))
 		{
-			$q->from($this->options['table']);
+			$qWhere = array('AND', $this->options['conditions']);
+			if(!empty($this->options['params']))
+				$qParams = array_merge($qParams, $this->options['params']);
+		}
+		if($qWhere)
+			$q->where($qWhere, $qParams);
+
+		if(!empty($this->options['order']))
+			$q->order($this->options['order']);
+		elseif($this->options['select'])
+		{
+			$fieldNames = array_keys($this->options['select']);
+			$q->order($fieldNames[0]);
+		}
+		$result = $q->queryAll();
+		foreach($result as $r)
+		{
 			if($this->options['select'])
-				$q->select(array_merge(array($this->options['pk']), array_keys($this->options['select'])));
-			if($qWhere)
-				$q->where($qWhere, $qParams);
-			if(!empty($this->options['order']))
-				$q->order($this->options['order']);
-			elseif($this->options['select'])
 			{
-				$fieldNames = array_keys($this->options['select']);
-				$q->order($fieldNames[0]);
+				$values = $r;
+				unset($values[$this->options['pk']]);
 			}
-			$result = $q->queryAll();
-			foreach($result as $r)
+			elseif(count($r) == 1)
 			{
-				if($this->options['select'])
-				{
-					$values = $r;
-					unset($values[$this->options['pk']]);
-				}
-				elseif(count($r) == 1)
-				{
-					$values = $r;
-				}
-				else
-				{
-					
-					$i = 0;
-					$values = array();
-					foreach($r as $field=>$value)
-					{
-						if($field == $this->options['pk'])
-							continue;
-						$values[$field] = $value;
-						if(++$i > 2)
-							break;
-					}
-				}
-				$optValues[$r[$this->options['pk']]] = implode(' - ', $values);
+				$values = $r;
 			}
+			else
+			{
+				$i = 0;
+				$values = array();
+				foreach($r as $field=>$value)
+				{
+					if($field == $this->options['pk'])
+						continue;
+					$values[$field] = $value;
+					if(++$i > 2)
+						break;
+				}
+			}
+			$optValues[$r[$this->options['pk']]] = $this->getTitleByFields($values);
 		}
 		return $optValues;
 	}
