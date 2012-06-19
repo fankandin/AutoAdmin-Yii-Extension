@@ -69,7 +69,7 @@ CREATE TABLE `aa_access` (
 
 CREATE TABLE `aa_logs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `interface_id` smallint(5) unsigned NOT NULL,
+  `interface_id` smallint(5) unsigned DEFAULT NULL,
   `authorization_id` int(10) unsigned DEFAULT NULL,
   `when_event` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `message` text CHARACTER SET cp1251,

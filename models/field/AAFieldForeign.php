@@ -108,6 +108,7 @@ class AAFieldForeign extends AAField implements AAIField
 							),
 						));
 					?>
+					<div class="tip"><?=Yii::t('AutoAdmin.form', 'You can use <b>*</b> to mark search not from beginning')?></div>
 				</div>
 				<?
 			}
@@ -203,7 +204,7 @@ class AAFieldForeign extends AAField implements AAIField
 	 */
 	private function getTitleByFields($row)
 	{
-		return implode(' - ', $row);
+		return ($row ? implode(' - ', $row) : '');
 	}
 
 	/**

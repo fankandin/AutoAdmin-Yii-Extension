@@ -43,7 +43,7 @@ class AutoAdmin extends CWebModule
 	private $_data;
 	private $_tableName;
 	private $_iframeMode = false;
-	private $_viewData;
+	private $_viewData = array();
 
 	/**
 	 *
@@ -169,6 +169,14 @@ class AutoAdmin extends CWebModule
 
 		$this->cache = new AACache();
 		$this->_data = new AAData();
+
+		$this->_viewData = array(
+			'getParams' => $_GET,
+			'viewsPath'	=> $this->viewsPath,
+			'isGuest'		=> Yii::app()->user->isGuest,
+			'userName'		=> (!Yii::app()->user->isGuest ? Yii::app()->user->getState('firstname').' '.Yii::app()->user->getState('surname') : ''),
+			'userLevel'		=> (!Yii::app()->user->isGuest ? Yii::app()->user->level : 0),
+		);
 	}
 
 	/**
@@ -256,7 +264,7 @@ class AutoAdmin extends CWebModule
 		}
 		catch(Exception $e)
 		{
-			$this->resultMode(array('errorOccured'=>true, 'msg'=>'Ошибка в конфигурационных данных: '.$e->getMessage()));
+			$this->resultMode(array('errorOccured'=>true, 'msg'=>Yii::t('AutoAdmin.errors', 'Incorrect fields configuration. Error: {exception}', array('{exception}'=>$e->getMessage()))));
 		}
 	}
 
@@ -435,9 +443,7 @@ class AutoAdmin extends CWebModule
 
 		if(!$this->testConf())
 			throw new CException(Yii::t('AutoAdmin.errors', 'Incorrect configuration'));
-		$this->_viewData = array(
-			'getParams' => $_GET,
-			'viewsPath'	=> $this->viewsPath,
+		$this->_viewData = array_merge($this->_viewData, array(
 			'rights'	=> $this->_access->exportRights(),
 			'pk'		=> $this->_data->pk,
 			'partialViews'	=> $this->partialViews,
@@ -445,10 +451,7 @@ class AutoAdmin extends CWebModule
 			'interface'		=> $this->_interface,
 			'bindKeys'		=> Yii::app()->request->getParam('bk', array()),
 			'bindKeysParent'=> Yii::app()->request->getParam('bkp', array()),
-			'isGuest'		=> Yii::app()->user->isGuest,
-			'userName'		=> (!Yii::app()->user->isGuest ? Yii::app()->user->getState('firstname').' '.Yii::app()->user->getState('surname') : ''),
-			'userLevel'		=> (!Yii::app()->user->isGuest ? Yii::app()->user->level : 0),
-		);
+		));
 
 		switch($this->manageAction)
 		{
@@ -893,11 +896,6 @@ class AutoAdmin extends CWebModule
 		{
 			$this->processQueryError($e);
 			$transaction->rollBack();
-		}
-
-		if($this->_access->isLogMode())
-		{
-			$this->_access->logctrl->fixQuery($q->text);
 		}
 
 		return $result;

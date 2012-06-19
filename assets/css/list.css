@@ -31,7 +31,7 @@
 #panel-down {border-top: 1px solid #F04200; width: 100%;}
 
 .panel-add {}
-.panel-add a {display: block; float: right; background: url('../../i/ico/new-32.png') no-repeat; padding: 6px 0 0 36px; height: 32px; font-size: 130%;}
+.panel-add a {display: block; float: right; background: url('../../i/ico/new-32.png') no-repeat; padding: 6px 0 0 36px; margin-right: 10px; height: 32px; font-size: 130%;}
 
 .sort.down {background: url('../../i/ico/go-down-24.png') no-repeat left -4px; display: inline-block; width: 24px; height: 20px; overflow: hidden; text-indent: 500px; float: left; margin: 2px 10px 2px 0; white-space: nowrap;}
 

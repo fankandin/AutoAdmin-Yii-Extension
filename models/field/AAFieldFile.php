@@ -67,7 +67,7 @@ class AAFieldFile extends AAField implements AAIField
 	{
 		if(is_array($formData[$this->name]) && !empty($formData[$this->name]['del']))
 		{
-			AAHelperFile::deleteFile($formData[$this->name]['old']);
+			//AAHelperFile::deleteFile($formData[$this->name]['old']);
 			$this->value = null;
 		}
 		elseif(!empty($_FILES[AutoAdmin::INPUT_PREFIX]['tmp_name'][$this->name]['new']))

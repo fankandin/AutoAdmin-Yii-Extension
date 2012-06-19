@@ -16,6 +16,7 @@ form {margin: 0;}
 .item .num-tip select {width: 50px; margin-bottom: 5px;}
 .item input.focused, .item textarea.focused, .item select.focused {box-shadow: 0 0 6px rgba(222, 47, 16, 0.9);}
 .item .desc {font-size: 85%; background: #FFFAEC; padding: 5px; font-style: italic; margin: -5px 0 3px 10px;}
+.item .tip {text-align: right; font-size: 85%; padding: 0; font-style: italic; margin: -4px 3px 0 0;}
 
 .ui-autocomplete {width: 350px; height: 300px; overflow-y: scroll;}
 .ui-autocomplete li:nth-child(odd) {background-color: #f4f4f4;}
