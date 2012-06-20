@@ -28,7 +28,7 @@ iframe.tiny_mce {width: 80%; height: 500px; margin: 0px 0px 10px 10px;}
 .tip {font-style: italic; font-weight: normal;}
 label.delete {margin-left: 10px; color: #863100;}
 input[type=text], input[type=password] {margin: 10px 0 20px 0; width: 100%;}
-input[type=file] {margin: 10px 0 20px 10px; width: 320px;}
+input[type=file] {margin: 5px 0 20px 10px; width: 320px;}
 input[type=button] {font-weight: bold; font-family: serif; margin: 0 0 0 5px; color: #444;}
 input.nullf[type=checkbox] {float: left; margin: 14px 10px 0 5px; box-shadow: 0 0 6px rgba(255, 205, 5, 0.9);}
 .block_text input.nullf[type=checkbox] {margin: 5px 12px 0 5px;}
@@ -39,10 +39,10 @@ input[type=submit] {clear: both; display: block; margin-left: 1%; margin-top: 15
 textarea {margin: 2px 0 10px 0; width: 80%; height: 300px; font-size: 15px; font-family: "Georgia", "Comic Sans MS"; color: #000;}
 textarea.small {width: 500px; height: 100px;}
 .form1 {border-width: 2px !important; background-color:#F8320D; color:#FFFFFF; font-weight:bold; font-size:10px;}
-form img {border: none; margin: 3px 10px 3px 0;}
-.block_image input[type="text"] {width: 200px; vertical-align: middle; margin-top: 3px; background-color: #ddd;}
-.block_image label.delfile {float: right;}
-.block_image .tip.inline {display: inline-block; clear: left;}
+.block_image img, .block_file img {border: none; margin: 3px 10px 3px 0; vertical-align: top;}
+.block_image input[type="text"], .block_file input[type="text"]  {width: 200px; margin-top: 3px; margin-bottom: 5px; background-color: #ddd;}
+.block_image label.delfile, .block_file label.delfile  {float: right;}
+.tip.inline  {display: inline-block; clear: left;}
 input.helpline {border: none; font-size: 10px; color: #777; width: 327px; background-color: #FFF; margin: 0;}
 .time-panel td {padding: 2px;}
 .time-panel input, .time-panel select {margin: 0;}

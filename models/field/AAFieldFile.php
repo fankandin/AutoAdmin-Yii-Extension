@@ -58,7 +58,7 @@ class AAFieldFile extends AAField implements AAIField
 			echo CHtml::label(Yii::t('AutoAdmin.form', 'Replace the image').':', $inputID);
 		}
 		$tagOptions['id'] = $inputID;
-		?><div class="tip inline">&lt;a href=<?=$this->options['directoryPath']?>/</div><?
+		?><br/><div class="tip inline">&lt;a href=<?=$this->options['directoryPath']?>/</div><?
 		echo CHtml::fileField("{$inputName}[new]", null, $tagOptions);
 
 		return ob_get_clean();
