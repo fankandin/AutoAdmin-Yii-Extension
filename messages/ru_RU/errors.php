@@ -26,6 +26,7 @@ return array(
 	'The error was occured during execution the trigger "{func}"' => 'Возникла ошибка в процессе выполнения триггера {func}',
 	'The error was occured during the query execution. You may contact the technical support and say the number #{errorNumber}' => 'Во время выполнения запроса произошла ошибка. Вы можете обратиться в службу технической поддержки, сообщив номер #{errorNumber}',
 	'Sorry, your account is blocked' => 'К сожалению, Ваш аккаунт заблокирован',
+	'Login or password is incorrect' => 'Неправильный логин или пароль',
 	'Incorrect table fields configuration. Error: {exception}' => 'Некорректная конфигурация полей таблицы. Ошибка: {exception}',
 );
 ?>

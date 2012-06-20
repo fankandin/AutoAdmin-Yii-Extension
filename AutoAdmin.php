@@ -169,14 +169,6 @@ class AutoAdmin extends CWebModule
 
 		$this->cache = new AACache();
 		$this->_data = new AAData();
-
-		$this->_viewData = array(
-			'getParams' => $_GET,
-			'viewsPath'	=> $this->viewsPath,
-			'isGuest'		=> Yii::app()->user->isGuest,
-			'userName'		=> (!Yii::app()->user->isGuest ? Yii::app()->user->getState('firstname').' '.Yii::app()->user->getState('surname') : ''),
-			'userLevel'		=> (!Yii::app()->user->isGuest ? Yii::app()->user->level : 0),
-		);
 	}
 
 	/**
@@ -197,11 +189,20 @@ class AutoAdmin extends CWebModule
 		{
 			if(!Yii::app()->request->isAjaxRequest)
 			{
-				$controller->redirect(array('aaauth/login'));
+				Yii::app()->user->loginUrl = array('aaauth/login');
+				Yii::app()->user->loginRequired();
 			}
 			else
 				throw new CHttpException(403);
 		}
+
+		$this->_viewData = array(
+			'getParams' => $_GET,
+			'viewsPath'	=> $this->viewsPath,
+			'isGuest'		=> Yii::app()->user->isGuest,
+			'userName'		=> (!Yii::app()->user->isGuest ? Yii::app()->user->getState('firstname').' '.Yii::app()->user->getState('surname') : ''),
+			'userLevel'		=> (!Yii::app()->user->isGuest ? Yii::app()->user->level : 0),
+		);
 
 		if(preg_match('/^foreign/i', $action->id))
 		{

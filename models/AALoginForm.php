@@ -64,6 +64,9 @@ class AALoginForm extends CFormModel
 			case AAUserIdentity::ERROR_USER_DISABLED:
 				$this->addError('login', Yii::t('AutoAdmin.errors', 'Sorry, your account is blocked'));
 				break;
+			default:
+				$this->addError('password', Yii::t('AutoAdmin.errors', 'Login or password is incorrect'));
+				break;
 		}
 		return false;
 	}

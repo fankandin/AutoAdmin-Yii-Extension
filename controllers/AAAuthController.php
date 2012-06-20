@@ -14,7 +14,6 @@ class AAAuthController extends CExtController
 		$data = array();
 
 		$returnURL = Yii::app()->user->getReturnUrl();
-
 		$data = array();
 		if(!Yii::app()->user->isGuest && Yii::app()->user->id)
 		{
@@ -32,8 +31,10 @@ class AAAuthController extends CExtController
 			if($model->validate())
 			{
 				if($model->authenticate())
-				{
 					$this->redirect(Yii::app()->request->redirect($returnURL));
+				else
+				{
+					$model->addError('password', 'Неправильный пароль или логин.');
 				}
 			}
 		}
