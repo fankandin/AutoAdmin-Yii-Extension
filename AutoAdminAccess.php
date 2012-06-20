@@ -11,6 +11,12 @@ class AutoAdminAccess
 	 * @var int Current interface ID.
 	 */
 	private $interfaceID;
+
+	/**
+	 *
+	 * @var array Possible access rights.
+	 */
+	private $possibleRights = array('read', 'add', 'edit', 'delete');
 	/**
 	 * 
 	 * @var array Preset of the access rights.
@@ -50,6 +56,7 @@ class AutoAdminAccess
 	 */
 	public function loadAccessSettings()
 	{
+		$this->rights = $this->possibleRights;
 		if(!$this->isOpenMode())
 		{
 			if(Yii::app()->user->isGuest)
@@ -105,24 +112,33 @@ class AutoAdminAccess
 	/**
 	 * Sets the standart right of the user on the current interface.
 	 * May be used in two directions: allow the right or deny.
-	 * @param string $right One from set [read, update, add, delete].
+	 * @param string|null $right One from set [read, update, add, delete]. If null, $permition will be applied to all defaultly possible rights.
 	 * @param bool $permition Allow or deny.
 	 * @return boolean Whether the operation was successful.
 	 */
 	public function setRight($right, $permition)
 	{
-		if(in_array($right, $this->rights))
+		if(is_null($right))
 		{
-			if(!$permition)
+			$this->rights = ($permition ? $this->possibleRights : array());
+			return true;
+		}
+		elseif(!in_array($right, $this->possibleRights))
+		{
+			throw new AAException(Yii::t('AutoAdmin.errors', 'Wrong params for access rights'));
+		}
+		else
+		{
+			if(!in_array($right, $this->rights))
+			{
+				if($permition)
+					$this->rights[] = $right;
+			}
+			elseif(!$permition)
 			{
 				array_splice($this->rights, array_search($right, $this->rights), 1);
-				return true;
 			}
-			elseif($this->checkRight($right))
-			{
-				$this->rights[] = $right;
-				return true;
-			}
+			return true;
 		}
 		return false;
 	}

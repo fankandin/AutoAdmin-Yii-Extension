@@ -146,17 +146,17 @@ class AutoAdmin extends CWebModule
 
 	/**
 	 * Inizialize all the settings through an array of options
+	 * @param array $columns Array with options.
+	 * 
 	 * Here is an example:
 	 * <code>
 	 * <?php
 	 * 		$columns = array(
-	 *			array('Зарегистрирован', 'when_reg', 'datetime', array('null', 'readonly', 'show'=>15, 'sort'=>-1)),
+	 *			array('Registered', 'when_reg', 'datetime', array('null', 'readonly', 'show'=>15, 'sort'=>-1)),
 	 *			array('E-mail', 'email', 'string', array('null', 'show'=>20, 'sort')),
 	 *		);
 	 * ?>
 	 * </code>
-	 * @param array $columns Array with options.
-	 *
 	 */
 	public function init()
 	{
@@ -244,6 +244,8 @@ class AutoAdmin extends CWebModule
 	 */
 	public function setInterface($interface)
 	{
+		if(isset($this->_access))
+			throw new AAException(Yii::t('AutoAdmin.errors', 'You can only specify the interface before access rights'));
 		$this->_interface = $interface;
 	}
 
@@ -273,7 +275,7 @@ class AutoAdmin extends CWebModule
 	 * Sets the main DBtable name or returns it's name if null has been passed.
 	 * @param string|null $tableName Table name.
 	 * @return null|string Table name if $tableName is null.
-	 * @throws CException 
+	 * @throws AAException 
 	 */
 	public function tableName($tableName=null)
 	{
@@ -282,7 +284,7 @@ class AutoAdmin extends CWebModule
 		if($tableName && is_string($tableName))
 			$this->_tableName = $tableName;
 		else
-			throw new CException(Yii::t('AutoAdmin.errors', 'Wrong data for DB Table Name'));
+			throw new AAException(Yii::t('AutoAdmin.errors', 'Wrong data for DB Table Name'));
 	}
 
 	/**
@@ -307,7 +309,7 @@ class AutoAdmin extends CWebModule
 	/**
 	 * Loads PrimaryKey values passed through a form or a link.
 	 * @return boolean
-	 * @throws CException 
+	 * @throws AAException 
 	 */
 	private function loadPK()
 	{
@@ -317,16 +319,17 @@ class AutoAdmin extends CWebModule
 		if(array_keys($this->_data->pk) === array_keys($pkValues))
 			$this->_data->loadPK($pkValues);
 		else
-			throw new CException(Yii::t('AutoAdmin.errors', 'Wrong data for PrimaryKey'));
+			throw new AAException(Yii::t('AutoAdmin.errors', 'Wrong data for PrimaryKey'));
 	}
 
 	/**
 	 * Sets the access rights to the administation interface.
 	 * The most default rights are true for everithing. This function overrides default rights, but doesn't override permissions for a current user which were set with the special interface in service DB.
 	 * @param array $rights An array of rights.
+	 * 
 	 * The permission for a particular right can be set in different ways. For example:
 	 * <code>
-	 * <?
+	 * <?php
 	 * $rights1 = array('read', 'edit');	//User will be able to read and update but only if it wasn't denied for him in the special DB table.
 	 * $rights2 = array('delete'=>false, 'edit'=>-1, 'add'=>0); //All these variants are equivalent and sets the deny for delete, update or add actions.
 	 * $rights3 = array('delete'=>false);	//Denies only delete. Other permissions are by default.
@@ -337,9 +340,9 @@ class AutoAdmin extends CWebModule
 	public function setAccessRights($rights)
 	{
 		if(!is_array($rights))
-			throw new CException(Yii::t('AutoAdmin.errors', 'Wrong params for access rights'));
-		if(empty($this->_access))
-			throw new CException(Yii::t('AutoAdmin.errors', 'You must specify the interface to use access rights'));
+			throw new AAException(Yii::t('AutoAdmin.errors', 'Wrong params for access rights'));
+		$this->initAccess();
+		$this->_access->setRight(null, false);
 		foreach($rights as $key=>$value)
 		{
 			if(is_string($key))
@@ -369,7 +372,7 @@ class AutoAdmin extends CWebModule
 		else
 		{
 			if(!$this->_data->fields)
-				throw new CException(Yii::t('AutoAdmin.errors', 'Function setSubHref() can be called only after fieldsConf()'));
+				throw new AAException(Yii::t('AutoAdmin.errors', 'Function setSubHref() can be called only after fieldsConf()'));
 
 			if($this->_iframeMode)
 			{
@@ -432,18 +435,27 @@ class AutoAdmin extends CWebModule
 	}
 
 	/**
+	 * Initiates AutoAdminAccess object.
+	 */
+	private function initAccess()
+	{
+		$this->_access = new AutoAdminAccess($this->_interface);
+		$this->_access->setOpenMode($this->openMode);
+		$this->_access->loadAccessSettings();
+	}
+
+	/**
 	 * Executes direct processing of state and activate internal methods.
 	 * Must be called only at the very end of a controller method.
 	 */
 	public function process()
 	{
-		$this->_access = new AutoAdminAccess($this->_interface);
-		$this->_access->setOpenMode($this->openMode);
-		$this->_access->loadAccessSettings();
+		if(!isset($this->_access))
+			$this->initAccess();
 		$this->loadPk();
 
 		if(!$this->testConf())
-			throw new CException(Yii::t('AutoAdmin.errors', 'Incorrect configuration'));
+			throw new AAException(Yii::t('AutoAdmin.errors', 'Incorrect configuration'));
 		$this->_viewData = array_merge($this->_viewData, array(
 			'rights'	=> $this->_access->exportRights(),
 			'pk'		=> $this->_data->pk,
@@ -596,7 +608,7 @@ class AutoAdmin extends CWebModule
 
 		//Preparing sort fields for ORDER BY in the query
 		$sortBy = Yii::app()->request->getQuery('sortBy', null);
-		if(!is_null($sortBy) && isset($this->_data->fields[abs($sortBy)-1]))
+		if(!is_null($sortBy) && isset($this->_data->fields[abs($sortBy)-1]) && $this->_data->fields[abs($sortBy)-1]->showInList)
 		{	//User sorting was called
 			$this->_data->setSortOrder(array($this->_data->fields[abs($sortBy)-1]->name => ($sortBy < 0 ? -1 : 1)));
 		}
@@ -673,13 +685,11 @@ class AutoAdmin extends CWebModule
 		if($this->_data->orderBy)
 		{
 			$k = 0;
-			foreach($this->_data->fields as $field)
+			foreach($this->_data->fields as $k=>$field)
 			{	//Display table header
-				if($field->showInList)
-					$k++;
 				if($this->_data->orderBy[0]['field']->name == $field->name)
 				{
-					$dataToPass['sortBy'] = ($this->_data->orderBy[0]['dir'] < 0 ? -$k : $k);
+					$dataToPass['sortBy'] = ($this->_data->orderBy[0]['dir'] < 0 ? -($k+1) : ($k+1));
 					break;
 				}
 			}
@@ -1078,7 +1088,7 @@ class AutoAdmin extends CWebModule
 	public function sortDefault($fields)
 	{
 		if(!is_array($fields))
-			throw new CException(Yii::t('AutoAdmin.errors', 'Wrong data for default sorting'));
+			throw new AAException(Yii::t('AutoAdmin.errors', 'Wrong data for default sorting'));
 		$this->_data->setSortOrder($fields);
 	}
 

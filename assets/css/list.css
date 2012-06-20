@@ -1,14 +1,14 @@
 #data-list {width: 100%; border-collapse: collapse; margin: 10px 0; border-bottom: 2px solid #999; border-top: 2px solid #999;}
 #data-list thead th {color: #000; background-color: #ddd; padding: 15px 5px; border-right: 2px solid #fff; border-bottom: 1px solid #999;}
-#data-list td {padding: 2px;}
-#data-list tr:nth-child(odd) {}
-#data-list tr:nth-child(even) td {background-color: #f0f0f0;}
+#data-list td {padding: 2px 5px;}
+#data-list tr:nth-child(odd) td {border-left: 1px solid #f0f0f0;}
+#data-list tr:nth-child(even) td {background-color: #f0f0f0; border-left: 1px solid #fff;}
 #data-list .edit {background: url('../../i/ico/edit-24.png') no-repeat; display: block; width: 24px; height: 24px; overflow: hidden; text-indent: 500px; float: left; margin: 2px 10px 2px 0;}
 #data-list .delete {background: url('../../i/ico/delete-24.png') no-repeat; display: block; width: 24px; height: 24px; overflow: hidden; text-indent: 500px; float: left; margin: 0 10px 2px 0;}
 #data-list .control {width: 80px;}
 #data-list .control a:hover {box-shadow: 0 0 5px rgba(253, 162, 20, 1);}
 #data-list .row-number {font-family: Garamond; font-weight: bold; padding: 0 8px 0 0; width: 20px;}
-#data-list .row-number span {background-color: #ccc; color: #fff; padding: 0 4px; display: block;}
+#data-list .row-number span {background-color: #ccc; color: #fff; padding: 0 4px; display: block; margin-left: 3px;}
 #data-list .null {color: #aaa;}
 #data-list .subtable a {background: url('../../i/ico/folder-24.png') no-repeat; display: block; width: 24px; height: 24px; overflow: hidden; text-indent: 500px;}
 #data-list .subtable a:hover {background-image: url('../../i/ico/folder-open-24.png');}

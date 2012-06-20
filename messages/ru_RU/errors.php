@@ -8,7 +8,7 @@ return array(
 	'Wrong data for default sorting' => 'Некорректные данные для сортировки',
 	'Wrong field name "{fieldName}" for sorting' => 'Некорректное имя {fieldName} поля для сортировки',
 	'Wrong params for access rights' => 'Некорректные параметры для установки прав',
-	'You must specify the interface to use access rights' => 'Необходимо определить интерфейс, чтобы использовать механизм прав доступа',
+	'You can only specify the interface before access rights' => 'Интерфейс может быть кастомизирован только до установки прав доступа',
 	'Wrong data for PrimaryKey' => 'Некорректные параметры для установки PrimaryKey',
 	'Incorrect configuration' => 'Некорректная конфигурация',
 	'Wrong data for ForeignKey configuration' => 'Некорректные параметры для конфигурации ForeignKey',

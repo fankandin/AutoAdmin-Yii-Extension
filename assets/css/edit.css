@@ -6,7 +6,7 @@ form {margin: 0;}
 .item label {font-weight: bold; color: #555;}
 .item textarea, .item select {margin: 5px 0 10px 10px; width: 100%;}
 .item.block_foreign select {width: 40%; float: left;}
-.item .foreign-search {float: left; margin-left: 10px; background: url('../../i/ico/go-left-16.png') no-repeat left 8px #eee; border: #ddd dashed 1px; padding: 2px 2px 2px 16px;}
+.item .foreign-search {float: left; margin: 0 0 4px 10px; background: url('../../i/ico/go-left-16.png') no-repeat left 8px #eee; border: #ddd dashed 1px; padding: 2px 2px 2px 16px;}
 .item.m .foreign-search {background-color: #ddd; border-color: #ccc;}
 .item .foreign-search label {background: url('../../i/ico/search-24.png') no-repeat; padding-left: 24px; height: 24px; display: inline-block; vertical-align: middle;}
 .item .foreign-search select {width: 120px; float: none; margin-top: 5px; margin-bottom: 2px;}
@@ -15,7 +15,7 @@ form {margin: 0;}
 .item.m .num-tip {background-color: #ddd; border-color: #ccc;}
 .item .num-tip select {width: 50px; margin-bottom: 5px;}
 .item input.focused, .item textarea.focused, .item select.focused {box-shadow: 0 0 6px rgba(222, 47, 16, 0.9);}
-.item .desc {font-size: 85%; background: #FFFAEC; padding: 5px; font-style: italic; margin: -5px 0 3px 10px;}
+.item .desc {font-size: 85%; background: #FFFAEC; padding: 5px; font-style: italic; margin: -5px 0 3px 10px; clear: both;}
 
 .ui-autocomplete {width: 350px; height: 300px; overflow-y: scroll;}
 .ui-autocomplete li:nth-child(odd) {background-color: #f4f4f4;}
@@ -42,6 +42,7 @@ textarea.small {width: 500px; height: 100px;}
 .block_image img, .block_file img {border: none; margin: 3px 10px 3px 0; vertical-align: top;}
 .block_image input[type="text"], .block_file input[type="text"]  {width: 200px; margin-top: 3px; margin-bottom: 5px; background-color: #ddd;}
 .block_image label.delfile, .block_file label.delfile  {float: right;}
+.block_image label:not(.delfile), .block_file label:not(.delfile) {clear: both; display: block;}
 .tip.inline  {display: inline-block; clear: left;}
 input.helpline {border: none; font-size: 10px; color: #777; width: 327px; background-color: #FFF; margin: 0;}
 .time-panel td {padding: 2px;}
