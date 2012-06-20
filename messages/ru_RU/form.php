@@ -10,6 +10,5 @@ return array(
 	'Add a file' => 'Добавить файл',
 	'Delete the file' => 'Добавить картинку',
 	'Submit the form in order to be able to edit additional links' => 'Сохраните добавляемые данные, чтобы редактировать дополнительные связи',
-	'You can use <b>*</b> to mark search not from beginning' => 'Вы можете использовать <b>*</b> для поиска не только с начала',
 );
 ?>

@@ -108,7 +108,6 @@ class AAFieldForeign extends AAField implements AAIField
 							),
 						));
 					?>
-					<div class="tip"><?=Yii::t('AutoAdmin.form', 'You can use <b>*</b> to mark search not from beginning')?></div>
 				</div>
 				<?
 			}
@@ -200,11 +199,12 @@ class AAFieldForeign extends AAField implements AAIField
 
 	/**
 	 * Converts the select row to a title.
+	 * @param array $row Select row.
 	 * @return string Title for <OPTION> or any alike.
 	 */
 	private function getTitleByFields($row)
 	{
-		return ($row ? implode(' - ', $row) : '');
+		return ($row && is_array($row) ? implode(' - ', $row) : '');
 	}
 
 	/**

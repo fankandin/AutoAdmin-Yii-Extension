@@ -667,9 +667,24 @@ class AutoAdmin extends CWebModule
 				'addActions'	=> $this->addActions,
 				'fields'		=> $this->_data->fields,
 				'baseURL'		=> Yii::app()->request->requestUri,
-				'sortBy'		=> Yii::app()->request->getParam('sortBy', 1),
 				'searchBy'		=> Yii::app()->request->getParam('searchBy'),
 			));
+		if($this->_data->orderBy)
+		{
+			$k = 0;
+			foreach($this->_data->fields as $field)
+			{	//Display table header
+				if($field->showInList)
+					$k++;
+				if($this->_data->orderBy[0]['field']->name == $field->name)
+				{
+					$dataToPass['sortBy'] = ($this->_data->orderBy[0]['dir'] < 0 ? -$k : $k);
+					break;
+				}
+			}
+		}
+		if(!$this->_data->orderBy)
+			$dataToPass['sortBy'] = Yii::app()->request->getParam('sortBy', 1);
 
 		$this->_controller->render($this->viewsPath.'list', $dataToPass);
 	}

@@ -24,12 +24,7 @@ class AAAjaxController extends CExtController
 		$q = Yii::app()->db->createCommand();
 		$q->from = $field->options['table'];
 		$q->select(array_merge(array($field->options['pk']), array_keys($field->options['select'])));
-		$term = str_replace('%', '\%', $term);
-		if(false !== mb_strpos($term, '*'))
-			$term = str_replace('*', '%', $term);
-		else
-			$term = $term.'%';
-		$q->where(Yii::app()->db->quoteColumnName($fieldBy)." LIKE :term", array(':term'=>$term));
+		$q->where(Yii::app()->db->quoteColumnName($fieldBy)." LIKE :term", array(':term'=>"{$term}%"));
 		$q->order($fieldBy);
 		$result = $q->queryAll();
 

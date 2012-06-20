@@ -49,6 +49,7 @@ class AAFieldImage extends AAFieldFile
 			echo CHtml::label(Yii::t('AutoAdmin.form', 'Replace the image').':', $inputID);
 		}
 		$tagOptions['id'] = $inputID;
+		?><div class="tip inline">&lt;img src=<?=$this->options['directoryPath']?>/</div><?
 		echo CHtml::fileField("{$inputName}[new]", null, $tagOptions);
 
 		return ob_get_clean();
