@@ -30,10 +30,10 @@ $(document).ready(function(){
 	$('#data-list tr').click(enlightRow);
 	$('#data-list .t-file a').lightBox(
 		{
-			imageLoading: '/_admin/i/lightbox/loading.gif',
-			imageBtnClose: '/_admin/i/lightbox/close.gif',
-			imageBtnPrev: '/_admin/i/lightbox/prev.gif',
-			imageBtnNext: '/_admin/i/lightbox/next.gif'
+			imageLoading: '../../../i/lightbox/loading.gif',
+			imageBtnClose: '../../../i/lightbox/close.gif',
+			imageBtnPrev: '../../../i/lightbox/prev.gif',
+			imageBtnNext: '../../../i/lightbox/next.gif'
 		}
 	);
 });

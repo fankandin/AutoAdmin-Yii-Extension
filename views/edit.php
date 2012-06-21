@@ -1,7 +1,7 @@
 <?
 Yii::app()->clientScript
-	->registerCssFile(AutoAdmin::$assetPathCSS.'/edit.css')
-	->registerScriptFile(AutoAdmin::$assetPathJS.'/edit.js');
+	->registerCssFile(AutoAdmin::$assetPath.'/css/edit.css')
+	->registerScriptFile(AutoAdmin::$assetPath.'/js/edit.js');
 
 $url = AAHelperUrl::replaceParam($baseURL, 'action', ($actionType == 'edit' ? 'update' : 'insert'));
 
@@ -17,7 +17,6 @@ else
 	}
 }
 ?>
-
 <h1><?=$this->pageTitle?></h1>
 <?
 if(!empty($clientData['subtitle']))
@@ -58,14 +57,13 @@ echo CHtml::form($url, 'post', array('id'=>'editform', 'enctype'=>'multipart/for
 echo CHtml::hiddenField('interface', $interface);
 $itemsI = 0;
 $tabindex = 1;
+$commonTagOptions = array('tabindex'=>&$tabindex);
 
 foreach($fields as $field)
 {
-	if($field->isReadonly && ($actionType == 'edit' || $field->type != 'foreign'))
-		continue;
 	?>
 	<div class="item<?=(($itemsI%4 < 2) ? ' m':'')?> block_<?=$field->type?><?=($field->allowNull ? ' nullf' : '')?>">
-		<?=$field->formInput($this, array('tabindex'=>$tabindex))?>
+		<?=$field->formInput($this, $commonTagOptions)?>
 		<?
 		if($field->description)
 		{
@@ -74,17 +72,11 @@ foreach($fields as $field)
 		?>
 	</div>
 	<?
-	if($field->type == 'date')
-		$tabindex += 3;
-	elseif($field->type == 'date')
-		$tabindex += 6;
-	else
-		$tabindex++;
-
 	if(!(++$itemsI%2))
 	{
 		?><br clear="all"/><?
 	}
+	$tabindex++;
 }
 if(!empty($iframes))
 {

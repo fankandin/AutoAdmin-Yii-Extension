@@ -132,6 +132,8 @@ abstract class AAField
 		if($this->allowNull)
 			$this->printFormNullCB();
 		$tagOptions['id'] = $inputID;
+		if($this->isReadonly)
+			$tagOptions['disabled'] = true;
 		echo CHtml::textField($inputName, AAHelperForm::prepareTextForForm(((string)$this->value ? $this->value : $this->defaultValue)), $tagOptions);
 
 		return ob_get_clean();

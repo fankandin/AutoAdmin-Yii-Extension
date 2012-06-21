@@ -22,6 +22,8 @@ class AAFieldPassword extends AAField implements AAIField
 		echo CHtml::tag('br');
 		if($this->allowNull)
 			$this->printFormNullCB();
+		if($this->isReadonly)
+			$tagOptions['disabled'] = true;
 
 		$tagOptions['id'] = $inputID;
 		if($this->value)

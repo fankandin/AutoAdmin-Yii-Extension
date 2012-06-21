@@ -1,7 +1,7 @@
 <?php
 $this->pageTitle = Yii::t('AutoAdmin.access', 'Authentication');
 Yii::app()->clientScript
-	->registerCssFile(AutoAdmin::$assetPathCSS.'/login.css');
+	->registerCssFile(AutoAdmin::$assetPath.'/css/login.css');
 
 $this->breadcrumbs = array(
 	$this->pageTitle,

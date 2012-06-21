@@ -6,12 +6,12 @@ form {margin: 0;}
 .item label {font-weight: bold; color: #555;}
 .item textarea, .item select {margin: 5px 0 10px 10px; width: 100%;}
 .item.block_foreign select {width: 40%; float: left;}
-.item .foreign-search {float: left; margin: 0 0 4px 10px; background: url('../../i/ico/go-left-16.png') no-repeat left 8px #eee; border: #ddd dashed 1px; padding: 2px 2px 2px 16px;}
+.item .foreign-search {float: left; margin: 0 0 4px 10px; background: url('../../../i/ico/go-left.png') no-repeat left 8px #eee; border: #ddd dashed 1px; padding: 2px 2px 2px 16px;}
 .item.m .foreign-search {background-color: #ddd; border-color: #ccc;}
-.item .foreign-search label {background: url('../../i/ico/search-24.png') no-repeat; padding-left: 24px; height: 24px; display: inline-block; vertical-align: middle;}
+.item .foreign-search label {background: url('../../../i/ico/search.png') no-repeat; padding-left: 24px; height: 24px; display: inline-block; vertical-align: middle;}
 .item .foreign-search select {width: 120px; float: none; margin-top: 5px; margin-bottom: 2px;}
 .item .foreign-search input {width: 170px; margin-top: 5px; margin-bottom: 10px; margin-bottom: 5px;}
-.item .num-tip {background: url('../../i/ico/go-left-16.png') no-repeat left 8px #eee; border: #ddd dashed 1px; padding: 2px 2px 2px 16px; display: inline-block;}
+.item .num-tip {background: url('../../../i/ico/go-left.png') no-repeat left 8px #eee; border: #ddd dashed 1px; padding: 2px 2px 2px 16px; display: inline-block;}
 .item.m .num-tip {background-color: #ddd; border-color: #ccc;}
 .item .num-tip select {width: 50px; margin-bottom: 5px;}
 .item input.focused, .item textarea.focused, .item select.focused {box-shadow: 0 0 6px rgba(222, 47, 16, 0.9);}
@@ -36,7 +36,7 @@ input.nullf[type=checkbox] {float: left; margin: 14px 10px 0 5px; box-shadow: 0 
 
 .block_num input[type=text] {margin: 10px 10px 20px 10px; width: 60px;}
 input[type=submit] {clear: both; display: block; margin-left: 1%; margin-top: 15px; height: 38px; width: 120px; font-size: 135%; vertical-align: middle;}
-textarea {margin: 2px 0 10px 0; width: 80%; height: 300px; font-size: 15px; font-family: "Georgia", "Comic Sans MS"; color: #000;}
+textarea {margin: 2px 0 10px 0; width: 80%; height: 300px; font-size: 15px; font-family: Georgia; color: #000;}
 textarea.small {width: 500px; height: 100px;}
 .form1 {border-width: 2px !important; background-color:#F8320D; color:#FFFFFF; font-weight:bold; font-size:10px;}
 .block_image img, .block_file img {border: none; margin: 3px 10px 3px 0; vertical-align: top;}
@@ -49,8 +49,11 @@ input.helpline {border: none; font-size: 10px; color: #777; width: 327px; backgr
 .time-panel input, .time-panel select {margin: 0;}
 .time-panel input[type=text] {width: 30px;}
 .time-panel input.i-year {width: 45px;}
+.time-panel .calendar {background: url('../../../i/ico/calendar.png') no-repeat center left; width: 16px; min-height: 15px; padding: 0;}
+.time-panel .calendar input {width: 16px; height: 15px; opacity: 0; cursor: pointer; margin: 0;}
 label.delfile {margin: 0 5px 0 0; display: block; font-weight: normal; padding-left: 20px;}
 .iframe-na {margin-top: 15px; color: #FA5B00; border: 1px solid #ccc; float: left; width: 90%; padding: 2%;}
 .item.wide {width: 96%;}
 
 #logout {clear: both; border-top: 3px double #ddd; border-bottom: 1px double #ddd; background: #f9f9f9; text-align: right; margin-top: 25px; padding: 7px 10px 7px 0;}
+.warning {color: #ff8800;}

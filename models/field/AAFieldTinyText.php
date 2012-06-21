@@ -20,15 +20,17 @@ class AAFieldTinyText extends AAFieldString
 		$inputID = "i_{$inputName}";
 		echo CHtml::label($this->label, $inputID);
 		echo CHtml::tag('br');
+		$tagOptions['id'] = $inputID;
 		if($this->allowNull)
 			$this->printFormNullCB();
+		if($this->isReadonly)
+			$tagOptions['disabled'] = true;
 			
 		$value = str_replace("<p>", "", $this->value);
 		$value = str_replace("</p>", "", $value);
 		$value = str_replace('<br/>', "\n", $value);
 		$value = AAHelperForm::prepareTextForForm($value);
 
-		$tagOptions['id'] = $inputID;
 		echo CHtml::textArea($inputName, $value, $tagOptions);
 
 		return ob_get_clean();

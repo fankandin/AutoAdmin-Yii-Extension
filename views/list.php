@@ -1,9 +1,9 @@
 <?
 Yii::app()->clientScript
-	->registerCssFile(AutoAdmin::$assetPathCSS.'/list.css')
-	->registerScriptFile(AutoAdmin::$assetPathJS.'/list.js')
-	->registerCssFile(AutoAdmin::$assetPathCSS.'/lightbox.css')
-	->registerScriptFile(AutoAdmin::$assetPathJS.'/jquery.lightbox-0.5.min.js', CClientScript::POS_END);
+	->registerCssFile(AutoAdmin::$assetPath.'/css/list.css')
+	->registerScriptFile(AutoAdmin::$assetPath.'/js/list.js')
+	->registerCssFile(AutoAdmin::$assetPath.'/css/lightbox.css')
+	->registerScriptFile(AutoAdmin::$assetPath.'/js/jquery.lightbox-0.5.min.js', CClientScript::POS_END);
 
 if(empty($this->breadcrumbs))
 	$this->breadcrumbs = array($this->pageTitle);
@@ -219,7 +219,7 @@ foreach($dataRows as $rowI=>$dataRow)
 				$href = preg_replace('/\%\$([a-z_]+)\$\%/e', 'urlencode($r->$1)', $href);
 			}
 			echo CHtml::link(
-					(!empty($v['img']) ? '<img src="'.$v['img'].'" title="'.$v['title'].'"/>' : $v['title']),
+					(!empty($v['img']) ? CHtml::image($v['img'], '', array('title'=>$v['title'])) : $v['title']),
 					$href.$id.(!empty($v['popup']) ? '&compact' : ''),
 					array('class'=>($v['popup'] ? 'popup' : ''))
 				);

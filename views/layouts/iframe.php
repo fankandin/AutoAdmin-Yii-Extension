@@ -5,7 +5,7 @@
 	<meta name="language" content="ru"/>
 <?
 Yii::app()->clientScript
-	->registerCssFile(AutoAdmin::$assetPathCSS.'/iframe.css')
+	->registerCssFile(AutoAdmin::$assetPath.'/css/iframe.css')
 	->registerCoreScript('jquery');
 ?>
 	<title><?=CHtml::encode($this->pageTitle);?></title>

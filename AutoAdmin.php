@@ -135,15 +135,9 @@ class AutoAdmin extends CWebModule
 	public $clientViewData = array();
 	/**
 	 *
-	 * @var string Path to assets of JS scripts.
+	 * @var string Path to asset data.
 	 */
-	public static $assetPathJS;
-	/**
-	 *
-	 * @var string Path to assets of CSS files.
-	 */
-	public static $assetPathCSS;
-
+	public static $assetPath;
 	/**
 	 * Inizialize all the settings through an array of options
 	 * @param array $columns Array with options.
@@ -164,8 +158,7 @@ class AutoAdmin extends CWebModule
 		$this->controllerMap['aaajax'] = array('class'=>'ext.autoAdmin.controllers.AAAjaxController');
 		$this->controllerMap['aaauth'] = array('class'=>'ext.autoAdmin.controllers.AAAuthController');
 
-		self::$assetPathJS = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.autoAdmin.assets.js'));
-		self::$assetPathCSS = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.autoAdmin.assets.css'));
+		self::$assetPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.autoAdmin.assets'));
 
 		$this->cache = new AACache();
 		$this->_data = new AAData();
@@ -212,13 +205,19 @@ class AutoAdmin extends CWebModule
 		else
 			$this->_controller->layout = $this->layout;	//property layout is a parameter from config. @see $layout
 
-		$this->manageAction = Yii::app()->request->getParam('action', null);
+		$this->manageAction = Yii::app()->request->getParam('action', 'list');
+		if(!in_array($this->manageAction, array('add', 'insert', 'edit', 'update', 'delete', 'empty')))
+			$this->manageAction = 'list';
 		$this->managePage = Yii::app()->request->getParam('page', 1);
 		if($this->managePage < 1)
 				$this->managePage = 1;
 
 		$this->_data->binding = Yii::app()->request->getParam('bk', array());
-		
+
+		Yii::app()->clientScript->registerCoreScript('jquery')
+				->registerCssFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/overcast/jquery-ui.css')
+				->registerScriptFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js');
+
 		if(parent::beforeControllerAction($controller, $action))
 		{
 			return true;

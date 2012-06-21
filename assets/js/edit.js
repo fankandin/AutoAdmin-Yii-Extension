@@ -109,7 +109,16 @@ $(document).ready(function(){
 	$form.find('.nullf').find('input,textarea').filter(':not(input[type=checkbox].nullf)').focus(focusNearNullF);
 	$form.find('.block_password input[type=checkbox][name$="[is_new]"]').change(checkboxNewPassword);
 	$form.find('.num-tip select').each(tuneNumTip).change(numTipChange);
-	//$('#editform input,textarea').filter('[name^="AA["]').focus(function() {$(this).addClass('focused')}).blur(function() {$(this).removeClass('focused')});
+
+	$form.find('.time-panel .calendar input').datepicker({
+			onSelect: function(dateText, inst) {
+				var $timePanel = $form.find('.time-panel');
+				$timePanel.find('select[name$="[d]"]').val(parseInt(dateText.substr(3, 2)));
+				$timePanel.find('select[name$="[m]"]').val(parseInt(dateText.substr(0, 2)));
+				$timePanel.find('input[name$="[y]"]').val(dateText.substr(6, 4));
+				return false;
+			}
+		});
 
 	$form.submit(function() {
 		filteredInputs($form).each(markChangedField);

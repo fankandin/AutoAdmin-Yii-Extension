@@ -20,6 +20,8 @@ class AAFieldNum extends AAField implements AAIField
 
 		$tagOptions['id'] = $inputID;
 		$tagOptions['maxlength'] = 10;
+		if($this->isReadonly)
+			$tagOptions['disabled'] = true;
 		echo CHtml::textField($inputName, $this->value, $tagOptions);
 
 		$numOptions = array();

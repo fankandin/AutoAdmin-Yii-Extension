@@ -31,18 +31,22 @@ class AAFieldText extends AAFieldString
 		$value = str_replace("<p>", "", $value);
 		$value = str_replace("</p>", "", $value);
 
-		echo CHtml::button('STRONG');
-		echo CHtml::button('EM');
-		echo CHtml::button('H3');
-		echo CHtml::button('H4');
-		echo CHtml::button('UL');
-		echo CHtml::button('OL');
-		echo CHtml::button('Link');
-		echo CHtml::button('MailTo');
-		echo CHtml::button('Img');
-		echo CHtml::button('<..>');
-
 		$tagOptions['id'] = $inputID;
+		if($this->isReadonly)
+			$tagOptions['disabled'] = true;
+		else
+		{
+			echo CHtml::button('STRONG');
+			echo CHtml::button('EM');
+			echo CHtml::button('H3');
+			echo CHtml::button('H4');
+			echo CHtml::button('UL');
+			echo CHtml::button('OL');
+			echo CHtml::button('Link');
+			echo CHtml::button('MailTo');
+			echo CHtml::button('Img');
+			echo CHtml::button('<..>');
+		}
 		echo CHtml::textArea($inputName, $value, $tagOptions);
 		
 		return ob_get_clean();

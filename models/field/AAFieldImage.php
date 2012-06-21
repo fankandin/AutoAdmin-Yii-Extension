@@ -32,15 +32,21 @@ class AAFieldImage extends AAFieldFile
 		echo CHtml::tag('br');
 		if($this->allowNull)
 			$this->printFormNullCB();
+		if($this->isReadonly)
+			$tagOptions['disabled'] = true;
 
 		if($this->value)
 		{
+			$oldOptions = array('readonly'=>true);
+			if($this->isReadonly)
+				$tagOptions['disabled'] = true;
 			echo CHtml::image("{$this->options['directoryPath']}/{$this->value}", $this->label, array('title'=>$this->label));
-			echo CHtml::textField($inputName, $this->value, array('readonly'=>true));
+			echo CHtml::textField($inputName, $this->value, $oldOptions);
+			unset($oldOptions['readonly']);
 			?>
 			<label class="delfile">
 				<?=Yii::t('AutoAdmin.form', '<b class="warning">Delete</b> the image')?> <span class="tip">(<?=Yii::t('AutoAdmin.form', 'set checkbox on for confirm')?>)</span>:
-				<?=CHtml::checkBox("{$inputName}[del]", false);?>
+				<?=CHtml::checkBox("{$inputName}[del]", false, $oldOptions);?>
 			</label>
 			<?
 		}

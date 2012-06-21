@@ -133,7 +133,7 @@ class AAData
 			if(is_string($key))
 			{
 				$fieldName = $key;
-				if((is_numeric($value) && $value < 0) || (is_string($value) && strcasecmp($value, 'desc')))
+				if((is_numeric($value) && $value < 0) || (is_string($value) && !strcasecmp($value, 'desc')))
 					$direction = -1;
 			}
 			else

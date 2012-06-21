@@ -1,7 +1,7 @@
 <?
 $this->pageTitle = Yii::t('AutoAdmin.access', 'Access denied');
 Yii::app()->clientScript
-	->registerCssFile(AutoAdmin::$assetPathCSS.'/edit-result.css');
+	->registerCssFile(AutoAdmin::$assetPath.'/css/edit-result.css');
 
 $this->breadcrumbs = array(
 	$this->pageTitle,

@@ -1,7 +1,6 @@
 <?
-$assetsPath = Yii::getPathOfAlias('ext.autoAdmin.assets');
 Yii::app()->clientScript
-	->registerCssFile(AutoAdmin::$assetPathCSS.'/list.css');
+	->registerCssFile(AutoAdmin::$assetPath.'/css/list.css');
 
 if(empty($this->breadcrumbs))
 	$this->breadcrumbs = array($this->pageTitle);

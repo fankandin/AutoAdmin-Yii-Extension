@@ -30,6 +30,8 @@ class AAFieldBoolean extends AAField implements AAIField
 		echo CHtml::tag('br');
 		if($this->allowNull)
 			$this->printFormNullCB();
+		if($this->isReadonly)
+			$tagOptions['disabled'] = true;
 
 		$tagOptions['id'] = $inputID;
 		echo CHtml::checkBox($inputName, (bool)($this->value ? $this->value : $this->defaultValue), $tagOptions);

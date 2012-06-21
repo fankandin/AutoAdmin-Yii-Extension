@@ -18,11 +18,12 @@ class AAFieldDatetime extends AAFieldDate
 		ob_start();
 		$inputName = $this->formInputName();
 
-		$tagOptions['tabindex']--;
 		echo CHtml::label($this->label, "{$inputName}[d]");
 		echo CHtml::tag('br');
 		if($this->allowNull)
 			$this->printFormNullCB();
+		if($this->isReadonly)
+			$tagOptions['disabled'] = true;
 
 		$d = $this->value ? $this->value : time();	//If not defined take current date
 		list($year, $month, $day) = explode('.', date('Y.m.d', $d));
@@ -30,13 +31,13 @@ class AAFieldDatetime extends AAFieldDate
 		?>
 		<table class="time-panel"><tbody>
 			<tr>
+				<td class="calendar"><input type="text"/></td>
 				<td>
 					<?
 					$days = array();
 					for($j = 1; $j <= 31; $j++)
 						$days[$j] = $j;
 					$tagOptions['id'] = "{$inputName}[d]";
-					$tagOptions['tabindex']++;
 					echo CHtml::dropDownList("{$inputName}[d]", (int)$day, $days, $tagOptions);
 					?>
 				</td>

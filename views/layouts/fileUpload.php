@@ -5,7 +5,7 @@
 	<meta name="language" content="ru"/>
 <?
 Yii::app()->clientScript
-	->registerCssFile(AutoAdmin::$assetPathCSS.'/file-upload.css')
+	->registerCssFile(AutoAdmin::$assetPath.'/css/file-upload.css')
 	->registerCoreScript('jquery');
 ?>
 	<title><?=CHtml::encode($this->pageTitle);?></title>

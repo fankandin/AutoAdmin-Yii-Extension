@@ -57,7 +57,7 @@ class AAWidgetPager extends CWidget
 					}
 					else
 					{
-						?><?=CHtml::tag('span', array('class'=>'active'), $pn);
+						?><?=CHtml::tag('span', array('class'=>'pagenum active'), $pn);
 					}
 				}
 			}

@@ -1,29 +1,30 @@
-#data-list {width: 100%; border-collapse: collapse; margin: 10px 0; border-bottom: 2px solid #999; border-top: 2px solid #999;}
-#data-list thead th {color: #000; background-color: #ddd; padding: 15px 5px; border-right: 2px solid #fff; border-bottom: 1px solid #999;}
-#data-list td {padding: 2px 5px;}
+#data-list {width: 100%; font-size: 120%; color: #000; border-collapse: collapse; margin: 10px 0; border-bottom: 2px solid #999; border-top: 2px solid #999;}
+#data-list thead th {font-size: 140%; background-color: #b83434; border-color: #ccc; border-style: solid; border-left-width: 1px; border-top-width: 4px; border-top-style: double; border-bottom-width: 3px; border-right-width: 1px; padding: 10px 5px;}
+#data-list td {padding: 5px; font-family: Georgia; border-bottom: 1px solid #ddd;}
 #data-list tr:nth-child(odd) td {border-left: 1px solid #f0f0f0;}
 #data-list tr:nth-child(even) td {background-color: #f0f0f0; border-left: 1px solid #fff;}
-#data-list .edit {background: url('../../i/ico/edit-24.png') no-repeat; display: block; width: 24px; height: 24px; overflow: hidden; text-indent: 500px; float: left; margin: 2px 10px 2px 0;}
-#data-list .delete {background: url('../../i/ico/delete-24.png') no-repeat; display: block; width: 24px; height: 24px; overflow: hidden; text-indent: 500px; float: left; margin: 0 10px 2px 0;}
+#data-list .edit {background: url('../../../i/ico/edit.png') no-repeat; display: block; width: 24px; height: 24px; overflow: hidden; text-indent: 500px; float: left; margin: 2px 10px 2px 0;}
+#data-list .delete {background: url('../../../i/ico/delete.png') no-repeat; display: block; width: 24px; height: 24px; overflow: hidden; text-indent: 500px; float: left; margin: 0 10px 2px 0;}
 #data-list .control {width: 80px;}
 #data-list .control a:hover {box-shadow: 0 0 5px rgba(253, 162, 20, 1);}
 #data-list .row-number {font-family: Garamond; font-weight: bold; padding: 0 8px 0 0; width: 20px;}
 #data-list .row-number span {background-color: #ccc; color: #fff; padding: 0 4px; display: block; margin-left: 3px;}
 #data-list .null {color: #aaa;}
-#data-list .subtable a {background: url('../../i/ico/folder-24.png') no-repeat; display: block; width: 24px; height: 24px; overflow: hidden; text-indent: 500px;}
-#data-list .subtable a:hover {background-image: url('../../i/ico/folder-open-24.png');}
+#data-list .subtable a {background: url('../../../i/ico/folder-in.png') no-repeat; display: block; width: 40px; height: 24px; overflow: hidden; text-indent: 500px;}
+#data-list .subtable a:hover {background-image: url('../../../i/ico/folder-in-open.png');}
 #data-list .t-text {font-size: 80%;}
 #data-list .t-foreign span {background-color: #fff4dd; display: inline-block; border-right: 1px dotted #999; border-left: 1px dotted #999; padding: 2px 3px;}
 #data-list td.foreign {background-color: #fff4dd; border-bottom: 1px solid #fff;}
-#data-list th.data {cursor: pointer; text-decoration: underline; background-repeat: no-repeat; background-position: center right; padding: 0;}
-#data-list th.data a {display: block; padding: 15px 14px 15px 8px;}
-#data-list th.data a, #data-list th.data a:visited {color: #000; text-decoration: underline;}
-#data-list th.data a:hover {color: #F04200; text-decoration: underline;}
-#data-list th.data:hover {background-image: url('../../i/ico/go-up-16.png');}
-#data-list th.data.sort-asc {background-image: url('../../i/ico/go-up-16.png');}
-#data-list th.data.sort-asc:hover {background-image: url('../../i/ico/go-down-16.png');}
-#data-list th.data.sort-desc {background-image: url('../../i/ico/go-down-16.png');}
-#data-list th.data.sort-desc:hover {background-image: url('../../i/ico/go-up-16.png');}
+#data-list th.data {cursor: pointer; background-repeat: no-repeat; background-position: center right; padding: 0;}
+#data-list th.data a {display: block; padding: 15px 14px 15px 8px; font-weight: normal; color: #fff;}
+#data-list th.data a, #data-list th.data a:visited {font-weight: normal; color: #fff; text-decoration: underline;}
+#data-list th.data a:hover {color: #fff; text-decoration: underline;}
+#data-list th.data:hover {background-image: url('../../../i/ico/go-up.png'); background-color: #DE2F0F;}
+#data-list th.data.sort-asc {background-image: url('../../../i/ico/go-up.png');}
+#data-list th.data.sort-asc:hover {background-image: url('../../../i/ico/go-down.png');}
+#data-list th.data.sort-desc {background-image: url('../../../i/ico/go-down.png');}
+#data-list th.data.sort-desc:hover {background-image: url('../../../i/ico/go-up.png');}
+#data-list thead tr th.data a small {font-size: 50%; text-decoration: none; display: inline-block; margin-top: 3px;}
 #data-list tr.enlighted td {background-color: #ffda8d;}
 
 
@@ -31,9 +32,9 @@
 #panel-down {border-top: 1px solid #F04200; width: 100%;}
 
 .panel-add {}
-.panel-add a {display: block; float: right; background: url('../../i/ico/new-32.png') no-repeat; padding: 6px 0 0 36px; margin-right: 10px; height: 32px; font-size: 130%;}
+.panel-add a {display: block; float: right; background: url('../../../i/ico/new.png') no-repeat; padding: 6px 0 0 36px; margin-right: 10px; height: 32px; font-size: 130%;}
 
-.sort.down {background: url('../../i/ico/go-down-24.png') no-repeat left -4px; display: inline-block; width: 24px; height: 20px; overflow: hidden; text-indent: 500px; float: left; margin: 2px 10px 2px 0; white-space: nowrap;}
+.sort.down {background: url('../../../i/ico/go-down-big.png') no-repeat left -4px; display: inline-block; width: 24px; height: 20px; overflow: hidden; text-indent: 500px; float: left; margin: 2px 10px 2px 0; white-space: nowrap;}
 
 .orderPanel {border-right: 1px solid #ddd; display: table; padding-right: 10px;}
 .orderPanel input, .orderPanel label, .orderPanel select {float: left; margin-right: 5px;}
@@ -41,20 +42,13 @@
 .searchPanel select {margin-left: 5px;}
 
 .nav-pages {width: 50%;}
-.nav-pages div {margin: 0 30px 0 0; padding: 5px; background: #f0f0f0;}
+.nav-pages div {margin: 0 30px 0 0; padding: 5px; background: #ddd;}
 .nav-pages .pagenum {border-right: 1px solid #fff; padding: 0 8px 5px 8px;}
-.nav-pages .active {padding: 0 5px 5px 8px;}
+.nav-pages .active {padding: 0 8px 5px; border-right: 1px solid #fff; font-weight: bold;}
 
 .t-foreign {font-size: 90%; color: #555;}
 
-.category-cat-link {margin-left: 25px;}
-.category-cat-link a {display: table-cell; padding-left: 72px; background: url('../../i/ico/catalog-64.png') no-repeat; height: 64px; vertical-align: middle; font-size: 150%; color: #08A300;}
-.banner-places-link {margin-left: 25px;}
-.banner-places-link a {display: table-cell; padding-left: 72px; background: url('../../i/desktop-64.png') no-repeat; height: 64px; vertical-align: middle; font-size: 150%; color: #08A300;}
-
 .t-file .file {background-repeat: no-repeat; displat: table-cell; padding-left: 20px; min-height: 16px;}
-.file.ext-jpg, .file.ext-gif {font-size: 90%; font-style: italic; cursor: pointer;}
-.file.ext-jpg {background-image: url('../../i/ico/ext/jpg.png');}
-.file.ext-gif {background-image: url('../../i/ico/ext/gif.png');}
+.file.ext {font-size: 90%; font-style: italic; cursor: pointer;}
 
 #logout {clear: both; border-top: 3px double #ddd; border-bottom: 1px double #ddd; background: #f9f9f9; text-align: right; margin-top: 25px; padding: 7px 10px 7px 0;}

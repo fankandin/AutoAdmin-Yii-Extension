@@ -42,14 +42,20 @@ class AAFieldFile extends AAField implements AAIField
 		echo CHtml::tag('br');
 		if($this->allowNull)
 			$this->printFormNullCB();
+		if($this->isReadonly)
+			$tagOptions['disabled'] = true;
 
 		if($this->value)
 		{
-			echo CHtml::textField("{$inputName}[old]", $this->value, array('readonly'=>true));
+			$oldOptions = array('readonly'=>true);
+			if($this->isReadonly)
+				$tagOptions['disabled'] = true;
+			echo CHtml::textField("{$inputName}[old]", $this->value, $oldOptions);
+			unset($oldOptions['readonly']);
 			?>
 			<label class="delfile">
 				<?=Yii::t('AutoAdmin.form', '<b class="warning">Delete</b> the file')?> <span class="tip">(<?=Yii::t('AutoAdmin.form', 'set checkbox on for confirm')?>)</span>:
-				<?=CHtml::checkBox("{$inputName}[del]", false);?>
+				<?=CHtml::checkBox("{$inputName}[del]", false, $oldOptions);?>
 			</label>
 			<?
 		}
