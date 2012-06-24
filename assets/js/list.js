@@ -36,7 +36,9 @@ $(document).ready(function(){
 			imageBtnNext: '../../../i/lightbox/next.gif'
 		}
 	);
-	$('#aasearch').hover(function() {
-		
+	$('#search-panel input[type=reset]').click(function() {
+		var $form = $(this.form);
+		$form.find('input, select').attr('disabled', true);
+		$form.submit();
 	});
 });

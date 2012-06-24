@@ -48,7 +48,9 @@
 #search-panel {}
 #search-panel input#searchQ {font-size: 130%; margin: 0 5px;}
 #search-panel select#searchBy {font-style: italic;}
-#search-panel input[type=submit] {background: url('../../../i/ico/find.png') no-repeat; width: 38px; height: 24px; overflow: hidden; display: inline-block; border: none; margin: 0 0 0 7px; text-indent: -300px; cursor: pointer;}
+#search-panel input[type=submit] {background: url('../../../i/ico/find.png') no-repeat; width: 38px; height: 24px; overflow: hidden; display: inline-block; border: none; margin: 0 2px 0 7px; text-indent: -300px; cursor: pointer;}
+#search-panel input[type=reset] {background: url('../../../i/ico/x.png') no-repeat center center; width: 16px; height: 16px; overflow: hidden; display: inline-block; border: none; text-indent: -300px; cursor: pointer; vertical-align: bottom;}
+#search-panel input[type=reset]:hover {background-image: url('../../../i/ico/x_.png');}
 
 .t-foreign {font-size: 90%; color: #555;}
 

@@ -260,11 +260,11 @@ class AADb
 	{
 		if($fieldBy->type == 'foreign')
 		{
-			$where = array();
-			foreach($fieldBy->options['select'] as $vfield)
-				$where[] = array('LIKE', "{$fieldBy->options['tableAlias']}.{$vfield}", "%{$term}%");
-			if($where)
-				$this->_listQuery->where('AND', $this->_listQuery->getWhere(), array('OR', $where));
+			$where = array('OR');
+			foreach($fieldBy->options['select'] as $fieldName=>$fieldAlias)
+				$where[] = array('LIKE', "{$fieldBy->options['tableAlias']}.{$fieldName}", "%{$term}%");
+			if(count($where)>1)
+				$this->_listQuery->where(array('AND', $this->_listQuery->getWhere(), $where));
 		}
 		elseif($fieldBy->type == 'date' || $fieldBy->type == 'datetime')
 		{

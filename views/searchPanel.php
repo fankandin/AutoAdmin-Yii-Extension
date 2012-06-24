@@ -24,6 +24,7 @@ foreach($fields as $i=>&$field)
 }
 echo CHtml::dropDownList('searchBy', (isset($searchBy) ? $searchBy : null), $inSearch);
 echo CHtml::submitButton('OK', array('name'=>null, 'title'=>Yii::t('AutoAdmin.common', 'Search')));
+echo CHtml::resetButton(Yii::t('AutoAdmin.common', 'Reset'), array('name'=>null, 'title'=>Yii::t('AutoAdmin.common', 'Reset')));
 
 echo CHtml::closeTag('form');
 ?>
