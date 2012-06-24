@@ -36,4 +36,7 @@ $(document).ready(function(){
 			imageBtnNext: '../../../i/lightbox/next.gif'
 		}
 	);
+	$('#aasearch').hover(function() {
+		
+	});
 });

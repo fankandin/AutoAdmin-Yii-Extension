@@ -72,7 +72,8 @@ CREATE TABLE `aa_logs` (
   `interface_id` smallint(5) unsigned DEFAULT NULL,
   `authorization_id` int(10) unsigned DEFAULT NULL,
   `when_event` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `message` text CHARACTER SET cp1251,
+  `message` text NULL DEFAULT NULL,
+  `data` text NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `interface_id` (`interface_id`),
   KEY `authorization_id` (`authorization_id`)

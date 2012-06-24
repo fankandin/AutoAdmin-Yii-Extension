@@ -41,6 +41,7 @@ class AutoAdmin extends CWebModule
 	private $_trigger;
 
 	private $_data;
+	private $_db;
 	private $_tableName;
 	private $_iframeMode = false;
 	private $_viewData = array();
@@ -62,11 +63,6 @@ class AutoAdmin extends CWebModule
 	public $logMode = true;
 	/**
 	 *
-	 * @var string An alias of CDbConnection that set up in config. It will be used as Yii::app()->{$dbConnection}.
-	 */
-	public $dbConnection = 'db';
-	/**
-	 *
 	 * @var AACache The object to operate with the site's global cache.
 	 */
 	public $cache;
@@ -77,6 +73,16 @@ class AutoAdmin extends CWebModule
 	public $wwwDirName = 'www';
 	/**
 	 *
+	 * @var string An alias of CDbConnection that set up in config. It will be used as Yii::app()->{$dbConnection}.
+	 */
+	public $dbConnection = 'db';
+	/**
+	 *
+	 * @var string DB schema that contains tables which are operated by a user.
+	 */
+	public $dbSchema;
+	/**
+	 *
 	 * @var string Prefix for names of service DB tables.
 	 */
 	public $dbAdminTablePrefix = 'aa_';
@@ -85,11 +91,6 @@ class AutoAdmin extends CWebModule
 	 * @var string DB schema that contains AutoAdmin service tables.
 	 */
 	public $dbAdminSchema;
-	/**
-	 *
-	 * @var string DB schema that contains tables which are operated by a user.
-	 */
-	public $dbSchema;
 	/**
 	 *
 	 * @var string Link down to subtable interface.
@@ -157,11 +158,15 @@ class AutoAdmin extends CWebModule
 		$this->controllerMap['aafile'] = array('class'=>'ext.autoAdmin.controllers.AAFileController');
 		$this->controllerMap['aaajax'] = array('class'=>'ext.autoAdmin.controllers.AAAjaxController');
 		$this->controllerMap['aaauth'] = array('class'=>'ext.autoAdmin.controllers.AAAuthController');
-
 		self::$assetPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.autoAdmin.assets'));
 
 		$this->cache = new AACache();
 		$this->_data = new AAData();
+		$this->_db = new AADb($this->_data);
+		//Link AADb properties with AutoAdmin properties for more convenient configurating these properties by a user.
+		$this->_db->dbConnection =& $this->dbConnection;
+		$this->_db->dbSchema =& $this->dbSchema;
+		
 	}
 
 	/**
@@ -256,7 +261,7 @@ class AutoAdmin extends CWebModule
 	{
 		try
 		{
-			$this->_data->loadColumnsConf($columns, $this->_tableName);
+			$this->_data->loadColumnsConf($columns, $this->tableName());
 			//Creating the oppourtunity to upload files in directories that set by the controller
 			foreach($this->_data->fields as &$field)
 			{
@@ -279,21 +284,11 @@ class AutoAdmin extends CWebModule
 	public function tableName($tableName=null)
 	{
 		if(is_null($tableName))
-			return $this->_tableName;
+			return $this->_db->tableName;
 		if($tableName && is_string($tableName))
-			$this->_tableName = $tableName;
+			$this->_db->tableName = $tableName;
 		else
 			throw new AAException(Yii::t('AutoAdmin.errors', 'Wrong data for DB Table Name'));
-	}
-
-	/**
-	 * Gets the full composite table name for SQL queries using @link AutoAdmin::dbSchema.
-	 * @param string Custom table name that you can use instead of @link AutoAdmin::dbSchema.
-	 * @return string Full composite table name ready to use in SQL quiries.
-	 */
-	public function getFullTableName($tableName=null)
-	{
-		return ($this->dbSchema ? "{$this->dbSchema}." : '').($tableName ? $tableName : $this->_tableName);
 	}
 
 	/**
@@ -401,28 +396,6 @@ class AutoAdmin extends CWebModule
 	}
 
 	/**
-	 * Update conditions of Yii DAO standard.
-	 * You don't know the alias of a table when you programme it. So you ought to use original name as prefix (e.g. "table_name.field_name = :param"). You may not use prefix only if you're sure that the field name is a unique one.
-	 * @param mixed $condition Yii DAO standart conditions.
-	 * @param string $tableName Original table name (function will replace by "{$tableName}.").
-	 * @param string $tableAlias New alias instead of $tableName.
-	 */
-	public static function addTableAliasToCond(&$condition, $tableName, $tableAlias)
-	{
-		if(is_array($condition))
-		{
-			foreach($condition as &$cond)
-			{
-				self::addTableAliasToCond($cond, $tableName, $tableAlias);
-			}
-		}
-		elseif(is_string($condition))
-		{
-			$condition = str_replace("{$tableName}.", "{$tableAlias}.", $condition);
-		}
-	}
-
-	/**
 	 * Executes the testing of compiled user's configuration.
 	 * @return bool whether the configuration is correct.
 	 */
@@ -471,6 +444,7 @@ class AutoAdmin extends CWebModule
 			{
 				if(!$this->_access->checkRight('add'))
 					$this->blockAccess('add');
+				$this->_viewData['actionType'] = 'add';
 				$this->editMode();
 				break;
 			}
@@ -478,7 +452,7 @@ class AutoAdmin extends CWebModule
 			{
 				if(!$this->_access->checkRight('edit'))
 					$this->blockAccess('edit');
-				$this->prepareEditMode();
+				$this->_viewData['actionType'] = 'edit';
 				$this->editMode();
 				break;
 			}
@@ -486,33 +460,33 @@ class AutoAdmin extends CWebModule
 			{
 				if(!$this->_access->checkRight('add'))
 					$this->blockAccess('add');
-				$result = $this->save('add');
-				$this->resultMode(array('msg'=>Yii::t('AutoAdmin.messages', ($result ? 'The record was added' : 'The record was not added'))));
+				$affected = $this->insert();
+				$this->resultMode(array('msg'=>Yii::t('AutoAdmin.messages', ($affected ? 'The record was added' : 'The record was not added'))));
 				break;
 			}
 			case 'update':	//Process updating data in DB
 			{
 				if(!$this->_access->checkRight('edit'))
 					$this->blockAccess('edit');
-				$result = $this->save('edit');
-				$this->resultMode(array('msg'=>Yii::t('AutoAdmin.messages', ($result ? 'The record has been changed' : 'The record has not been changed'))));
+				$affected = $this->update();
+				$this->resultMode(array('msg'=>Yii::t('AutoAdmin.messages', ($affected ? 'The record has been changed' : 'The record has not been changed'))));
 				break;
 			}
 			case 'delete':	//Process deletion data in DB
 			{
 				if(!$this->_access->checkRight('delete'))
 					$this->blockAccess('delete');
-				if($this->confirmDelete && !Yii::app()->request->getParam('sure', false))
+				if($this->confirmDelete && !Yii::app()->request->getPost('sure', false))
 				{
-					$confirmUrl = AAHelperUrl::update(Yii::app()->request->requestUri, array('action'), array('action'=>'delete', 'sure'=>1));
+					$confirmUrl = AAHelperUrl::update(Yii::app()->request->requestUri, array('action'), array('action'=>'delete'));
 					$cancelUrl = AAHelperUrl::stripParam(Yii::app()->request->requestUri, array('action'));
 					foreach($this->_data->pk as $pkField=>$value)
 						$cancelUrl = AAHelperUrl::stripParam($cancelUrl, "id[{$pkField}]");
-					$this->_controller->render($this->viewsPath.'confirmDelete', array('confirmUrl'=>$confirmUrl, 'cancelUrl'=>$cancelUrl));
+					$this->_controller->render($this->viewsPath.'confirmDelete', array('confirmUrl'=>$confirmUrl, 'cancelUrl'=>$cancelUrl, 'fields'=>$this->_data->fields));
 					Yii::app()->end();
 				}
-				$result = $this->delete();
-				$this->resultMode(array('msg'=>Yii::t('AutoAdmin.messages', ($result ? 'The record was deleted' : 'The record has not been deleted'))));
+				$affected = $this->delete();
+				$this->resultMode(array('msg'=>Yii::t('AutoAdmin.messages', ($affected ? 'The record was deleted' : 'The record has not been deleted'))));
 				break;
 			}
 			case 'empty':	//Interface which is programmed directly by user
@@ -533,111 +507,6 @@ class AutoAdmin extends CWebModule
 	}
 
 	/**
-	 * Builds the base part of query for common list or single row of data.
-	 * @param \CDbCommand $q DAO built command
-	 * @param array $qWhere An array to pass in DAO as where() argument.
-	 * @param array $qParams An array to pass in DAO as "parameters" argument in where().
-	 * @param bool $strictShowInList Whether to restrict output within fields which marked as "showInList" or show every one.
-	 */
-	private function getBaseQuery(&$q, &$qWhere, &$qParams, $strictShowInList=true)
-	{
-		$selectFields = array();
-		foreach($this->_data->pk as $pkField=>$pkValue)
-			$selectFields[] = "{$this->_tableName}.{$pkField}";
-		foreach($this->_data->fields as &$field)
-		{
-			if($field->showInList || !$strictShowInList)
-			{
-				$selectFields[] = "{$this->_tableName}.{$field->name}";
-				//A field can provide its own parts for query: SELECT and JOIN.
-				if(method_exists($field, 'modifySqlQuery'))
-				{
-					$sqlModifing = $field->modifySqlQuery();
-					if(!empty($sqlModifing['select']))
-						$selectFields = array_merge($selectFields, $sqlModifing['select']);
-					if(!empty($sqlModifing['join']))
-					{
-						if(empty($sqlModifing['join']['type']) || $sqlModifing['join']['type']=='inner')
-							$joinF = 'join';
-						else
-							$joinF = strtolower($sqlModifing['join']['type'])."Join";
-						$q->{$joinF}($this->getFullTableName($sqlModifing['join']['table']), $sqlModifing['join']['conditions'], (!empty($sqlModifing['join']['params']) ? $sqlModifing['join']['params'] : array()));
-					}
-				}
-			}
-		}
-
-		$q->select($selectFields);
-		$q->from($this->getFullTableName());
-	}
-
-	/**
-	 * SQL query for output in a common list of data rows.
-	 * @return \CDbCommand DAO built command
-	 */
-	private function getListQuery()
-	{
-		$q = Yii::app()->{$this->dbConnection}->createCommand();
-		$qWhere = array();
-		$qParams = array();
-		$this->getBaseQuery($q, $qWhere, $qParams);
-
-		foreach($this->_data->fields as &$field)
-		{
-			if(!is_null($field->bind))
-			{
-				if($field->bind == 'NULL')
-					$qWhere[] = "{$this->_tableName}.{$field->name} IS NULL";
-				else
-				{
-					$qWhere[] = "{$this->_tableName}.{$field->name} = :_bind_{$field->name}";
-					$qParams[":_bind_{$field->name}"] = $field->bind;
-				}
-			}
-		}
-
-		//Search by a field (user-defined)
-		if(Yii::app()->request->getParam('searchBy') && $this->_data->getFieldByName((int)Yii::app()->request->getParam('searchBy')))
-		{
-			$this->prepareSearch($q, (int)Yii::app()->request->getParam('searchBy'));
-		}
-
-		if($qWhere)
-			$q->where(array_merge(array('AND'), $qWhere), $qParams);
-
-		//Preparing sort fields for ORDER BY in the query
-		$sortBy = Yii::app()->request->getQuery('sortBy', null);
-		if(!is_null($sortBy) && isset($this->_data->fields[abs($sortBy)-1]) && $this->_data->fields[abs($sortBy)-1]->showInList)
-		{	//User sorting was called
-			$this->_data->setSortOrder(array($this->_data->fields[abs($sortBy)-1]->name => ($sortBy < 0 ? -1 : 1)));
-		}
-
-		if(!empty($this->_data->orderBy))
-		{
-			$qOrder = array();
-			foreach($this->_data->orderBy as $order)
-			{
-				if($order['field']->type == 'foreign')
-				{
-					$selectNames = array_keys($order['field']->options['select']);
-					$orderPiece = "{$order['field']->options['tableAlias']}.{$selectNames[0]}";
-				}
-				else
-					$orderPiece = "{$this->_tableName}.{$order['field']->name}";
-				if($order['dir'] == -1)
-					$orderPiece .= " DESC";
-				$qOrder[] = $orderPiece;
-			}
-			if($qOrder)
-				$q->order($qOrder);
-		}
-
-		$q->limit($this->rowsOnPage);
-		$q->offset(($this->managePage-1)*$this->rowsOnPage);
-		return $q;
-	}
-
-	/**
 	 * Data list mode.
 	 */
 	private function listMode()
@@ -646,33 +515,20 @@ class AutoAdmin extends CWebModule
 		if($this->subHref)	//ссылка на вложенный раздел
 			$dataToPass['urlSub'] = $this->subHref;
 
-		if(!empty($_GET['msg']))
-			$this->view->addMessage($_GET['msg']);
+		if(Yii::app()->request->getParam('msg'))
+			$this->view->addMessage(Yii::app()->request->getParam('msg'));
 
-		$q = $this->getListQuery();
-		$queryResult = $q->queryAll();
-		$dataToPass['dataRows'] = array();
-
-		foreach($queryResult as $row)
+		$this->_db->initList();
+		if(!is_null(Yii::app()->request->getParam('searchBy')) && isset($this->_data->fields[Yii::app()->request->getParam('searchBy')]) && Yii::app()->request->getParam('searchQ'))
 		{
-			$dataToPass['dataRows'][] = $this->_data->loadRow($row);
+			$this->_db->addSearch($this->_data->fields[Yii::app()->request->getParam('searchBy')], Yii::app()->request->getParam('searchQ'));
 		}
-				
+		$dataToPass['dataRows'] = $this->_db->getList($this->rowsOnPage, ($this->managePage-1)*$this->rowsOnPage);
 		if($this->_data->foreignLinks)
-		{
-			$dataToPass['foreignData'] = $this->getForeignData($queryResult);
-		}
-
-		//Now use the same query to calculate overall count of rows
-		$sqlCount = "SELECT COUNT(*) FROM ".$q->getFrom();
-		if($q->getJoin())
-			$sqlCount .= " ".implode(' ', $q->getJoin());
-		if($q->where)
-			$sqlCount .= " WHERE ".$q->getWhere();
-		$total = Yii::app()->{$this->dbConnection}->createCommand($sqlCount)->queryScalar($q->params);
+			$dataToPass['foreignData'] = $this->_db->getForeignData($dataToPass['dataRows']);
 
 		$dataToPass = array_merge($dataToPass, array(
-				'total'			=> $total,
+				'total'			=> $this->_db->getListOverallCount(),
 				'rowsOnPage'	=> $this->rowsOnPage,
 				'currentPage'	=> $this->managePage,
 				'checkboxes'	=> $this->checkboxes,
@@ -680,6 +536,7 @@ class AutoAdmin extends CWebModule
 				'fields'		=> $this->_data->fields,
 				'baseURL'		=> Yii::app()->request->requestUri,
 				'searchBy'		=> Yii::app()->request->getParam('searchBy'),
+				'searchQ'		=> Yii::app()->request->getParam('searchQ'),
 			));
 		if($this->_data->orderBy)
 		{
@@ -700,50 +557,20 @@ class AutoAdmin extends CWebModule
 	}
 
 	/**
-	 * Prepares data for editing and showing in form.
-	 * @throws CHttpException 
-	 */
-	private function prepareEditMode()
-	{
-		$q = Yii::app()->{$this->dbConnection}->createCommand();
-		$qWhere = array();
-		$qParams = array();
-		$this->getBaseQuery($q, $qWhere, $qParams, false);
-
-		foreach($this->_data->pk as $pkField=>$pkValue)
-		{
-			$qWhere[] = "{$this->_tableName}.{$pkField} = :id_{$pkField}";
-			$qParams[":id_{$pkField}"] = $pkValue;
-		}
-
-		foreach($this->_data->fields as $field)
-		{
-			if($field->bind)
-			{
-				$qWhere[] = "{$this->_tableName}.{$field->name} = :bk_{$field->name}";
-				$qParams[":bk_{$field->name}"] = $field->bind;
-			}
-		}
-
-		if($qWhere)
-			$q->where(array_merge(array('AND'), $qWhere), $qParams);
-		$row = $q->queryRow();
-		if(!$row)
-			throw new CHttpException(404, Yii::t('AutoAdmin.errors', 'Can\'t find the record'));
-		$this->_viewData['fields'] = $this->_data->loadRow($row);
-		$this->_viewData['actionType'] = 'edit';
-	}
-
-	/**
 	 * Outputs form for inserting or updating data.
 	 */
 	private function editMode()
 	{
 		$dataToPass = $this->_viewData;
-		if(empty($dataToPass['fields']))
-		{	//Situation in insert mode
+		if($this->_viewData['actionType'] == 'edit')
+		{
+			$dataToPass['fields'] = $this->_db->getCurrentRow();
+			if(!$dataToPass['fields'])
+				throw new CHttpException(404, Yii::t('AutoAdmin.errors', 'Can\'t find the record'));
+		}
+		else
+		{
 			$dataToPass['fields'] = $this->_data->fields;
-			$dataToPass['actionType'] = 'add';
 		}
 
 		if($this->_data->foreignLinks)
@@ -783,90 +610,87 @@ class AutoAdmin extends CWebModule
 	}
 
 	/**
-	 * Adding / Updating data.
-	 * @param string $actionType
+	 * Inserts the data into DB.
 	 * @return mixed
 	 */
-	private function save($actionType)
+	private function insert()
 	{
 		if(!isset($_POST[self::INPUT_PREFIX]))
 			throw new CHttpException(400);
+		$affected = 0;
 
-		$q = Yii::app()->{$this->dbConnection}->createCommand();
-		$values = array();
-		foreach($this->_data->fields as &$field)
+		$values = $this->getValues();
+		if($values)
 		{
-			if(!empty($_POST['isChangedAA'][$field->name]))
-				$field->isChanged = true;
-			if(!$field->isReadonly)
-				$field->loadFromForm($_POST[self::INPUT_PREFIX]);
-			if($actionType == 'add' || $field->isChanged)
-				$values[$field->name] = $field->valueForSql();
-		}
-
-		$affected = false;
-		if($actionType == 'add')
-		{	//Compose SQL-query for insertion
-			$transaction = Yii::app()->{$this->dbConnection}->beginTransaction();
+			$transaction = $this->_db->beginTransaction();
 			try
 			{
 				$this->_trigger->execute(null, 'before', 'insert');
-				$affected = $q->insert($this->getFullTableName(), $values);
+				$affected = $this->_db->insert($values);
 				if($affected)
 				{
-					$tableSchema = Yii::app()->{$this->dbConnection}->schema->getTable($this->_tableName);
-					if(count($this->_data->pk) == 1)	//Can use a sequence (AutoIncrement)
-						$pk = array($this->_data->pk[$this->_data->getPKField(0)] => Yii::app()->{$this->dbConnection}->getLastInsertID(($tableSchema->sequenceName ? $tableSchema->sequenceName : null)));
-					else
-						$pk = $this->_data->rowPK($values);
+					$pk = $this->_db->getInsertedPKs();
 					$this->_trigger->execute($pk, 'after', 'insert');
 				}
-				$transaction->commit();
+				$this->_db->transactionCommit($transaction);
 			}
 			catch(Exception $e)
 			{
 				$this->processQueryError($e);
-				$transaction->rollBack();
+				$this->_db->transactionRollback($transaction);
+			}
+		
+			if($affected)
+			{
+				$this->cache->updateDependency();
+
+				if($this->logMode)
+					$this->_access->log('INSERT', array('pk'=>$pk, 'values'=>$values));
 			}
 		}
-		elseif($values)
-		{	//Compose SQL-query for updating
-			$params = array();
-			$where = array('AND');
-			foreach($this->_data->pk as $pkField=>$pkValue)
-			{
-				$where[] = "{$this->_tableName}.{$pkField} = :_id{$pkField}";
-				$params[":_id{$pkField}"] = $pkValue;
-			}
+		return $affected;
+	}
 
-			$transaction = Yii::app()->{$this->dbConnection}->beginTransaction();
+	/**
+	 * Updates the data in DB.
+	 * @return mixed
+	 */
+	private function update()
+	{
+		if(!isset($_POST[self::INPUT_PREFIX]))
+			throw new CHttpException(400);
+		$affected = 0;
+
+		$values = $this->getValues();
+		if($values)
+		{
+			$transaction = $this->_db->beginTransaction();
 			try
 			{
 				$this->_trigger->execute($this->_data->pk, 'before', 'update');
-				$affected = $q->update($this->getFullTableName(), $values, $where, $params);
+				$affected = $q->update($values);
 				if($affected)
 				{
 					$pk = $this->_data->rowPK($values);
 					$this->_trigger->execute($pk, 'after', 'update');
 				}
-				$transaction->commit();
+				$this->_db->transactionCommit($transaction);
 			}
 			catch(Exception $e)
 			{
 				$this->processQueryError($e);
-				$transaction->rollBack();
+				$this->_db->transactionRollback($transaction);
+			}
+		
+			if($affected)
+			{
+				$this->cache->updateDependency();
+
+				if($this->logMode)
+					$this->_access->log('UPDATE', array('pk'=>$pk, 'values'=>$values));
 			}
 		}
-		
-		if($affected)
-		{	//Updates took place
-			$this->cache->updateDependency();
-
-			if($this->logMode)
-				$this->_access->log("ID: ".var_export($pk, true)."\n SQL: ".$q->text."\n Params: ".$q->params);
-		}
-
-		return (bool)$affected;
+		return $affected;
 	}
 
 	/**
@@ -877,122 +701,60 @@ class AutoAdmin extends CWebModule
 	 */
 	private function delete()
 	{
-		$params = array();
-		$where = array('AND');
-		foreach($this->_data->pk as $pkField=>$pkValue)
+		$deletingRow = $this->_db->getCurrentRow();
+		$affected = 0;
+		if($deletingRow)
 		{
-			$where[] = "{$this->_tableName}.{$pkField} = :_id{$pkField}";
-			$params[":_id{$pkField}"] = $pkValue;
-		}
-		$q = Yii::app()->{$this->dbConnection}->createCommand();
-
-		$fileSQLf = array(); //We should delete files
-		foreach($this->_data->fields as &$field)
-		{	//Defining if the field has a file
-			if(in_array($field->type, array('image', 'file')))
-				$fileSQLf[$field->name] = $field->options['directoryPath'];
-		}
-		if($fileSQLf)
-		{	//Selecting data about deleting files from the deleting row
-			$q->select(array_keys($fileSQLf));
-			$q->from($this->getFullTableName());
-			$q->where($where, $params);
-			$filesToDelete = $q->queryRow();
-			$q->reset();
-		}
-
-		$transaction = Yii::app()->{$this->dbConnection}->beginTransaction();
-		try
-		{
-			$this->_trigger->execute($this->_data->pk, 'before', 'delete');
-			$result = $q->delete($this->_tableName, $where, $params);
-			if($result)
+			$transaction = $this->_db->beginTransaction();
+			try
 			{
-				if(!empty($filesToDelete))
-				{	//Only in case of success of main record deletion we do delete files
-					foreach($filesToDelete as $fieldName=>$fileName)
-						AAHelperFile::deleteFile($fileSQLf[$fieldName].DIRECTORY_SEPARATOR.$fileName);
+				$this->_trigger->execute($this->_data->pk, 'before', 'delete');
+				$affected = $this->_db->delete();
+				if($affected)
+				{
+					//Need to delete files if they were among the fields and have been checked in the confirmation form
+					$fieldsToDel = Yii::app()->request->getPost('filesToDelF', array());
+					if($fieldsToDel)
+					{
+						foreach($fieldsToDel as $iField)
+						{
+							if(isset($deletingRow->fields[$iField]) && in_array($deletingRow->fields[$iField]->type, array('image', 'file')))
+							{
+								if(in_array($deletingRow->fields[$iField]->type, array('image', 'file')))
+									AAHelperFile::deleteFile($deletingRow->fields[$iField]->options['directoryPath'].DIRECTORY_SEPARATOR.$deletingRow->fields[$iField]->value);
+							}
+						}
+					}
 				}
+				$this->_trigger->execute($this->_data->pk, 'after', 'delete');
+				$this->_db->transactionCommit($transaction);
 			}
-			$this->_trigger->execute($this->_data->pk, 'after', 'delete');
-			$transaction->commit();
+			catch(Exception $e)
+			{
+				$this->processQueryError($e);
+				$this->_db->transactionRollback($transaction);
+			}
 		}
-		catch(Exception $e)
-		{
-			$this->processQueryError($e);
-			$transaction->rollBack();
-		}
-
-		return $result;
+		return $affected;
 	}
 
 	/**
-	 * Prepares query for data searching
-	 * @param type $sqlCommand
-	 * @param type $i
-	 * @return string 
+	 * Gets the values from AAData as array ready for inserting or updating in DB.
+	 * @return array An array of fields's values with field names as keys.
 	 */
-	private function prepareSearch(&$sqlCommand, $i)
+	public function getValues()
 	{
-		$search = $_GET['searchq'];
-		if($this->_data->fields[$i]->type == 'foreign')
+		$values = array();
+		foreach($this->_data->fields as &$field)
 		{
-			$where = array('OR', array());
-			foreach($this->_data->foreignKeys[$this->_data->fields[$i]->name]['valueFields'] as $vfield)
-				$where[1][] = array('LIKE', "{$this->_data->foreignKeys[$this->_data->fields[$i]->name]['table_alias']}.{$vfield}", "%{$search}%");
-			$sqlCommand->where($where);
+			if(!empty($_POST['isChangedAA'][$field->name]))
+				$field->isChanged = true;
+			if(!$field->isReadonly)
+				$field->loadFromForm($_POST[self::INPUT_PREFIX]);
+			if($this->manageAction == 'insert' || $field->isChanged)
+				$values[$field->name] = $field->valueForSql();
 		}
-		elseif($this->_data->fields[$i]->type == 'date' || $this->_data->fields[$i]->type == 'datetime')
-		{
-			/*
-			if(($k = array_search($_GET['searchq'], Hot::$months)) || ($k = array_search($_GET['searchq'], Hot::$months3)))
-			{
-				$where .= " MONTH(`{$this->_tableName}`.`".$this->_data->fields[$i]->name."`) ";
-				$where .= " = '{$k}'";
-			}
-			elseif(preg_match('/^(\d{4})$/u', $_GET['searchq'], $ar))
-			{
-				$where .= " YEAR(`{$this->_tableName}`.`".$this->_data->fields[$i]->name."`) ";
-				$where .= " = '{$ar[1]}'";
-			}
-			elseif(preg_match('/^(\d?\d)[\.\,\-\s]?(\d?\d)[\.\,\-\s]?(\d{4})\s*\-\s*(\d?\d)[\.\,\-\s]?(\d?\d)[\.\,\-\s]?(\d{4})$/', $_GET['searchq'], $ar))
-			{
-				$where .= " `{$this->_tableName}`.`".$this->_data->fields[$i]->name."`";
-				$where .= " >= '{$ar[3]}-{$ar[2]}-{$ar[1]}".(($this->_data->fields[$i]->type == 'datetime') ? ' 00:00:00':'')."'";
-				$where .= " AND `{$this->_tableName}`.`".$this->_data->fields[$i]->name."`";
-				$where .= " <= '{$ar[6]}-{$ar[5]}-{$ar[4]}".(($this->_data->fields[$i]->type == 'datetime') ? ' 23:59:59':'')."'";
-			}
-			elseif(preg_match('/^(\d{4})[\.\,\-\s]?(\d?\d)[\.\,\-\s]?(\d?\d)$/', $_GET['searchq'], $ar))
-			{
-				$where .= " `{$this->_tableName}`.`".$this->_data->fields[$i]->name."` ";
-				$where .= " = '{$ar[1]}-{$ar[2]}-{$ar[3]}'";
-			}
-			elseif(preg_match('/^(\d?\d)[\.\,\-\s]?(\d?\d)[\.\,\-\s]?(\d{4})$/', $_GET['searchq'], $ar))
-			{
-				$where .= " `{$this->_tableName}`.`".$this->_data->fields[$i]->name."` ";
-				$where .= " = '{$ar[3]}-{$ar[2]}-{$ar[1]}'";
-			}
-			elseif(preg_match('/^(\d?\d)[\.\,\-\s](\d{4})$/', $_GET['searchq'], $ar))
-			{
-				$where .= " `{$this->_tableName}`.`".$this->_data->fields[$i]->name."` ";
-				$where .= " LIKE '%{$ar[1]}-{$ar[2]}'";
-			}
-			elseif(preg_match('/^(\d?\d)[\.\,\-\s](\d{4})$/', $_GET['searchq'], $ar))
-			{
-				$where .= " `{$this->_tableName}`.`".$this->_data->fields[$i]->name."` ";
-				$where .= " LIKE '%{$ar[2]}-{$ar[1]}'";
-			}
-			elseif(preg_match('/^(\d?\d)[\.\,\-\s](\d?\d)$/', $_GET['searchq'], $ar))
-			{
-				$where .= " `{$this->_tableName}`.`".$this->_data->fields[$i]->name."` ";
-				$where .= " LIKE '%-{$ar[2]}-{$ar[1]}%'";
-			}
-			*/
-		}
-		elseif($this->_data->fields[$i]->type == 'string' || $this->_data->fields[$i]->type == 'text' || $this->_data->fields[$i]->type == 'text2' || $this->_data->fields[$i]->type == 'editor' || $this->_data->fields[$i]->type == 'num')
-		{
-			$sqlCommand->where(array('LIKE', "{$this->_tableName}.{$this->_data->fields[$i]->name}", "%{$search}%"));
-		}
+		return $values;
 	}
 
 	/**
@@ -1012,71 +774,6 @@ class AutoAdmin extends CWebModule
 	public function setPartialViewData($data)
 	{
 		$this->clientViewData = $data;
-	}
-
-	/**
-	 * Loads data from linked foreign tables as "many to many".
-	 * @todo The function while doesn't work with composite PrimaryKey ID
-	 * @param array $nativeData Data from native table, foreign data extract by.
-	 */
-	public function getForeignData(&$nativeData)
-	{
-		$data = array();
-
-		$nativeKeys = array();
-		foreach($this->_data->pk as $pkField=>$pkValue)
-		{
-			$nativeKeys[$pkField] = array();
-			foreach($nativeData as $r)
-				$nativeKeys[$pkField][] = $r[$pkField];
-		}
-		if(!$nativeKeys)
-			return $data;
-
-		$q = Yii::app()->{$this->dbConnection}->createCommand();
-		foreach($this->_data->foreignLinks as $outAlias=>$link)
-		{
-			$q->from($this->getFullTableName($link['linkTable'])." AS t1, ".$this->getFullTableName($link['targetTable'])." AS t2");
-
-			//Collect fields for selection
-			$fields = array();
-			foreach($link['inKey'] as $inKey=>$nativeKey)
-				$fields[] = "t1.{$inKey}";
-			if(!empty($link['linkFields']))
-			{
-				foreach($link['linkFields'] as $field)
-					$fields[] = "t1.{$field}";
-			}
-			if(!empty($link['targetFields']))
-			{
-				foreach($link['targetFields'] as $field)
-					$fields[] = "t2.{$field}";
-			}
-			$q->select($fields);
-
-			$where = array('AND');
-			$whereJoin =& $where[array_push($where, array('AND')) - 1];	//INNER JOIN conditions must have a the separate group
-			foreach($link['outKey'] as $outKey=>$targetKey)
-				$whereJoin[] = "{$outKey} = {$targetKey}";	//INNER JOIN conditions
-			foreach($link['inKey'] as $inKey=>$nativeKey)
-				$where[] = array('IN', $inKey, $nativeKeys[$nativeKey]);
-			$q->where($where);
-
-			$result = $q->queryAll();
-			$data[$outAlias] = array();	//result data
-			foreach($result as $r)
-			{
-				$exportKey = array();
-				foreach($this->_data->pk as $pkField=>$pkValue)
-					$exportKey[] = $r[array_search($pkField, $link['inKey'])];
-				$exportKey = serialize($exportKey);
-				if(!isset($data[$outAlias][$exportKey]))
-					$data[$outAlias][$exportKey] = array();
-				$data[$outAlias][$exportKey][] = $r;
-			}
-			$q->reset();
-		}
-		return $data;
 	}
 
 	/**

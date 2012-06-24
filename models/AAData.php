@@ -1,6 +1,6 @@
 <?php
 /**
- * Description of AAFields
+ * Keeps and operates by the fields configuration.
  *
  * @author Alexander Palamarchuk <a@palamarchuk.info>
  */
@@ -109,7 +109,7 @@ class AAData
 				throw new AAException(Yii::t('AutoAdmin.errors', 'Incorrect options configuration of the field {fieldName}', array('{fieldName}'=>$field->name)));
 
 			if(in_array('search', $options, true))
-				$this->searchBy[] = $k;
+				$field->options['inSearch'] = true;
 
 		}
 	}

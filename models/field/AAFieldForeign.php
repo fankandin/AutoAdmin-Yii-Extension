@@ -144,6 +144,7 @@ class AAFieldForeign extends AAField implements AAIField
 			{
 				$modifySql['select'][] = "{$this->options['tableAlias']}.{$fieldName} AS {$fieldAlias}";
 			}
+
 			$modifySql['join']['table'] = "{$this->options['table']} AS {$this->options['tableAlias']}";
 			if(!empty($this->options['dbName']))	//Foreign table is in another DB
 				$modifySql['join']['table'] = "{$this->options['dbName']}.{$modifySql['join']['table']}";
@@ -152,7 +153,7 @@ class AAFieldForeign extends AAField implements AAIField
 			if(!empty($this->options['conditions']))
 			{
 				$conditions = $this->options['conditions'];
-				AutoAdmin::addTableAliasToCond($conditions, $this->options['table'], $this->options['tableAlias']);
+				AADb::addTableAliasToCond($conditions, $this->options['table'], $this->options['tableAlias']);
 				$modifySql['join']['conditions'][] = $conditions;
 				if(!empty($this->options['params']))
 					$modifySql['join']['params'] = $this->options['params'];

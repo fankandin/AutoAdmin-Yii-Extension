@@ -123,6 +123,7 @@ CREATE TABLE admin.aa_logs (
   authorization_id INTEGER, 
   when_event TIMESTAMP WITHOUT TIME ZONE NOT NULL, 
   message TEXT, 
+  data TEXT, 
   CONSTRAINT aa_logs_pkey PRIMARY KEY(id), 
   CONSTRAINT aa_logs_fk FOREIGN KEY (interface_id)
     REFERENCES admin.aa_interfaces(id)

@@ -1,0 +1,4 @@
+#confirm-delete fieldset {margin: 0 0 10px; border: none; background: #f9f9f9; border: 1px solid #eee; display: inline-block;}
+#confirm-delete input[type=submit] {font-size: 150%; display: block; clear: left; float: left;}
+#confirm-delete .cancel {float: left; margin: 10px 0 0 20px;}
+#filesToDelF {line-height: 160%;}

@@ -1,26 +1,29 @@
 <?
-echo CHtml::form('./', 'get', array('class'=>'searchPanel'));
-
+$baseURL = HelperUrl::stripParam($baseURL, 'searchQ');
+$baseURL = HelperUrl::stripParam($baseURL, 'searchBy');
+echo CHtml::form($baseURL, 'get', array('id'=>'search-panel'));
+/*
 foreach($getParams as $param=>$value)
 {
 	if($param == 'searchq' || $param == 'searchby')
 		continue;
 	echo CHtml::hiddenField($param, $value);
 }
-echo CHtml::label('Поиск: ', 'searchq');
-echo CHtml::textField('searchq', ((!empty($_GET['searchq'])) ? $_GET['searchq'] : ''));
+ * 
+ */
+echo CHtml::label(Yii::t('AutoAdmin.common', 'Search').':', 'searchQ');
+echo CHtml::textField('searchQ', (!empty($searchQ) ? $searchQ : ''), array('id'=>'searchQ'));
 
-$searchOptions = array();
-foreach($SearchBy as $k)
+$inSearch = array();
+foreach($fields as $i=>&$field)
 {
-	$searchOptions[$k] = $fields['names'][$k];
+	if(!empty($field->options['inSearch']))
+	{
+		$inSearch[$i] = $field->label;
+	}
 }
-echo CHtml::dropDownList('searchby', (isset($_GET['searchby']) ? $_GET['searchby'] : null), $searchOptions);
-
-echo CHtml::submitButton('OK', array('name'=>null));
-?>
-[<a href="<?=AAHelperUrl::update(Yii::app()->request->requestUri, array('searchq', 'searchby'))?>">x</a>]
-<?
+echo CHtml::dropDownList('searchBy', (isset($searchBy) ? $searchBy : null), $inSearch);
+echo CHtml::submitButton('OK', array('name'=>null, 'title'=>Yii::t('AutoAdmin.common', 'Search')));
 
 echo CHtml::closeTag('form');
 ?>

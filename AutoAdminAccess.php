@@ -188,13 +188,14 @@ class AutoAdminAccess
 	 * Logs unconditioned text message which is linked to a current user's session.
 	 * @param string $message 
 	 */
-	public function log($message)
+	public function log($message, $data)
 	{
 		Yii::app()->dbAdmin->createCommand()->insert(self::sqlAdminTableName('logs'), array(
 				'interface_id'		=> ($this->interfaceID ? new CDbExpression('NULL') : $this->interfaceID),
 				'authorization_id'	=> (Yii::app()->user->isGuest ? new CDbExpression('NULL') : Yii::app()->user->authID),
 				'when_event'		=> date('Y-m-d H:i:s'),
-				'message'			=> $message
+				'message'			=> $message,
+				'data'				=> serialize($data),
 			));
 	}
 

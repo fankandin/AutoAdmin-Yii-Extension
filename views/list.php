@@ -39,22 +39,37 @@ if(!empty($clientData['subhtml']))
 			</div>
 		</td>
 <?
-if(!empty($SearchBy))
+if($dataRows)
 {
-	?><td><?=$this->renderPartial($viewsPath.'searchPanel', array('SearchBy'=>$_data['searchBy'], 'DataName'=>$_data['titles'], 'getParams'=>$getParams))?></td><?
+	foreach($fields as $field)
+	{
+		if(!empty($field->options['inSearch']))
+		{
+			?>
+		<td>
+			<?=$this->renderPartial($viewsPath.'searchPanel', array(
+				'searchQ'=>$searchQ,
+				'searchBy'=>$searchBy,
+				'fields'=>$fields,
+				'baseURL'=>$baseURL,
+			))?>
+		</td>
+			<?
+			break;
+		}
+	}
 }
-?>
-<?
 if(in_array('add', $rights))
 {
 	?>
-	<td class="panel-add">
-		<a href="<?=$urlAdd?>"><?=Yii::t('AutoAdmin.common', 'Add')?></a>
-	</td>
+		<td class="panel-add">
+			<a href="<?=$urlAdd?>"><?=Yii::t('AutoAdmin.common', 'Add')?></a>
+		</td>
 	<?
 }
 ?>
 	</tr>
+</tbody>
 </table>
 
 <?
@@ -113,7 +128,6 @@ if(!empty($_data['foreignKeysLinks']))
 </thead>
 <tbody>
 <?
-$row_i = 0;
 foreach($dataRows as $rowI=>$dataRow)
 {
 	?>
@@ -140,7 +154,10 @@ foreach($dataRows as $rowI=>$dataRow)
 		}
 		else
 		{
-			echo $field->printValue();
+			if($searchQ && !is_null($searchBy))
+				echo str_replace($searchQ, CHtml::tag('span', array('class'=>'found'), $searchQ), $field->printValue());
+			else
+				echo $field->printValue();
 		}
 		if($checkboxes)
 		{
