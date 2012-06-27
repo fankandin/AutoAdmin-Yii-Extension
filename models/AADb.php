@@ -154,12 +154,16 @@ class AADb
 
 	public function getListOverallCount()
 	{
-		$this->_listQuery->select(new CDbExpression("COUNT(*)"));
-		$this->_listQuery->setText('');
-		$this->_listQuery->limit = -1;
-		$this->_listQuery->offset = -1;
-		//unset($this->_listQuery->order);
-		return $this->_listQuery->queryScalar($this->_listQuery->params);
+		$q = Yii::app()->{$this->dbConnection}->createCommand();
+		$q->select(new CDbExpression("COUNT(*)"));
+		$q->from($this->tableName);
+		if($this->_listQuery->join)
+			$q->join = $this->_listQuery->join;
+		if($this->_listQuery->where)
+			$q->where = $this->_listQuery->where;
+		if($this->_listQuery->params)
+			$q->params = $this->_listQuery->params;
+		return $q->queryScalar();
 	}
 
 	/**
@@ -367,7 +371,7 @@ class AADb
 		$where = array('AND');
 		foreach($this->_data->pk as $pkField=>$pkValue)
 		{
-			$where[] = "{$this->_tableName}.{$pkField} = :_id{$pkField}";
+			$where[] = "{$this->tableName}.{$pkField} = :_id{$pkField}";
 			$params[":_id{$pkField}"] = $pkValue;
 		}
 		return Yii::app()->{$this->dbConnection}->createCommand()
@@ -389,9 +393,10 @@ class AADb
 
 	/**
 	 * Gets the last inserted sequence (primary key).
+	 * @param array $values Just inserted values. Used for composite primary keys.
 	 * @return mixed|array LastInsertedID value if the PrimaryKey is scalar, and array of inserted values if PK is composite.
 	 */
-	public function getInsertedPKs()
+	public function getInsertedPKs(&$values)
 	{
 		$tableSchema = Yii::app()->{$this->dbConnection}->schema->getTable($this->tableName);
 		if(count($this->_data->pk) == 1)	//Can use a sequence (AutoIncrement)

@@ -22,14 +22,14 @@ class AAFieldNum extends AAField implements AAIField
 		$tagOptions['maxlength'] = 10;
 		if($this->isReadonly)
 			$tagOptions['disabled'] = true;
-		echo CHtml::textField($inputName, $this->value, $tagOptions);
+		echo CHtml::textField($inputName, (is_int($this->value) ? $this->value : $this->defaultValue), $tagOptions);
 
 		$numOptions = array();
 		for($j=0; $j<35; $j++)
 		{
 			$numOptions[] = $j;
 		}
-		?><div class="num-tip"><?=CHtml::dropDownList(null, ($this->value ? $this->value : $this->defaultValue), $numOptions);?></div><?
+		?><div class="num-tip"><?=CHtml::dropDownList(null, (is_int($this->value) ? $this->value : $this->defaultValue), $numOptions);?></div><?
 
 		return ob_get_clean();
 	}

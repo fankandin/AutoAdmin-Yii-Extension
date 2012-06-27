@@ -49,7 +49,12 @@ function foreignKeyQuery(request, response)
 		for(var param in this.options.extraParams)
 			params[param] = this.options.extraParams[param];
 	}
-	$.getJSON(this.options.sourceUrl, params, response);
+	$.ajax(this.options.sourceUrl, {
+			type: 'post',
+			dataType: 'json',
+			data: params,
+			success: response
+		});
 }
 
 function foreignKeySelected(event, ui)

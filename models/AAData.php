@@ -93,7 +93,7 @@ class AAData
 			{
 				$field->options = array_merge($field->options, $options['foreign']);
 			}
-
+			//Binding settings
 			if(!empty($options['bind']))
 				$field->bind = $options['bind'];
 			elseif(isset($options['bindBy']))	//'bindBy' has a lesser priority than 'bind' does
@@ -103,6 +103,8 @@ class AAData
 			}
 			if($field->bind == '[NULL]')
 				$field->bind = new CDbExpression('NULL');
+			if(!is_null($field->bind))
+				$field->value = $field->defaultValue = $field->bind;
 
 			$field->completeOptions();
 			if(!$field->testOptions())

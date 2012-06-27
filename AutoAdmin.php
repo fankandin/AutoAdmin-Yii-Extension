@@ -262,12 +262,6 @@ class AutoAdmin extends CWebModule
 		try
 		{
 			$this->_data->loadColumnsConf($columns, $this->tableName());
-			//Creating the oppourtunity to upload files in directories that set by the controller
-			foreach($this->_data->fields as &$field)
-			{
-				//if($field->$field->options['directoryPath'])
-				//Yii::app()->user->setState("fileDirs[{$this->_interface}]", $this->_data->uploadDirs);
-			}
 		}
 		catch(Exception $e)
 		{
@@ -570,6 +564,12 @@ class AutoAdmin extends CWebModule
 		}
 		else
 		{
+			foreach($this->_data->fields as &$field)
+			{
+				if(!is_null($field->bind))
+					$field->defaultValue = $field->bind;
+					
+			}
 			$dataToPass['fields'] = $this->_data->fields;
 		}
 
@@ -629,15 +629,15 @@ class AutoAdmin extends CWebModule
 				$affected = $this->_db->insert($values);
 				if($affected)
 				{
-					$pk = $this->_db->getInsertedPKs();
+					$pk = $this->_db->getInsertedPKs($values);
 					$this->_trigger->execute($pk, 'after', 'insert');
 				}
 				$this->_db->transactionCommit($transaction);
 			}
 			catch(Exception $e)
 			{
-				$this->processQueryError($e);
 				$this->_db->transactionRollback($transaction);
+				$this->processQueryError($e);
 			}
 		
 			if($affected)
@@ -668,7 +668,7 @@ class AutoAdmin extends CWebModule
 			try
 			{
 				$this->_trigger->execute($this->_data->pk, 'before', 'update');
-				$affected = $q->update($values);
+				$affected = $this->_db->update($values);
 				if($affected)
 				{
 					$pk = $this->_data->rowPK($values);

@@ -67,6 +67,7 @@ class AAAuthController extends CExtController
 			throw new CHttpException(403);
 		
 		$this->module->dbConnection = 'dbAdmin';
+		$this->module->dbSchema = '';	//We must set to null the default schema, because of all the admin tables are named with AutoAdminAccess::sqlAdminTableName()
 		$this->module->tableName(AutoAdminAccess::sqlAdminTableName('users'));
 		$this->module->setPK('id');
 
@@ -134,6 +135,8 @@ class AAAuthController extends CExtController
 			throw new CHttpException(403);
 			
 		$this->module->dbConnection = 'dbAdmin';
+		$this->module->dbSchema = '';
+
 		$this->module->tableName(AutoAdminAccess::sqlAdminTableName('sections'));
 		$this->module->setPK('id');
 		$this->module->fieldsConf(array(
@@ -195,6 +198,8 @@ class AAAuthController extends CExtController
 		}
 
 		$this->module->dbConnection = 'dbAdmin';
+		$this->module->dbSchema = '';
+
 		$this->module->tableName(AutoAdminAccess::sqlAdminTableName('interfaces'));
 		$this->module->setPK('id');
 		$this->module->fieldsConf(array(
@@ -238,6 +243,8 @@ class AAAuthController extends CExtController
 		$interfaceID = $bk['id'];
 
 		$this->module->dbConnection = 'dbAdmin';
+		$this->module->dbSchema = '';
+
 		$this->module->tableName(AutoAdminAccess::sqlAdminTableName('access'));
 		$this->module->setPK('user_id', 'interface_id');
 		$fieldsConf = array(
