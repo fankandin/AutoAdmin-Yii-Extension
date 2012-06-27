@@ -152,8 +152,15 @@ class AADb
 		return $q;
 	}
 
+	/**
+	 * Calculate overall count of rows in a current list mode.
+	 * @return int Count of rows.
+	 * @todo Caching of the query. The problem is in updating key (more precisely - in generating of the key in any mode).
+	 */
 	public function getListOverallCount()
 	{
+		//$dependency = new CGlobalStateCacheDependency($this->_listQuery->text);
+		//$q = Yii::app()->{$this->dbConnection}->cache(600, $dependency)->createCommand();
 		$q = Yii::app()->{$this->dbConnection}->createCommand();
 		$q->select(new CDbExpression("COUNT(*)"));
 		$q->from($this->tableName);
@@ -354,16 +361,17 @@ class AADb
 
 	/**
 	 * Inserts the data.
-	 * @param array $values 
+	 * @param array $values An array of field=>value to insert.
 	 */
 	public function insert($values)
 	{
 		return Yii::app()->{$this->dbConnection}->createCommand()
 				->insert($this->getFullTableName(), $values);
 	}
+
 	/**
 	 * Updates the data.
-	 * @param array $values 
+	 * @param array $values An array of field=>value to update.
 	 */
 	public function update($values)
 	{
@@ -378,6 +386,10 @@ class AADb
 				->update($this->getFullTableName(), $values, $where, $params);
 	}
 
+	/**
+	 * Deletes a row from the table.
+	 * @return int Affected rows.
+	 */
 	public function delete()
 	{
 		$params = array();

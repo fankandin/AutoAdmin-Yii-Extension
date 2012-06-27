@@ -470,17 +470,26 @@ class AutoAdmin extends CWebModule
 			{
 				if(!$this->_access->checkRight('delete'))
 					$this->blockAccess('delete');
+				$deletingRow = $this->_db->getCurrentRow();
+				if(!$deletingRow)
+					throw new CHttpException(404, Yii::t('AutoAdmin.errors', 'Can\'t find the record'));
+
 				if($this->confirmDelete && !Yii::app()->request->getPost('sure', false))
 				{
 					$confirmUrl = AAHelperUrl::update(Yii::app()->request->requestUri, array('action'), array('action'=>'delete'));
 					$cancelUrl = AAHelperUrl::stripParam(Yii::app()->request->requestUri, array('action'));
 					foreach($this->_data->pk as $pkField=>$value)
 						$cancelUrl = AAHelperUrl::stripParam($cancelUrl, "id[{$pkField}]");
+					foreach($this->_data->fields as $k=>&$field)
+						$field->value = $deletingRow->fields[$k]->value;
 					$this->_controller->render($this->viewsPath.'confirmDelete', array('confirmUrl'=>$confirmUrl, 'cancelUrl'=>$cancelUrl, 'fields'=>$this->_data->fields));
 					Yii::app()->end();
 				}
-				$affected = $this->delete();
-				$this->resultMode(array('msg'=>Yii::t('AutoAdmin.messages', ($affected ? 'The record was deleted' : 'The record has not been deleted'))));
+				else
+				{
+					$affected = $this->delete($deletingRow);
+					$this->resultMode(array('msg'=>Yii::t('AutoAdmin.messages', ($affected ? 'The record was deleted' : 'The record has not been deleted'))));
+				}
 				break;
 			}
 			case 'empty':	//Interface which is programmed directly by user
@@ -619,7 +628,12 @@ class AutoAdmin extends CWebModule
 			throw new CHttpException(400);
 		$affected = 0;
 
-		$values = $this->getValues();
+		$this->fillFieldsWithForm();
+		$values = array();
+		foreach($this->_data->fields as &$field)
+		{
+			$values[$field->name] = $field->valueForSql();
+		}
 		if($values)
 		{
 			$transaction = $this->_db->beginTransaction();
@@ -661,7 +675,13 @@ class AutoAdmin extends CWebModule
 			throw new CHttpException(400);
 		$affected = 0;
 
-		$values = $this->getValues();
+		$this->fillFieldsWithForm();
+		$values = array();
+		foreach($this->_data->fields as &$field)
+		{
+			if($field->isChanged)
+				$values[$field->name] = $field->valueForSql();
+		}
 		if($values)
 		{
 			$transaction = $this->_db->beginTransaction();
@@ -695,66 +715,56 @@ class AutoAdmin extends CWebModule
 
 	/**
 	 * Deletes the data.
-	 * @return integer Number of rows affected by the execution 
-	 * 
-	 * @todo To add an opportunity to choose whether to delete files (which are linked with fields in a row that is beeing deleted) or not
+	 * @param Data from a deleting row. Need for additional delete operations (and not to query these data twice).
+	 * @return integer Number of rows affected by the execution.
 	 */
-	private function delete()
+	private function delete(&$deletingRow)
 	{
-		$deletingRow = $this->_db->getCurrentRow();
 		$affected = 0;
-		if($deletingRow)
+		$transaction = $this->_db->beginTransaction();
+		try
 		{
-			$transaction = $this->_db->beginTransaction();
-			try
+			$this->_trigger->execute($this->_data->pk, 'before', 'delete');
+			$affected = $this->_db->delete();
+			if($affected)
 			{
-				$this->_trigger->execute($this->_data->pk, 'before', 'delete');
-				$affected = $this->_db->delete();
-				if($affected)
+				//Need to delete files if they were among the fields and have been checked in the confirmation form
+				$fieldsToDel = Yii::app()->request->getPost('filesToDelF', array());
+				if($fieldsToDel)
 				{
-					//Need to delete files if they were among the fields and have been checked in the confirmation form
-					$fieldsToDel = Yii::app()->request->getPost('filesToDelF', array());
-					if($fieldsToDel)
+					foreach($fieldsToDel as $iField)
 					{
-						foreach($fieldsToDel as $iField)
+						if(isset($deletingRow->fields[$iField]) && in_array($deletingRow->fields[$iField]->type, array('image', 'file')))
 						{
-							if(isset($deletingRow->fields[$iField]) && in_array($deletingRow->fields[$iField]->type, array('image', 'file')))
-							{
-								if(in_array($deletingRow->fields[$iField]->type, array('image', 'file')))
-									AAHelperFile::deleteFile($deletingRow->fields[$iField]->options['directoryPath'].DIRECTORY_SEPARATOR.$deletingRow->fields[$iField]->value);
-							}
+							if(in_array($deletingRow->fields[$iField]->type, array('image', 'file')))
+								AAHelperFile::deleteFile($deletingRow->fields[$iField]->options['directoryPath'].DIRECTORY_SEPARATOR.$deletingRow->fields[$iField]->value);
 						}
 					}
 				}
-				$this->_trigger->execute($this->_data->pk, 'after', 'delete');
-				$this->_db->transactionCommit($transaction);
 			}
-			catch(Exception $e)
-			{
-				$this->processQueryError($e);
-				$this->_db->transactionRollback($transaction);
-			}
+			$this->_trigger->execute($this->_data->pk, 'after', 'delete');
+			$this->_db->transactionCommit($transaction);
+		}
+		catch(Exception $e)
+		{
+			$this->processQueryError($e);
+			$this->_db->transactionRollback($transaction);
 		}
 		return $affected;
 	}
 
 	/**
-	 * Gets the values from AAData as array ready for inserting or updating in DB.
-	 * @return array An array of fields's values with field names as keys.
+	 * Fill the AutoAdmin::_data->fields with the data sent by the main edit form.
 	 */
-	public function getValues()
+	public function fillFieldsWithForm()
 	{
-		$values = array();
 		foreach($this->_data->fields as &$field)
 		{
 			if(!empty($_POST['isChangedAA'][$field->name]))
 				$field->isChanged = true;
 			if(!$field->isReadonly)
 				$field->loadFromForm($_POST[self::INPUT_PREFIX]);
-			if($this->manageAction == 'insert' || $field->isChanged)
-				$values[$field->name] = $field->valueForSql();
 		}
-		return $values;
 	}
 
 	/**
