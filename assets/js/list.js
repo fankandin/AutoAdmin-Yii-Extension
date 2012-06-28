@@ -38,7 +38,7 @@ $(document).ready(function(){
 	);
 	$('#search-panel input[type=reset]').click(function() {
 		var $form = $(this.form);
-		$form.find('input, select').attr('disabled', true);
+		$form.find('[name=searchBy], [name=searchQ]').attr('disabled', true);
 		$form.submit();
 	});
 });

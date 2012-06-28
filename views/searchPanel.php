@@ -1,28 +1,26 @@
 <?
-$baseURL = HelperUrl::stripParam($baseURL, 'searchQ');
-$baseURL = HelperUrl::stripParam($baseURL, 'searchBy');
-echo CHtml::form($baseURL, 'get', array('id'=>'search-panel'));
-/*
+$actionURL = HelperUrl::update($baseURL, array('searchQ', 'searchBy'));
+$getParams = HelperUrl::uriToParamsArray($actionURL);
+if($getParams)
+	$actionURL = HelperUrl::update($actionURL, array_keys($getParams));
+echo CHtml::form($actionURL, 'get', array('id'=>'search-panel'));
 foreach($getParams as $param=>$value)
-{
-	if($param == 'searchq' || $param == 'searchby')
-		continue;
 	echo CHtml::hiddenField($param, $value);
-}
- * 
- */
 echo CHtml::label(Yii::t('AutoAdmin.common', 'Search').':', 'searchQ');
-echo CHtml::textField('searchQ', (!empty($searchQ) ? $searchQ : ''), array('id'=>'searchQ'));
+echo CHtml::textField('searchQ', (isset($searchOptions['query']) && !is_array($searchOptions['query']) ? $searchOptions['query'] : ''), array('id'=>'searchQ'));
 
 $inSearch = array();
-foreach($fields as $i=>&$field)
+$selectedIndex = null;
+foreach($fields as $k=>&$field)
 {
 	if(!empty($field->options['inSearch']))
 	{
-		$inSearch[$i] = $field->label;
+		$inSearch[$k] = $field->label;
+		if($searchOptions['field']->name == $field->name)
+			$selectedIndex = $k;
 	}
 }
-echo CHtml::dropDownList('searchBy', (isset($searchBy) ? $searchBy : null), $inSearch);
+echo CHtml::dropDownList('searchBy', $selectedIndex, $inSearch);
 echo CHtml::submitButton('OK', array('name'=>null, 'title'=>Yii::t('AutoAdmin.common', 'Search')));
 echo CHtml::resetButton(Yii::t('AutoAdmin.common', 'Reset'), array('name'=>null, 'title'=>Yii::t('AutoAdmin.common', 'Reset')));
 

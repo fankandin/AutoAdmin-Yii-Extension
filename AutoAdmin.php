@@ -42,7 +42,6 @@ class AutoAdmin extends CWebModule
 
 	private $_data;
 	private $_db;
-	private $_tableName;
 	private $_iframeMode = false;
 	private $_viewData = array();
 
@@ -140,18 +139,18 @@ class AutoAdmin extends CWebModule
 	 */
 	public static $assetPath;
 	/**
-	 * Inizialize all the settings through an array of options
-	 * @param array $columns Array with options.
-	 * 
-	 * Here is an example:
-	 * <code>
-	 * <?php
-	 * 		$columns = array(
-	 *			array('Registered', 'when_reg', 'datetime', array('null', 'readonly', 'show'=>15, 'sort'=>-1)),
-	 *			array('E-mail', 'email', 'string', array('null', 'show'=>20, 'sort')),
-	 *		);
-	 * ?>
-	 * </code>
+	 *
+	 * @var array Options for search by fields in the list mode.
+	 * Format:
+	 * array(
+	 *  'by' => [the index of a field in AutoAdmin::fieldsConf() to search by],
+	 *  'query' => [value to search],
+	 * )
+	 */
+	public $searchOptions;
+
+	/**
+	 * Inits of the class.
 	 */
 	public function init()
 	{
@@ -166,7 +165,6 @@ class AutoAdmin extends CWebModule
 		//Link AADb properties with AutoAdmin properties for more convenient configurating these properties by a user.
 		$this->_db->dbConnection =& $this->dbConnection;
 		$this->_db->dbSchema =& $this->dbSchema;
-		
 	}
 
 	/**
@@ -254,8 +252,18 @@ class AutoAdmin extends CWebModule
 	}
 
 	/**
-	 * Initializes configuration of managed DB tables.
-	 * @param array $columns Configuration array
+	 * Inits all the settings through an array of options
+	 * @param array $columns Array with options.
+	 * 
+	 * Here is an example:
+	 * <code>
+	 * <?php
+	 * 		$columns = array(
+	 *			array('Registered', 'when_reg', 'datetime', array('null', 'readonly', 'show'=>15, 'sort'=>-1)),
+	 *			array('E-mail', 'email', 'string', array('null', 'show'=>20, 'sort')),
+	 *		);
+	 * ?>
+	 * </code>
 	 */
 	public function fieldsConf($columns)
 	{
@@ -522,10 +530,22 @@ class AutoAdmin extends CWebModule
 			$this->view->addMessage(Yii::app()->request->getParam('msg'));
 
 		$this->_db->initList();
-		if(!is_null(Yii::app()->request->getParam('searchBy')) && isset($this->_data->fields[Yii::app()->request->getParam('searchBy')]) && Yii::app()->request->getParam('searchQ'))
-		{
-			$this->_db->addSearch($this->_data->fields[Yii::app()->request->getParam('searchBy')], Yii::app()->request->getParam('searchQ'));
+
+		//For search by GET-params has priority against user-defined!
+		$this->searchOptions = array(
+			'by' => (!is_null(Yii::app()->request->getQuery('searchBy')) ? Yii::app()->request->getQuery('searchBy') : (isset($this->searchOptions['by']) ? $this->searchOptions['by'] : null)),
+			'query' => (!is_null(Yii::app()->request->getQuery('searchQ')) ? Yii::app()->request->getQuery('searchQ') : (isset($this->searchOptions['query']) ? $this->searchOptions['query'] : null)),
+		);
+		if(isset($this->searchOptions['by']) && isset($this->searchOptions['query']))
+			$this->_data->setSearch($this->searchOptions['by'], $this->searchOptions['query']);
+
+		//Preparing sort fields for ORDER BY in the query
+		$sortBy = Yii::app()->request->getQuery('sortBy', null);
+		if(!is_null($sortBy) && isset($this->_data->fields[abs($sortBy)-1]) && $this->_data->fields[abs($sortBy)-1]->showInList)
+		{	//User sorting was called
+			$this->_data->setSortOrder(array($this->_data->fields[abs($sortBy)-1]->name => ($sortBy < 0 ? -1 : 1)));
 		}
+
 		$dataToPass['dataRows'] = $this->_db->getList($this->rowsOnPage, ($this->managePage-1)*$this->rowsOnPage);
 		if($this->_data->foreignLinks)
 			$dataToPass['foreignData'] = $this->_db->getForeignData($dataToPass['dataRows']);
@@ -537,9 +557,8 @@ class AutoAdmin extends CWebModule
 				'checkboxes'	=> $this->checkboxes,
 				'addActions'	=> $this->addActions,
 				'fields'		=> $this->_data->fields,
+				'searchOptions'	=> $this->_data->searchOptions,
 				'baseURL'		=> Yii::app()->request->requestUri,
-				'searchBy'		=> Yii::app()->request->getParam('searchBy'),
-				'searchQ'		=> Yii::app()->request->getParam('searchQ'),
 			));
 		if($this->_data->orderBy)
 		{
@@ -835,5 +854,26 @@ class AutoAdmin extends CWebModule
 	{
 		$this->_controller->render($this->viewsPath.'restricted', array('actionType'=>$actionType));
 		Yii::app()->end();
+	}
+
+	/**
+	 * Returns the field as a config row, by its SQL name in the config, or its index.
+	 * Simple helper for customizing fields configs.
+	 * @param string $fieldName SQL name of the field.
+	 * @param array $fieldsConf An array with a fields configuration which is used in AutoAdmin::fieldsConf().
+	 * @param bool $returnIndex It set to TRUE the function returns the index of found element instead it.
+	 * @return array|null A row element of the config or its index if $returnIndex is true. Returns null if nothing's found or nothing can be found.
+	 */
+	public static function fByName($fieldName, &$fieldsConf, $returnIndex=false)
+	{
+		if($fieldsConf && is_array($fieldsConf))
+		{
+			foreach($fieldsConf as $k=>&$fieldData)
+			{
+				if($fieldData[0]==$fieldName)
+					return ($returnIndex ? $k : $fieldData);
+			}
+		}
+		return null;
 	}
 }

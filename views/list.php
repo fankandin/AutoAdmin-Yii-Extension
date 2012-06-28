@@ -39,22 +39,17 @@ if(!empty($clientData['subhtml']))
 			</div>
 		</td>
 <?
-foreach($fields as $field)
+if($searchOptions)
 {
-	if(!empty($field->options['inSearch']))
-	{
-		?>
+	?>
 		<td>
 			<?=$this->renderPartial($viewsPath.'searchPanel', array(
-				'searchQ'=>$searchQ,
-				'searchBy'=>$searchBy,
-				'fields'=>$fields,
-				'baseURL'=>$baseURL,
+				'searchOptions'	=> $searchOptions,
+				'fields'	=> $fields,
+				'baseURL'	=> $baseURL,
 			))?>
 		</td>
-		<?
-		break;
-	}
+	<?
 }
 if(in_array('add', $rights))
 {
@@ -151,9 +146,19 @@ foreach($dataRows as $rowI=>$dataRow)
 		}
 		else
 		{
-			if($searchQ && !is_null($searchBy) && $searchBy==$k)
+			if(isset($searchOptions['field']) && $searchOptions['field']->name == $field->name)
 			{
-				echo str_ireplace($searchQ, CHtml::tag('span', array('class'=>'found'), $searchQ), $field->printValue());
+				$value = $field->printValue();
+				if(is_array($searchOptions['query']))
+				{
+					foreach($searchOptions['query'] as $term)
+					{
+						$value = str_ireplace($term, CHtml::tag('span', array('class'=>'found'), $term), $value);
+					}
+				}
+				else
+					$value = str_ireplace($searchOptions['query'], CHtml::tag('span', array('class'=>'found'), $searchOptions['query']), $value);
+				echo $value;
 			}
 			else
 				echo $field->printValue();

@@ -9,7 +9,7 @@ class AAData
 	public $fields = array();
 
 	public $orderBy = array();
-	public $searchBy = array();
+	public $searchOptions = array();
 
 	/**
 	 *
@@ -313,5 +313,24 @@ class AAData
 			$dataRow->addPK($fieldName, $queryRow[$fieldName]);
 		}
 		return $dataRow;
+	}
+
+	/**
+	 * Sets the search options.
+	 * @param int $byIndex The index of a field.
+	 * @param mixed $searchQuery A query to search by.
+	 * If an array's passed the function will search by each element of it as scalars, joining them with logical OR.
+	 * Array in $searchQuery can be used only as manually set in user-defined controllers.
+	 * Meta-symbols * are accepted.
+	 */
+	public function setSearch($byIndex, $searchQuery)
+	{
+		if(isset($this->fields[$byIndex]) && $this->fields[$byIndex]->options['inSearch'] && $searchQuery !== '')
+		{
+			$this->searchOptions = array(
+				'field' => &$this->fields[$byIndex],
+				'query' => $searchQuery
+			);
+		}
 	}
 }

@@ -67,22 +67,10 @@ class AADb
 				}
 			}
 		}
-
-		//Search by a field (user-defined)
-		if(Yii::app()->request->getParam('searchBy') && $this->_data->getFieldByName((int)Yii::app()->request->getParam('searchBy')))
-		{
-			$this->addSearch($q, (int)Yii::app()->request->getParam('searchBy'));
-		}
-
 		if($qWhere)
 			$this->_listQuery->where(array_merge(array('AND'), $qWhere), $qParams);
-
-		//Preparing sort fields for ORDER BY in the query
-		$sortBy = Yii::app()->request->getQuery('sortBy', null);
-		if(!is_null($sortBy) && isset($this->_data->fields[abs($sortBy)-1]) && $this->_data->fields[abs($sortBy)-1]->showInList)
-		{	//User sorting was called
-			$this->_data->setSortOrder(array($this->_data->fields[abs($sortBy)-1]->name => ($sortBy < 0 ? -1 : 1)));
-		}
+		if($this->_data->searchOptions)
+			$this->addSearch();
 
 		if(!empty($this->_data->orderBy))
 		{
@@ -264,70 +252,36 @@ class AADb
 
 	/**
 	 * Adds a search condition to the query.
-	 * @param AAField $field
-	 * @param string $term 
 	 */
-	public function addSearch(&$fieldBy, $term)
+	public function addSearch()
 	{
-		if($fieldBy->type == 'foreign')
+		if($this->_data->searchOptions['field']->type == 'foreign' && $this->_data->searchOptions['field']->options['select'])
 		{
-			$where = array('OR');
-			foreach($fieldBy->options['select'] as $fieldName=>$fieldAlias)
-				$where[] = array('LIKE', "{$fieldBy->options['tableAlias']}.{$fieldName}", "%{$term}%");
-			if(count($where)>1)
-				$this->_listQuery->where(array('AND', $this->_listQuery->getWhere(), $where));
-		}
-		elseif($fieldBy->type == 'date' || $fieldBy->type == 'datetime')
-		{
-			/*
-			if(($k = array_search($_GET['searchq'], Hot::$months)) || ($k = array_search($_GET['searchq'], Hot::$months3)))
+			$like = array('OR');
+			foreach($this->_data->searchOptions['field']->options['select'] as $fieldName=>$fieldAlias)
 			{
-				$where .= " MONTH(`{$this->_tableName}`.`".$this->_data->fields[$i]->name."`) ";
-				$where .= " = '{$k}'";
+				if(is_array($this->_data->searchOptions['query']))
+				{
+					foreach($this->_data->searchOptions['query'] as $i=>$term)
+						$like[] = array('LIKE', "{$this->_data->searchOptions['field']->options['tableAlias']}.{$fieldName}", self::metaToLike($term));
+				}
+				else
+					$like = array('LIKE', "{$this->_data->searchOptions['field']->options['tableAlias']}.{$fieldName}", self::metaToLike($this->_data->searchOptions['query']));
 			}
-			elseif(preg_match('/^(\d{4})$/u', $_GET['searchq'], $ar))
-			{
-				$where .= " YEAR(`{$this->_tableName}`.`".$this->_data->fields[$i]->name."`) ";
-				$where .= " = '{$ar[1]}'";
-			}
-			elseif(preg_match('/^(\d?\d)[\.\,\-\s]?(\d?\d)[\.\,\-\s]?(\d{4})\s*\-\s*(\d?\d)[\.\,\-\s]?(\d?\d)[\.\,\-\s]?(\d{4})$/', $_GET['searchq'], $ar))
-			{
-				$where .= " `{$this->_tableName}`.`".$this->_data->fields[$i]->name."`";
-				$where .= " >= '{$ar[3]}-{$ar[2]}-{$ar[1]}".(($this->_data->fields[$i]->type == 'datetime') ? ' 00:00:00':'')."'";
-				$where .= " AND `{$this->_tableName}`.`".$this->_data->fields[$i]->name."`";
-				$where .= " <= '{$ar[6]}-{$ar[5]}-{$ar[4]}".(($this->_data->fields[$i]->type == 'datetime') ? ' 23:59:59':'')."'";
-			}
-			elseif(preg_match('/^(\d{4})[\.\,\-\s]?(\d?\d)[\.\,\-\s]?(\d?\d)$/', $_GET['searchq'], $ar))
-			{
-				$where .= " `{$this->_tableName}`.`".$this->_data->fields[$i]->name."` ";
-				$where .= " = '{$ar[1]}-{$ar[2]}-{$ar[3]}'";
-			}
-			elseif(preg_match('/^(\d?\d)[\.\,\-\s]?(\d?\d)[\.\,\-\s]?(\d{4})$/', $_GET['searchq'], $ar))
-			{
-				$where .= " `{$this->_tableName}`.`".$this->_data->fields[$i]->name."` ";
-				$where .= " = '{$ar[3]}-{$ar[2]}-{$ar[1]}'";
-			}
-			elseif(preg_match('/^(\d?\d)[\.\,\-\s](\d{4})$/', $_GET['searchq'], $ar))
-			{
-				$where .= " `{$this->_tableName}`.`".$this->_data->fields[$i]->name."` ";
-				$where .= " LIKE '%{$ar[1]}-{$ar[2]}'";
-			}
-			elseif(preg_match('/^(\d?\d)[\.\,\-\s](\d{4})$/', $_GET['searchq'], $ar))
-			{
-				$where .= " `{$this->_tableName}`.`".$this->_data->fields[$i]->name."` ";
-				$where .= " LIKE '%{$ar[2]}-{$ar[1]}'";
-			}
-			elseif(preg_match('/^(\d?\d)[\.\,\-\s](\d?\d)$/', $_GET['searchq'], $ar))
-			{
-				$where .= " `{$this->_tableName}`.`".$this->_data->fields[$i]->name."` ";
-				$where .= " LIKE '%-{$ar[2]}-{$ar[1]}%'";
-			}
-			*/
 		}
 		else
 		{
-			$this->_listQuery->where(array('AND', $this->_listQuery->getWhere(), array('LIKE', "{$this->tableName}.{$fieldBy->name}", "%{$term}%")));
+			if(is_array($this->_data->searchOptions['query']))
+			{
+				$like = array('OR');
+				foreach($this->_data->searchOptions['query'] as $i=>$term)
+					$like[] = array('LIKE', $this->_data->searchOptions['field']->name, self::metaToLike($term));
+			}
+			else
+				$like = array('LIKE', $this->_data->searchOptions['field']->name, self::metaToLike($this->_data->searchOptions['query']));
 		}
+		$where = ($this->_listQuery->getWhere() ? array('AND', $this->_listQuery->getWhere(), $like) : $like);
+		$this->_listQuery->where($where, $this->_listQuery->params);
 	}
 
 	/**
@@ -442,5 +396,26 @@ class AADb
 	public function transactionRollback(&$transaction)
 	{
 		$transaction->rollBack();
+	}
+
+	/**
+	 * Converts a string into SQL "LIKE" term using meta-symbols inside it.
+	 * The logic:
+	 *  1. If you enter simple string $s, SQL search LIKE-condition will be "LIKE $s%" - by beginning of fields.
+	 *  2. If you enter "*" among symbols in $s then also "LIKE $s%", but your "*" will be replaced with SQL-analogs "%".
+	 *  3. If you enter "$" in the end of $s then (and only then) SQL-meta "%" will not be added to "LIKE $s". But "*" will be replaced as it should be done with case 2.
+	 * @param string $term String to search by, with meta-symbols.
+	 */
+	public static function metaToLike($term)
+	{
+		$term = str_replace('%', '\%', $term);
+		if(false !== mb_strpos($term, '*'))
+			$term = str_replace('*', '%', $term);
+		if(mb_substr($term, -1) == '$')
+			$term = mb_substr($term, 0, -1);
+		elseif(mb_substr($term, -1) != '%')
+			$term = $term.'%';
+
+		return $term;
 	}
 }
