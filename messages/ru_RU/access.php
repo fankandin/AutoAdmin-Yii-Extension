@@ -30,6 +30,9 @@ return array(
 	'<b>Master</b> can do everything. <b>Administrator</b> can do all but to create new Masters. <b>User</b> is a plain user whose rights can be restricted either by Master and Administrator.'
 		=> '<b>Владелец</b> может делать всё что угодно. <b>Администратор</b> может делать всё, кроме создания новых Владельцев. <b>Пользователь</b> &mdash; рядовой пользователь системы, чьие права могут быть ограничены как Владельцами, так и Администраторами.',
 	'You\'ve been entered as <b>{userName}</b>. It\'s nice to see you!' => 'Вы вошли как <b>{userName}</b>. Рады Вас видеть!',
+	'You\'ve been entered as <b>{userName}</b>' => 'Вы вошли как <b>{userName}</b>',
+	'logout' => 'выйти',
+	'Panel\'s users managing' => 'Управление пользователями панели',
 	//
 	'Alias' => 'Алиас',
 	'Interface Title' => 'Название интерфейса',

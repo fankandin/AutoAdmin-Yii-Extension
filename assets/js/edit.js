@@ -66,21 +66,6 @@ function foreignKeySelected(event, ui)
 	return false;
 }
 
-function tuneNumTip()
-{
-	var $this = $(this);
-	if($this.parent(0).parent(0).find('label').html().match(/год/i))
-	{
-		var d = new Date();
-		$this.html('');
-		for(var y=1960; y<d.getFullYear(); y++)
-		{
-			$this.append('<option value="'+ y +'">'+ y +'</option>');
-		}
-		$this.find('option:last').attr('selected', true);
-	}
-}
-
 function filteredInputs($form)
 {
 	return $form.find('input,textarea,select').filter('[name^="AA["]:not([name^="AA[AAnullf]"])');
@@ -113,7 +98,6 @@ $(document).ready(function(){
 	$form.find('.nullf select:not(:has(option))').parent(0).find('input[type=checkbox].nullf').attr('checked', false).attr('disabled', true);
 	$form.find('.nullf').find('input,textarea').filter(':not(input[type=checkbox].nullf)').focus(focusNearNullF);
 	$form.find('.block_password input[type=checkbox][name$="[is_new]"]').change(checkboxNewPassword);
-	$form.find('.num-tip select').each(tuneNumTip).change(numTipChange);
 
 	$form.find('.time-panel .calendar input').datepicker({
 			onSelect: function(dateText, inst) {

@@ -76,6 +76,9 @@ class AAData
 			elseif(isset($options['desc']))	//An alias
 				$field->description = $options['desc'];
 
+			if(in_array('search', $options, true))
+				$field->options['inSearch'] = true;
+
 			//Specific field options
 			if($fieldType == 'enum')
 			{
@@ -106,12 +109,16 @@ class AAData
 			if(!is_null($field->bind))
 				$field->value = $field->defaultValue = $field->bind;
 
-			$field->completeOptions();
-			if(!$field->testOptions())
-				throw new AAException(Yii::t('AutoAdmin.errors', 'Incorrect options configuration of the field {fieldName}', array('{fieldName}'=>$field->name)));
+			//You can use custom options
+			foreach($options as $optName=>$optValue)
+			{
+				if(is_string($optName) && !isset($field->options[$optName]) && !in_array($optName, array('bind', 'bindBy', 'foreign', 'enum', 'show', 'search', 'description', 'null', 'default', 'directoryPath')))
+					$field->options[$optName] = $optValue;
+			}
 
-			if(in_array('search', $options, true))
-				$field->options['inSearch'] = true;
+			$field->completeOptions();	//Set default options if they haven't been set by user
+			if(!$field->testOptions())	//Testing the configuration
+				throw new AAException(Yii::t('AutoAdmin.errors', 'Incorrect options configuration of the field {fieldName}', array('{fieldName}'=>$field->name)));
 
 		}
 	}

@@ -52,7 +52,7 @@ class AADb
 	public function getList($rowsOnPage, $offset)
 	{
 		$qWhere = $this->_listQuery->getWhere() ? array($this->_listQuery->getWhere()) : array();
-		$qParams = $this->_listQuery->params ? array($this->_listQuery->params) : array();
+		$qParams = $this->_listQuery->params ? $this->_listQuery->params : array();
 		
 		foreach($this->_data->fields as &$field)
 		{
@@ -292,7 +292,7 @@ class AADb
 	{
 		$q = $this->getBaseQuery(false);
 		$qWhere = $q->getWhere() ? array($q->getWhere()) : array();
-		$qParams = $q->params ? array($q->params) : array();
+		$qParams = $q->params ? $q->params : array();
 
 		foreach($this->_data->pk as $pkField=>$pkValue)
 		{

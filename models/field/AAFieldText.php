@@ -15,8 +15,8 @@ class AAFieldText extends AAFieldString
 
 	public function formInput(&$controller, $tagOptions=array())
 	{
-		if(!Yii::app()->clientScript->isScriptFileRegistered(AutoAdmin::$assetPathJS.'/text-editor.js'))
-			Yii::app()->clientScript->registerScriptFile(AutoAdmin::$assetPathJS.'/text-editor.js');
+		if(!Yii::app()->clientScript->isScriptFileRegistered(AutoAdmin::$assetPath.'/js/text-editor.js'))
+			Yii::app()->clientScript->registerScriptFile(AutoAdmin::$assetPath.'/js/text-editor.js');
 
 		ob_start();
 		$inputName = $this->formInputName();

@@ -8,6 +8,12 @@ class AAFieldNum extends AAField implements AAIField
 {
 	public $type='num';
 
+	public function completeOptions()
+	{
+		if(!isset($this->options['numType']))
+			$this->options['numType'] = 'number';
+	}
+
 	public function formInput(&$controller, $tagOptions=array())
 	{
 		ob_start();
@@ -22,14 +28,47 @@ class AAFieldNum extends AAField implements AAIField
 		$tagOptions['maxlength'] = 10;
 		if($this->isReadonly)
 			$tagOptions['disabled'] = true;
-		echo CHtml::textField($inputName, (is_int($this->value) ? $this->value : $this->defaultValue), $tagOptions);
+		echo CHtml::textField($inputName, (!is_null($this->value) ? $this->value : $this->defaultValue), $tagOptions);
 
-		$numOptions = array();
-		for($j=0; $j<35; $j++)
+		switch($this->options['numType'])
 		{
-			$numOptions[] = $j;
+			case 'year':
+				$nTo = (int)date('Y');
+				$nFrom = $nTo-40;
+				if(!isset($this->defaultValue))
+					$this->defaultValue = $nTo;
+				break;
+			case 'tempCelsius':
+				$nFrom = -15;
+				$nTo = 40;
+				if(!isset($this->defaultValue))
+					$this->defaultValue = 0;
+				break;
+			case 'tempFarengeit':
+				$nFrom = 14;
+				$nTo = 100;
+				if(!isset($this->defaultValue))
+					$this->defaultValue = 50;
+				break;
+			case 'digit':
+				$nFrom = 0;
+				$nTo = 10;
+				if(!isset($this->defaultValue))
+					$this->defaultValue = 0;
+				break;
+			default:
+				$nFrom = 0;
+				$nTo = 36;
+				if(!isset($this->defaultValue))
+					$this->defaultValue = 0;
+				break;
 		}
-		?><div class="num-tip"><?=CHtml::dropDownList(null, (is_int($this->value) ? $this->value : $this->defaultValue), $numOptions);?></div><?
+		$numOptions = array();
+		for($j=$nFrom; $j<=$nTo; $j++)
+		{
+			$numOptions[$j] = $j;
+		}
+		?><div class="num-tip"><?=CHtml::dropDownList(null, (!is_null($this->value) ? $this->value : $this->defaultValue), $numOptions);?></div><?
 
 		return ob_get_clean();
 	}

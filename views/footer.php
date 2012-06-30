@@ -3,12 +3,12 @@ if(!$isGuest)
 {
 	?>
 	<div id="logout">
-		Вы вошли как <b><?=$userName?></b>. [<a href="<?=$this->createUrl('aaauth/logout')?>">выйти</a>]
+		<?=Yii::t('AutoAdmin.access', 'You\'ve been entered as <b>{userName}</b>', array('{userName}'=>$userName))?>. [<a href="<?=$this->createUrl('aaauth/logout')?>"><?=Yii::t('AutoAdmin.access', 'logout')?></a>]
 		<?
 		if($userLevel && in_array($userLevel, array('admin', 'root')))
 		{
 			?>
-			<br/>/<a href="<?=$this->createUrl('aaauth/users')?>">Управление пользователями панели</a>/
+			<br/>/<a href="<?=$this->createUrl('aaauth/users')?>"><?=Yii::t('AutoAdmin.access', 'Panel\'s users managing')?></a>/
 			<?
 		}
 		?>
