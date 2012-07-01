@@ -213,5 +213,5 @@ function aaImgUploadWindow($textEditor)
 {
 	var wtop = (screen.height/2)-(160/2)-20;
 	var wleft = (screen.width/2)-(500/2);
-	window.open('/_admin/file/imgupload/?fieldID='+$textEditor.attr('id')+'&interface='+ $($textEditor.get(0).form['interface']).val(), 'imguploadWindow'+Math.floor(Math.random()*10),'top='+wtop+', left='+wleft+',titlebar=no,toolbar=no,width=500,height=220,directories=no,status=no,scrollbars=no, resize=no,menubar=no');
+	window.open('./?action=upload&field='+$textEditor.attr('name'), 'imguploadWindow'+Math.floor(Math.random()*10),'top='+wtop+', left='+wleft+',titlebar=no,toolbar=no,width=500,height=220,directories=no,status=no,scrollbars=no, resize=no,menubar=no');
 }

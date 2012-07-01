@@ -1,10 +1,6 @@
 <?
 Yii::app()->clientScript
 	->registerCssFile(AutoAdmin::$assetPath.'/css/edit-result.css');
-
-$this->breadcrumbs = array(
-	$this->pageTitle,
-);
 ?>
 
 <div class="narrow-content">

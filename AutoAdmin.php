@@ -209,7 +209,7 @@ class AutoAdmin extends CWebModule
 			$this->_controller->layout = $this->layout;	//property layout is a parameter from config. @see $layout
 
 		$this->manageAction = Yii::app()->request->getParam('action', 'list');
-		if(!in_array($this->manageAction, array('add', 'insert', 'edit', 'update', 'delete', 'empty')))
+		if(!in_array($this->manageAction, array('add', 'insert', 'edit', 'update', 'delete', 'upload', 'empty')))
 			$this->manageAction = 'list';
 		$this->managePage = Yii::app()->request->getParam('page', 1);
 		if($this->managePage < 1)
@@ -267,14 +267,7 @@ class AutoAdmin extends CWebModule
 	 */
 	public function fieldsConf($columns)
 	{
-		try
-		{
-			$this->_data->loadColumnsConf($columns, $this->tableName());
-		}
-		catch(Exception $e)
-		{
-			$this->resultMode(array('errorOccured'=>true, 'msg'=>Yii::t('AutoAdmin.errors', 'Incorrect fields configuration. Error: {exception}', array('{exception}'=>$e->getMessage()))));
-		}
+		$this->_data->loadColumnsConf($columns, $this->tableName());
 	}
 
 	/**
@@ -498,6 +491,34 @@ class AutoAdmin extends CWebModule
 					$affected = $this->delete($deletingRow);
 					$this->resultMode(array('msg'=>Yii::t('AutoAdmin.messages', ($affected ? 'The record was deleted' : 'The record has not been deleted'))));
 				}
+				break;
+			}
+			case 'upload':	//Uploading a file for field
+			{
+				if(!$this->_access->checkRight('edit'))
+					$this->blockAccess('edit');
+				$viewData = array('field'=>Yii::app()->request->getParam('field'));
+				if(!empty($_POST[self::INPUT_PREFIX]['upload']) && !empty($_FILES[self::INPUT_PREFIX]['name']['uploadFile']))
+				{
+					$upload = $_POST[self::INPUT_PREFIX]['upload'];
+					if(preg_match('/'.self::INPUT_PREFIX.'\[([^\]]+)\]$/', $upload['field'], $matches))
+					{
+						$field = $this->_data->getFieldByName($matches[1]);
+						if(!isset($field->options['directoryPath']))
+							throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "{paramName}" must be set for the field {fieldName}', array('parameter'=>'directoryPath', '{fieldName}'=>$field->name)));
+						$uploadDir = $field->options['directoryPath'];
+						if($field->options['subDirectoryPath'])
+							$uploadDir .= '/'.$field->options['subDirectoryPath'];
+						
+						$viewData['uploadedFileName'] = AAHelperFile::uploadFile('uploadFile', $uploadDir);
+						$viewData['uploadedFileAbs'] = Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.Yii::app()->modules['autoadmin']['wwwDirName'].str_replace('/', DIRECTORY_SEPARATOR, $uploadDir).DIRECTORY_SEPARATOR.$viewData['uploadedFileName'];
+						$viewData['uploadedFileSrc'] = "{$uploadDir}/{$viewData['uploadedFileName']}";
+						$viewData['alt'] = !empty($upload['alt']) ? $upload['alt'] : '';
+						$viewData['fieldName'] = $field->formInputName();
+					}
+				}
+				$this->_controller->layout = 'ext.autoAdmin.views.layouts.fileUpload';
+				$this->_controller->render($this->viewsPath.'fileUpload', $viewData);
 				break;
 			}
 			case 'empty':	//Interface which is programmed directly by user
@@ -779,7 +800,7 @@ class AutoAdmin extends CWebModule
 	{
 		foreach($this->_data->fields as &$field)
 		{
-			if(!empty($_POST['isChangedAA'][$field->name]))
+			if(!empty($_POST['isChangedAA'][$field->name]) || !empty($_POST['isChangedAA']["{$field->name}_new"]))
 				$field->isChanged = true;
 			if(!$field->isReadonly)
 				$field->loadFromForm($_POST[self::INPUT_PREFIX]);
@@ -837,7 +858,7 @@ class AutoAdmin extends CWebModule
 	{
 		$this->resultMode(array(
 				'errorOccured'=>true,
-				'msg'=>Yii::t('AutoAdmin.errors', 'The error was occured during the query execution. You may contact the technical support and say the number #{errorNumber}', array('{errorNumber}'=>1)),
+				'msg'=>Yii::t('AutoAdmin.errors', 'An error was occured during the query execution. You may contact the technical support and say the number #{errorNumber}', array('{errorNumber}'=>1)),
 			));
 		if($this->logMode)
 			$this->_access->logError('exception', $e->getMessage());

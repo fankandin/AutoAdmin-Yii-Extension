@@ -2,11 +2,24 @@
 /**
  * File (uploading) field
  *
+ * Options:
+ *	[directoryPath]		Relative (from wwwDir) path to a directory where files must be uploaded to.
+ *	[subDirectoryPath]	Relative from [directoryPath] path to a directory where files must be uploaded to. Unlike [directoryPath] the [subDirectoryPath] will be added to the value. It's may be useful for dynamicaly created directories.
+ *		So in views you should use [directoryPath]/[$this->value] in src="".
+ * 
  * @author Alexander Palamarchuk <a@palamarchuk.info>
  */
 class AAFieldFile extends AAField implements AAIField
 {
 	public $type='file';
+
+	public function completeOptions()
+	{
+		if(!isset($this->options['directoryPath']))
+			throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "{paramName}" must be set for the field {fieldName}', array('parameter'=>'directoryPath', '{fieldName}'=>$this->name)));
+		$this->options['directoryPath'] = rtrim($this->options['directoryPath'], '/');
+		$this->options['subDirectoryPath'] = isset($this->options['subDirectoryPath']) ? rtrim($this->options['subDirectoryPath'], '/') : '';
+	}
 
 	public function testOptions()
 	{
@@ -62,61 +75,23 @@ class AAFieldFile extends AAField implements AAIField
 		$tagOptions['id'] = $inputID;
 		echo CHtml::label(Yii::t('AutoAdmin.form', 'New file').':', $inputID);
 		?><div class="tip inline">&lt;a href=<?=$this->options['directoryPath']?>/</div><?
-		echo CHtml::fileField("{$inputName}[new]", null, $tagOptions);
+		echo CHtml::fileField(AutoAdmin::INPUT_PREFIX."[{$this->name}_new]", null, $tagOptions);
 
 		return ob_get_clean();
 	}
 
 	public function loadFromForm($formData)
 	{
-		if(!empty($formData[$this->name]['del']))
+		if(!empty($formData[$this->name]) && is_array($formData[$this->name]) && !empty($formData[$this->name]['del']))
 		{
 			$this->value = null;
 		}
-		elseif(!empty($_FILES[AutoAdmin::INPUT_PREFIX]['tmp_name'][$this->name]['new']))
+		elseif(!empty($_FILES[AutoAdmin::INPUT_PREFIX]['tmp_name']["{$this->name}_new"]))
 		{
-			$this->value = $this->copyUploadedFile();
+			$uploadDir = $this->options['directoryPath'];
+			if($this->options['subDirectoryPath'])
+				$uploadDir .= '/'.$this->options['subDirectoryPath'];
+			$this->value = ($this->options['subDirectoryPath'] ? $this->options['subDirectoryPath'].'/' : '').AAHelperFile::uploadFile("{$this->name}_new", $uploadDir);
 		}
 	}
-
-	/**
-	 * Copy an image uploaded with HTML form to the specified directory.
-	 * In view scripts one should use something like <img src="{$fileBaseDir}/{@return}"/>
-	 * @return string A part of file path that should to be written in DB.
-	 * @throws CException 
-	 */
-	public function copyUploadedFile()
-	{
-		if(empty($_FILES[AutoAdmin::INPUT_PREFIX]['tmp_name'][$this->name]['new']) || !empty($_FILES[AutoAdmin::INPUT_PREFIX]['error'][$this->name]['new']))
-			throw new AAException(Yii::t('AutoAdmin.errors', 'An error occured with uploading of the file for field "{field}"', array('{field}'=>$this->name)));
-		$uploadedFileName =& $_FILES[AutoAdmin::INPUT_PREFIX]['name'][$this->name]['new'];
-		//A base directory constant for the file (should be used in view scripts as prefix before $filePath from DB table).
-		$fileBaseDir = $this->options['directoryPath'];
-		//The variable part of file path which is put to DB right as a part.
-		$fileCustomDir = date('Ym').DIRECTORY_SEPARATOR.strtolower(preg_replace('/[^a-z0-9\-]/', '-', $this->name));
-
-		$newfname = '';
-		$fdir = Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.Yii::app()->modules['autoadmin']['wwwDirName'].str_replace('/', DIRECTORY_SEPARATOR, $fileBaseDir);
-		$newfname = mb_strtolower(mb_substr($uploadedFileName, 0, mb_strrpos($uploadedFileName, '.')));
-		$newfname = AAHelperText::translite($newfname);
-		$newfname = str_replace(' ', '_', $newfname);
-		$newfname = preg_replace('/[^a-z\-\_0-9]/ui', '', $newfname);
-		if(mb_strlen($newfname)>60)
-			$newfname = mb_substr($newfname, 0, 60);
-		$ext = mb_substr(mb_strrchr($uploadedFileName, '.'), 1);
-		$toDir = $fdir.DIRECTORY_SEPARATOR.$fileCustomDir;
-		if(!is_dir($toDir))
-		{
-			mkdir($toDir, 0777, true);
-		}
-		$i = 0;
-		while(file_exists($toDir.DIRECTORY_SEPARATOR.$newfname.'.'.$ext))
-		{
-			$newfname .= '_'.++$i;
-		}
-		if(!copy($_FILES[AutoAdmin::INPUT_PREFIX]['tmp_name'][$this->name]['new'], $toDir.DIRECTORY_SEPARATOR.$newfname.'.'.$ext))
-			throw new AAException(Yii::t('AutoAdmin.errors', 'The file ({filename}) cannot be copied', array('{filename}'=>"{$newfname}.{$ext}")));
-		return str_replace('\\', '/', $fileCustomDir.DIRECTORY_SEPARATOR.$newfname.'.'.$ext);
-	}
-
 }

@@ -8,13 +8,6 @@ class AAFieldImage extends AAFieldFile
 {
 	public $type='image';
 
-	public function testOptions()
-	{
-		if(empty($this->options['directoryPath']))
-			return false;
-		return true;
-	}
-
 	public function printValue()
 	{
 		if($this->value)
@@ -53,7 +46,7 @@ class AAFieldImage extends AAFieldFile
 		$tagOptions['id'] = $inputID;
 		echo CHtml::label(Yii::t('AutoAdmin.form', 'New image').':', $inputID);
 		?><div class="tip inline">&lt;img src=<?=$this->options['directoryPath']?>/</div><?
-		echo CHtml::fileField("{$inputName}[new]", null, $tagOptions);
+		echo CHtml::fileField(AutoAdmin::INPUT_PREFIX."[{$this->name}_new]", null, $tagOptions);
 
 		return ob_get_clean();
 	}

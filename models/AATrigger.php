@@ -60,7 +60,7 @@ class AATrigger
 			}
 			catch(Exception $e)
 			{
-				Yii::t('AutoAdmin.errors', 'The error was occured during execution the trigger "{func}"', array('{func}'=>$func));
+				Yii::t('AutoAdmin.errors', 'An error was occured during execution the trigger "{func}"', array('{func}'=>$func));
 			}
 		}
 		return true;

@@ -79,23 +79,6 @@ class AAData
 			if(in_array('search', $options, true))
 				$field->options['inSearch'] = true;
 
-			//Specific field options
-			if($fieldType == 'enum')
-			{
-				if(!isset($options['enum']))
-					throw new AAException(Yii::t('AutoAdmin.errors', 'Enum values must be set for the field {fieldName}', array('{fieldName}'=>$field->name)));
-				$field->options['enumValues'] = $options['enum'];
-			}
-			elseif(in_array($fieldType, array('image', 'file')))
-			{
-				if(!isset($options['directoryPath']))
-					throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "directoryPath" must be set for the field {fieldName}', array('{fieldName}'=>$field->name)));
-				$field->options['directoryPath'] = rtrim($options['directoryPath'], '/');
-			}
-			elseif($fieldType == 'foreign')
-			{
-				$field->options = array_merge($field->options, $options['foreign']);
-			}
 			//Binding settings
 			if(!empty($options['bind']))
 				$field->bind = $options['bind'];
@@ -112,14 +95,13 @@ class AAData
 			//You can use custom options
 			foreach($options as $optName=>$optValue)
 			{
-				if(is_string($optName) && !isset($field->options[$optName]) && !in_array($optName, array('bind', 'bindBy', 'foreign', 'enum', 'show', 'search', 'description', 'null', 'default', 'directoryPath')))
+				if(is_string($optName) && !isset($field->options[$optName]) && !in_array($optName, array('bind', 'bindBy', 'show', 'search', 'description', 'null', 'default')))
 					$field->options[$optName] = $optValue;
 			}
 
 			$field->completeOptions();	//Set default options if they haven't been set by user
 			if(!$field->testOptions())	//Testing the configuration
 				throw new AAException(Yii::t('AutoAdmin.errors', 'Incorrect options configuration of the field {fieldName}', array('{fieldName}'=>$field->name)));
-
 		}
 	}
 

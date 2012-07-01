@@ -12,26 +12,37 @@ class AAFieldForeign extends AAField implements AAIField
 
 	public function completeOptions()
 	{
-		$this->options['foreignValues'] = array();
-
-		if(empty($this->options['tableAlias']))
+		if(!isset($this->options['foreign']))
+			throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "{paramName}" must be set for the field {fieldName}', array('parameter'=>'foreign', '{fieldName}'=>$this->name)));
+		$oblParams = array('table', 'pk');
+		foreach($oblParams as $paramName)
 		{
-			$tableNameParts = explode('.', $this->options['table']);
+			if(isset($this->options['foreign'][$paramName]))
+				$this->options[$paramName] = $this->options['foreign'][$paramName];
+			else
+				throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "{paramName}" must be set for the field {fieldName}', array('parameter'=>'foreign['.$paramName.']', '{fieldName}'=>$this->name)));
+		}
+	
+		$this->options['foreignValues'] = array();
+		if(empty($this->options['foreign']['tableAlias']))
+		{
+			$tableNameParts = explode('.', $this->options['foreign']['table']);
 			$this->options['tableAlias'] = $tableNameParts[count($tableNameParts)-1].'_'.mb_substr(md5(serialize($this)), 0, 5);
 		}
-		if(empty($this->options['select']))
+		else
+			$this->options['tableAlias'] = $this->options['foreign']['tableAlias'];
+		if(empty($this->options['foreign']['select']))
 			$this->options['select'] = array();
 		else
 		{	//Setting aliases for fields
 			$select = array();
-			foreach($this->options['select'] as $fieldName)
+			foreach($this->options['foreign']['select'] as $fieldName)
 			{
 				$select[$fieldName] = "{$this->options['tableAlias']}_$fieldName";
 			}
 			$this->options['select'] = $select;
 		}
-		if(!isset($this->options['limit']))
-			$this->options['limit'] = self::defaultSelectLimit;
+		$this->options['limit'] = isset($this->options['foreign']['limit']) ? $this->options['foreign']['limit'] : self::defaultSelectLimit;
 	}
 
 	public function testOptions()

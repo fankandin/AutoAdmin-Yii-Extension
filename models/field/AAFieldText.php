@@ -8,6 +8,21 @@ class AAFieldText extends AAFieldString
 {
 	public $type='text';
 
+	public function completeOptions()
+	{
+		if(!isset($this->options['directoryPath']))
+			throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "{paramName}" must be set for the field {fieldName}', array('parameter'=>'directoryPath', '{fieldName}'=>$this->name)));
+		$this->options['directoryPath'] = rtrim($this->options['directoryPath'], '/');
+		$this->options['subDirectoryPath'] = isset($this->options['subDirectoryPath']) ? rtrim($this->options['subDirectoryPath'], '/') : '';
+	}
+
+	public function testOptions()
+	{
+		if(empty($this->options['directoryPath']))
+			return false;
+		return true;
+	}
+
 	public function printValue()
 	{
 		return AAHelperText::strip($this->value, 80);
