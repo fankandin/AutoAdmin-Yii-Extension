@@ -559,6 +559,19 @@ class AutoAdmin extends CWebModule
 		);
 		if(isset($this->searchOptions['by']) && isset($this->searchOptions['query']))
 			$this->_data->setSearch($this->searchOptions['by'], $this->searchOptions['query']);
+		if($this->_data->searchOptions)
+			$dataToPass['searchAvailable'] = true;
+		else
+		{
+			foreach($this->_data->fields as &$field)
+			{
+				if(!empty($field->options['inSearch']))
+				{
+					$dataToPass['searchAvailable'] = true;
+					break;
+				}
+			}
+		}
 
 		//Preparing sort fields for ORDER BY in the query
 		$sortBy = Yii::app()->request->getQuery('sortBy', null);

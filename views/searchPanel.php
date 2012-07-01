@@ -11,12 +11,13 @@ echo CHtml::textField('searchQ', (isset($searchOptions['query']) && !is_array($s
 
 $inSearch = array();
 $selectedIndex = null;
+
 foreach($fields as $k=>&$field)
 {
 	if(!empty($field->options['inSearch']))
 	{
 		$inSearch[$k] = $field->label;
-		if($searchOptions['field']->name == $field->name)
+		if(!empty($searchOptions['field']) && $searchOptions['field']->name == $field->name)
 			$selectedIndex = $k;
 	}
 }

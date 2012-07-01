@@ -39,7 +39,7 @@ if(!empty($clientData['subhtml']))
 			</div>
 		</td>
 <?
-if($searchOptions)
+if($searchAvailable)
 {
 	?>
 		<td>
