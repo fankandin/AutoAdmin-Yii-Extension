@@ -597,7 +597,7 @@ class AutoAdmin extends CWebModule
 		if($this->_data->orderBy)
 		{
 			$k = 0;
-			foreach($this->_data->fields as $k=>$field)
+			foreach($this->_data->fields as $k=>&$field)
 			{	//Display table header
 				if($this->_data->orderBy[0]['field']->name == $field->name)
 				{
