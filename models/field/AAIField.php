@@ -54,16 +54,12 @@ interface AAIField
 	 */
 	public function valueForSql();
 
-	/**
-	 * Checks a value whether it's like a NULL and returns the converted value.
-	 * E.g. as NULL should be presented: strings with value '', enums without predefined value and etc.
-	 * Of course, a value can't be NULL, if AAField::$allowNull is set to false.
-	 * 
-	 * @param mixed $value A value of any type, typified for the children classes.
-	 * @return mixed
-	 */
 	/*
-	public function nullValue($value=null);
-	 * 
+	 * Validates value with rules set by user.
+	 * It ignores the default and NULL checkings and orients only on not-null form values.
+	 * @param mixed A value.
+	 * @return bool Whether the value is correct.
 	 */
+	public function validateValue($value);
+
 }

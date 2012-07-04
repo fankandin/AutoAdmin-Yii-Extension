@@ -51,6 +51,7 @@ input.helpline {border: none; font-size: 10px; color: #777; width: 327px; backgr
 .time-panel input.i-year {width: 45px;}
 .time-panel .calendar {background: url('../../../i/ico/calendar.png') no-repeat center left; width: 16px; min-height: 15px; padding: 0;}
 .time-panel .calendar input {width: 16px; height: 15px; opacity: 0; cursor: pointer; margin: 0;}
+.time-panel .calendar span.mindate, .time-panel .calendar span.maxdate {display: none;}
 label.delfile {margin: 0 5px 0 0; display: block; font-weight: normal; padding-left: 20px;}
 .iframe-na {margin-top: 15px; color: #FA5B00; border: 1px solid #ccc; float: left; width: 90%; padding: 2%;}
 .item.wide {width: 96%;}

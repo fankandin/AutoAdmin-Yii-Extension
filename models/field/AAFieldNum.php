@@ -88,4 +88,25 @@ class AAFieldNum extends AAField implements AAIField
 			$this->throwErrorValue();
 		return $value;
 	}
+
+	public function validateValue($value)
+	{
+		if(!parent::validateValue($value))
+		 return false;
+		if(isset($this->options['min']))
+		{
+			if(!is_numeric($this->options['min']))
+				throw new AAException;
+			if($value < $this->options['min'])
+				return false;
+		}
+		if(isset($this->options['max']))
+		{
+			if(!is_numeric($this->options['max']))
+				throw new AAException;
+			if($value > $this->options['max'])
+				return false;
+		}
+		return true;
+	}
 }

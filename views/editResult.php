@@ -11,4 +11,7 @@ Yii::app()->clientScript
 </div>
 <script language="JavaScript">window.setTimeout(function() {document.location.href = "<?=$redirectURL?>"}, <?=(empty($errorOccured) ? 1000 : 10000)?>);</script>
 
-<? $this->renderPartial($viewsPath.'footer', array('isGuest'=>$isGuest, 'userName'=>$userName, 'userLevel'=>$userLevel));?>
+<?
+if(empty($iframeMode))
+	$this->renderPartial($viewsPath.'footer', array('isGuest'=>$isGuest, 'userName'=>$userName, 'userLevel'=>$userLevel));
+?>

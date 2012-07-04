@@ -197,14 +197,6 @@ class AutoAdmin extends CWebModule
 				throw new CHttpException(403);
 		}
 
-		$this->_viewData = array(
-			'getParams' => $_GET,
-			'viewsPath'	=> $this->viewsPath,
-			'isGuest'		=> Yii::app()->user->isGuest,
-			'userName'		=> (!Yii::app()->user->isGuest ? Yii::app()->user->getState('firstname').' '.Yii::app()->user->getState('surname') : ''),
-			'userLevel'		=> (!Yii::app()->user->isGuest ? Yii::app()->user->level : 0),
-		);
-
 		if(preg_match('/^foreign/i', $action->id))
 		{
 			$this->_iframeMode = true;
@@ -223,6 +215,15 @@ class AutoAdmin extends CWebModule
 		$this->_data->binding = Yii::app()->request->getParam('bk', array());
 
 		Yii::app()->clientScript->registerCoreScript('jquery')->registerCoreScript('jquery.ui')->registerCssFile('jquery-ui.css');
+
+		$this->_viewData = array(
+			'getParams'		=> $_GET,
+			'viewsPath'		=> $this->viewsPath,
+			'iframeMode'	=> $this->_iframeMode,
+			'isGuest'		=> Yii::app()->user->isGuest,
+			'userName'		=> (!Yii::app()->user->isGuest ? Yii::app()->user->getState('firstname').' '.Yii::app()->user->getState('surname') : ''),
+			'userLevel'		=> (!Yii::app()->user->isGuest ? Yii::app()->user->level : 0),
+		);
 
 		if(parent::beforeControllerAction($controller, $action))
 		{
@@ -687,6 +688,18 @@ class AutoAdmin extends CWebModule
 		$values = array();
 		foreach($this->_data->fields as &$field)
 		{
+			if(!is_null($field->value))
+			{
+				try
+				{
+					if(!$field->validateValue($field->value))
+						$this->processFormError($field, Yii::t('AutoAdmin.form', 'Incorrect value'));
+				}
+				catch(AAException $e)
+				{	//Validation rule may be set incorrectly
+					throw new AAException(Yii::t('AutoAdmin.errors', 'Incorrect validation condition for field "{fieldName}"', array('fieldName'=>$field->name)));
+				}
+			}
 			try
 			{
 				$values[$field->name] = $field->valueForSql();
@@ -927,21 +940,20 @@ class AutoAdmin extends CWebModule
 	}
 
 	/**
-	 * Returns the field as a config row, by its SQL name in the config, or its index.
+	 * Returns a config row by its SQL name in the config.
 	 * Simple helper for customizing fields configs.
 	 * @param string $fieldName SQL name of the field.
 	 * @param array $fieldsConf An array with a fields configuration which is used in AutoAdmin::fieldsConf().
-	 * @param bool $returnIndex It set to TRUE the function returns the index of found element instead it.
-	 * @return array|null A row element of the config or its index if $returnIndex is true. Returns null if nothing's found or nothing can be found.
+	 * @return int|null Index of the row element. Returns null if nothing's found or nothing can be found.
 	 */
-	public static function fByName($fieldName, &$fieldsConf, $returnIndex=false)
+	public static function fByName($fieldName, &$fieldsConf)
 	{
 		if($fieldsConf && is_array($fieldsConf))
 		{
 			foreach($fieldsConf as $k=>&$fieldData)
 			{
 				if($fieldData[0]==$fieldName)
-					return ($returnIndex ? $k : $fieldData);
+					return $k;
 			}
 		}
 		return null;

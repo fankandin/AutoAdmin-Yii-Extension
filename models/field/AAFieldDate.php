@@ -30,7 +30,14 @@ class AAFieldDate extends AAField implements AAIField
 		?>
 		<table class="time-panel"><tbody>
 			<tr>
-				<td class="calendar"><input type="text"/></td>
+				<td class="calendar"><input type="text"/>
+				<?
+				if(!empty($this->options['min']))
+					echo CHtml::tag('span', array('class'=>'mindate'), strtotime($this->options['min']));
+				if(!empty($this->options['max']))
+					echo CHtml::tag('span', array('class'=>'maxdate'), strtotime($this->options['max']));
+				?>
+				</td>
 				<td>
 					<?
 					$days = array();
@@ -92,4 +99,29 @@ class AAFieldDate extends AAField implements AAIField
 			return parent::valueForSql();
 		return date('Y-m-d', $this->value);
 	}
+
+	public function validateValue($value)
+	{
+		if(!parent::validateValue($value))
+		 return false;
+		//Internal value format is UNIX TIMESTAMP
+		if(!empty($this->options['min']))
+		{	
+			$tsFrom = strtotime($this->options['min']);
+			if($tsFrom === false)
+				throw new AAException;
+			if($value < $this->options['min'])
+				return false;
+		}
+		if(!empty($this->options['max']))
+		{
+			$tsTo = strtotime($this->options['max']);
+			if($tsTo === false)
+				throw new AAException;
+			if($value > $this->options['max'])
+				return false;
+		}
+		return true;
+	}
+
 }

@@ -17,7 +17,7 @@
 #data-list .t-foreign span {background-color: #fff4dd; display: inline-block; border-right: 1px dotted #999; border-left: 1px dotted #999; padding: 2px 3px;}
 #data-list td.foreign {background-color: #fff4dd; border-bottom: 1px solid #fff;}
 #data-list th.data {cursor: pointer; background-repeat: no-repeat; background-position: center right; padding: 0;}
-#data-list th.data a {display: block; padding: 15px 14px 15px 8px; font-weight: normal; color: #fff;}
+#data-list th.data a {display: block; padding: 15px 14px 15px 8px; font-weight: normal; line-height: 120%; color: #fff;}
 #data-list th.data a, #data-list th.data a:visited {font-weight: normal; color: #fff; text-decoration: underline;}
 #data-list th.data a:hover {color: #fff; text-decoration: underline;}
 #data-list th.data:hover {background-image: url('../../../i/ico/go-up.png'); background-color: #DE2F0F;}

@@ -49,4 +49,4 @@ input.tip {color: #999; font-style: italic; font-size: 90%;}
 p.msg, div.msg {margin: 20px 0;}
 .orderPanel select {font-size: 90%;}
 #iframe-content .nav-pages {width: 30% !important;}
-#iframe-content .panel-add a {background-image: url('../../../i/ico/new-small.png'); height: 24px; padding-left: 28px; font-size: 120%; padding-top: 3px;}
+#iframe-content .panel-add a {font-weight: bold; background-image: url('../../../i/ico/new-small.png'); height: 24px; padding-left: 28px; font-size: 120%; padding-top: 3px;}

@@ -286,5 +286,6 @@ if(!empty($partialViews['down']))
 {
 	$this->renderPartial($partialViews['down'], $clientData);
 }
-$this->renderPartial($viewsPath.'footer', array('isGuest'=>$isGuest, 'userName'=>$userName, 'userLevel'=>$userLevel));
+if(empty($iframeMode))
+	$this->renderPartial($viewsPath.'footer', array('isGuest'=>$isGuest, 'userName'=>$userName, 'userLevel'=>$userLevel));
 ?>

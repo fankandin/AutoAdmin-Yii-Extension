@@ -184,6 +184,19 @@ abstract class AAField
 			return $this->value;
 	}
 
+	public function validateValue($value)
+	{
+		if(!empty($this->options['pattern']))
+		{
+			$result = @preg_match("#^({$this->options['pattern']})$#", $value);
+			if($result === false)
+				throw new AAException;
+			if(!$result)
+				return false;
+		}
+		return true;
+	}
+
 	/**
 	 * Throws an error in case of inadmissible NULL value.
 	 * @throws AAException 

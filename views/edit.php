@@ -135,4 +135,7 @@ if(!empty($iframes))
 <?=CHtml::submitButton(Yii::t('AutoAdmin.common', 'Save'), array('name'=>null));?>
 <?=CHtml::closeTag('form');?>
 
-<? $this->renderPartial($viewsPath.'footer', array('isGuest'=>$isGuest, 'userName'=>$userName, 'userLevel'=>$userLevel));?>
+<?
+if(empty($iframeMode))
+	$this->renderPartial($viewsPath.'footer', array('isGuest'=>$isGuest, 'userName'=>$userName, 'userLevel'=>$userLevel));
+?>

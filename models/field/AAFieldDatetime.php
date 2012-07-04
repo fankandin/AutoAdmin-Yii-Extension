@@ -31,7 +31,14 @@ class AAFieldDatetime extends AAFieldDate
 		?>
 		<table class="time-panel"><tbody>
 			<tr>
-				<td class="calendar"><input type="text"/></td>
+				<td class="calendar"><input type="text"/>
+				<?
+				if(!empty($this->options['min']))
+					echo CHtml::tag('span', array('class'=>'mindate'), strtotime($this->options['min']));
+				if(!empty($this->options['max']))
+					echo CHtml::tag('span', array('class'=>'maxdate'), strtotime($this->options['max']));
+				?>
+				</td>
 				<td>
 					<?
 					$days = array();

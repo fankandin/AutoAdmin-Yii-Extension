@@ -29,5 +29,6 @@ return array(
 	'Login or password is incorrect' => 'Неправильный логин или пароль',
 	'Incorrect table fields configuration. Error: {exception}' => 'Некорректная конфигурация полей таблицы. Ошибка: {exception}',
 	'The directory "{dirname}" cannot be created' => 'Директория "{dirname}" не может быть создана',
+	'Incorrect validation condition for field "{fieldName}"' => 'Некорректное условие валидации для поля "{fieldName}"',
 );
 ?>
