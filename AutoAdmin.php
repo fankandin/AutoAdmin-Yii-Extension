@@ -6,6 +6,7 @@
  * @author Alexander Palamarchuk <a@palamarchuk.info>. 2003-2012
  * @copyright Alexander Palamarchuk <a@palamarchuk.info>. 2003-2012
  * 
+ * @property string $manageAction The current interface mode.
  * @property AutoAdminAccess $accessManaging authorized access
  * @property string $interface Unique alias for the current management interface.
  * @property CController $controller Yii controller object.
@@ -16,7 +17,6 @@
  * @property array $viewData Common storage for view scripts.
  * 
  * @todo Gii-like automatic creation interfaces configurations (Controllers & Actions).
- * @todo Using Yii validators with forms.
  */
 Yii::import('ext.autoAdmin.*');
 Yii::import('ext.autoAdmin.models.*');
@@ -32,11 +32,10 @@ class AutoAdmin extends CWebModule
 	 */
 	const INPUT_PREFIX = 'AA';
 
-	public $manageAction;
-	public $managePage;
-
-	private $_interface;
+	private $_manageAction;
 	private $_access;
+	private $_interface;
+
 	private $_controller;
 	private $_trigger;
 
@@ -44,6 +43,12 @@ class AutoAdmin extends CWebModule
 	private $_db;
 	private $_iframeMode = false;
 	private $_viewData = array();
+
+	/**
+	 *
+	 * @var int Current page (for paginator).
+	 */
+	public $managePage;
 
 	/**
 	 *
@@ -208,18 +213,16 @@ class AutoAdmin extends CWebModule
 		else
 			$this->_controller->layout = $this->layout;	//property layout is a parameter from config. @see $layout
 
-		$this->manageAction = Yii::app()->request->getParam('action', 'list');
-		if(!in_array($this->manageAction, array('add', 'insert', 'edit', 'update', 'delete', 'upload', 'empty')))
-			$this->manageAction = 'list';
+		$this->_manageAction = Yii::app()->request->getParam('action', 'list');
+		if(!in_array($this->_manageAction, array('add', 'insert', 'edit', 'update', 'delete', 'upload', 'empty')))
+			$this->_manageAction = 'list';
 		$this->managePage = Yii::app()->request->getParam('page', 1);
 		if($this->managePage < 1)
 				$this->managePage = 1;
 
 		$this->_data->binding = Yii::app()->request->getParam('bk', array());
 
-		Yii::app()->clientScript->registerCoreScript('jquery')
-				->registerCssFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/overcast/jquery-ui.css')
-				->registerScriptFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js');
+		Yii::app()->clientScript->registerCoreScript('jquery')->registerCoreScript('jquery.ui')->registerCssFile('jquery-ui.css');
 
 		if(parent::beforeControllerAction($controller, $action))
 		{
@@ -431,30 +434,29 @@ class AutoAdmin extends CWebModule
 			'interface'		=> $this->_interface,
 			'bindKeys'		=> Yii::app()->request->getParam('bk', array()),
 			'bindKeysParent'=> Yii::app()->request->getParam('bkp', array()),
+			'manageAction'	=> $this->_manageAction,
 		));
 
-		switch($this->manageAction)
+		switch($this->_manageAction)
 		{
 			case 'add':	//Form for data adding
 			{
 				if(!$this->_access->checkRight('add'))
-					$this->blockAccess('add');
-				$this->_viewData['actionType'] = 'add';
+					$this->blockAccess();
 				$this->editMode();
 				break;
 			}
 			case 'edit':	//Form for data editing
 			{
 				if(!$this->_access->checkRight('edit'))
-					$this->blockAccess('edit');
-				$this->_viewData['actionType'] = 'edit';
+					$this->blockAccess();
 				$this->editMode();
 				break;
 			}
 			case 'insert':	//Process inserting data in DB
 			{
 				if(!$this->_access->checkRight('add'))
-					$this->blockAccess('add');
+					$this->blockAccess();
 				$affected = $this->insert();
 				$this->resultMode(array('msg'=>Yii::t('AutoAdmin.messages', ($affected ? 'The record was added' : 'The record was not added'))));
 				break;
@@ -462,7 +464,7 @@ class AutoAdmin extends CWebModule
 			case 'update':	//Process updating data in DB
 			{
 				if(!$this->_access->checkRight('edit'))
-					$this->blockAccess('edit');
+					$this->blockAccess();
 				$affected = $this->update();
 				$this->resultMode(array('msg'=>Yii::t('AutoAdmin.messages', ($affected ? 'The record has been changed' : 'The record has not been changed'))));
 				break;
@@ -470,7 +472,7 @@ class AutoAdmin extends CWebModule
 			case 'delete':	//Process deletion data in DB
 			{
 				if(!$this->_access->checkRight('delete'))
-					$this->blockAccess('delete');
+					$this->blockAccess();
 				$deletingRow = $this->_db->getCurrentRow();
 				if(!$deletingRow)
 					throw new CHttpException(404, Yii::t('AutoAdmin.errors', 'Can\'t find the record'));
@@ -496,7 +498,7 @@ class AutoAdmin extends CWebModule
 			case 'upload':	//Uploading a file for field
 			{
 				if(!$this->_access->checkRight('edit'))
-					$this->blockAccess('edit');
+					$this->blockAccess();
 				$viewData = array('field'=>Yii::app()->request->getParam('field'));
 				if(!empty($_POST[self::INPUT_PREFIX]['upload']) && !empty($_FILES[self::INPUT_PREFIX]['name']['uploadFile']))
 				{
@@ -524,14 +526,14 @@ class AutoAdmin extends CWebModule
 			case 'empty':	//Interface which is programmed directly by user
 			{
 				if(!$this->_access->checkRight('read'))
-					$this->blockAccess('read');
+					$this->blockAccess();
 				$this->_controller->render($this->viewsPath.'empty', $this->_viewData);
 				break;
 			}
 			default:	//Data list show (default mode)
 			{
 				if(!$this->_access->checkRight('read'))
-					$this->blockAccess('read');
+					$this->blockAccess();
 				$this->listMode();
 				break;
 			}
@@ -618,7 +620,7 @@ class AutoAdmin extends CWebModule
 	private function editMode()
 	{
 		$dataToPass = $this->_viewData;
-		if($this->_viewData['actionType'] == 'edit')
+		if($this->_manageAction == 'edit')
 		{
 			$dataToPass['fields'] = $this->_db->getCurrentRow();
 			if(!$dataToPass['fields'])
@@ -685,7 +687,14 @@ class AutoAdmin extends CWebModule
 		$values = array();
 		foreach($this->_data->fields as &$field)
 		{
-			$values[$field->name] = $field->valueForSql();
+			try
+			{
+				$values[$field->name] = $field->valueForSql();
+			}
+			catch(AAException $e)
+			{
+				$this->processFormError($field, $e->getMessage());
+			}
 		}
 		if($values)
 		{
@@ -701,7 +710,7 @@ class AutoAdmin extends CWebModule
 				}
 				$this->_db->transactionCommit($transaction);
 			}
-			catch(Exception $e)
+			catch(AAException $e)
 			{
 				$this->_db->transactionRollback($transaction);
 				$this->processQueryError($e);
@@ -733,7 +742,16 @@ class AutoAdmin extends CWebModule
 		foreach($this->_data->fields as &$field)
 		{
 			if($field->isChanged)
-				$values[$field->name] = $field->valueForSql();
+			{
+				try
+				{
+					$values[$field->name] = $field->valueForSql();
+				}
+				catch(AAException $e)
+				{
+					$this->processFormError($field, $e->getMessage());
+				}
+			}
 		}
 		if($values)
 		{
@@ -749,7 +767,7 @@ class AutoAdmin extends CWebModule
 				}
 				$this->_db->transactionCommit($transaction);
 			}
-			catch(Exception $e)
+			catch(AAException $e)
 			{
 				$this->processQueryError($e);
 				$this->_db->transactionRollback($transaction);
@@ -798,7 +816,7 @@ class AutoAdmin extends CWebModule
 			$this->_trigger->execute($this->_data->pk, 'after', 'delete');
 			$this->_db->transactionCommit($transaction);
 		}
-		catch(Exception $e)
+		catch(AAException $e)
 		{
 			$this->processQueryError($e);
 			$this->_db->transactionRollback($transaction);
@@ -863,9 +881,28 @@ class AutoAdmin extends CWebModule
 	}
 
 	/**
+	 * Processes an exception after catching an error from the form.
+	 * @param AAIField A field object with AAIField interface.
+	 * @param string $errorMEssage Error message.
+	 */
+	private function processFormError(&$field, $errorMessage='')
+	{
+		$this->_viewData['formError'] = array(
+			'field' => $field,
+			'message' => $errorMessage,
+		);
+		if($this->_manageAction == 'insert')
+			$this->_manageAction = 'add';
+		elseif($this->_manageAction == 'update')
+			$this->_manageAction = 'edit';
+		$this->editMode();
+		Yii::app()->end();
+	}
+
+	/**
 	 * Processes an exception after a bad SQL query.
 	 * Logs the problem and renders the view.
-	 * @param Exception $e 
+	 * @param AAException $e 
 	 */
 	private function processQueryError($e)
 	{
@@ -881,12 +918,11 @@ class AutoAdmin extends CWebModule
 
 	/**
 	 * Blocks access to the interface: shows the message, ends the application.
-	 * @param string $actionType Type of action (predefined).
 	 * @throws CHttpException 
 	 */
-	public function blockAccess($actionType)
+	public function blockAccess()
 	{
-		$this->_controller->render($this->viewsPath.'restricted', array('actionType'=>$actionType));
+		$this->_controller->render($this->viewsPath.'restricted', array('manageAction'=>$this->_manageAction));
 		Yii::app()->end();
 	}
 
@@ -909,5 +945,32 @@ class AutoAdmin extends CWebModule
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Gets the current mode.
+	 * @return string The predefined code of the mode.
+	 */
+	public function getManageAction()
+	{
+		return $this->_manageAction;
+	}
+
+	/**
+	 * Gets the current AudoAdminAccess object.
+	 * @return AudoAdminAccess
+	 */
+	public function getAccess()
+	{
+		return $this->_access;
+	}
+
+	/**
+	 * Gets the current interface ID.
+	 * @return string Interface ID.
+	 */
+	public function getInterface()
+	{
+		return $this->_interface;
 	}
 }

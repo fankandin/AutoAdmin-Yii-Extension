@@ -11,7 +11,7 @@ $this->breadcrumbs = array(
 <h1><?=$this->pageTitle?></h1>
 
 <?
-switch($actionType)
+switch($manageAction)
 {
 	case 'read':
 		$message = Yii::t('AutoAdmin.access', 'You don\'t have permissions to read the data here');
@@ -19,11 +19,11 @@ switch($actionType)
 	case 'add':
 		$message = Yii::t('AutoAdmin.access', 'You don\'t have permissions to add data here here');
 		break;
-	case 'edit':
-		$message = Yii::t('AutoAdmin.access', 'You don\'t have permissions to edit the data here');
-		break;
 	case 'delete':
 		$message = Yii::t('AutoAdmin.access', 'You don\'t have permissions to delete the data here');
+		break;
+	default:	//Default error is as for edit mode
+		$message = Yii::t('AutoAdmin.access', 'You don\'t have permissions to edit the data here');
 		break;
 }
 ?>

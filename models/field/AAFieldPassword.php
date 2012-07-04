@@ -20,8 +20,6 @@ class AAFieldPassword extends AAField implements AAIField
 		$inputID = "i_{$inputName}";
 		echo CHtml::label($this->label, $inputID);
 		echo CHtml::tag('br');
-		if($this->allowNull)
-			$this->printFormNullCB();
 		if($this->isReadonly)
 			$tagOptions['disabled'] = true;
 
@@ -39,6 +37,10 @@ class AAFieldPassword extends AAField implements AAIField
 		}
 		else
 		{
+			if(!empty($this->options['pattern']))
+				$tagOptions['pattern'] = $this->options['pattern'];
+			if(isset($this->options['maxlength']))
+				$tagOptions['maxlength'] = $this->options['maxlength'];
 			echo CHtml::passwordField("{$inputName}[val]", $this->value, $tagOptions);
 		}
 
@@ -52,5 +54,13 @@ class AAFieldPassword extends AAField implements AAIField
 			$this->value = AAUserIdentity::hashPassword($formData[$this->name]['val']);
 			$this->isChanged = true;
 		}
+	}
+
+	public function valueForSql()
+	{	//A password theoretically may be an empty string, so we need to hash it
+		if(!is_null($this->value) && $this->value==='' && !$this->allowNull)
+			$this->value = '';
+		else
+			return parent::valueForSql();
 	}
 }

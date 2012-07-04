@@ -129,11 +129,15 @@ abstract class AAField
 		$inputID = "i_{$inputName}";
 		echo CHtml::label($this->label, $inputID);
 		echo CHtml::tag('br');
-		if($this->allowNull)
-			$this->printFormNullCB();
 		$tagOptions['id'] = $inputID;
 		if($this->isReadonly)
 			$tagOptions['disabled'] = true;
+		if(!$this->allowNull)
+			$tagOptions['required'] = 'required';
+		if(!empty($this->options['pattern']))
+			$tagOptions['pattern'] = $this->options['pattern'];
+		if(isset($this->options['maxlength']))
+			$tagOptions['maxlength'] = $this->options['maxlength'];
 		echo CHtml::textField($inputName, AAHelperForm::prepareTextForForm(((string)$this->value ? $this->value : $this->defaultValue)), $tagOptions);
 
 		return ob_get_clean();
@@ -167,13 +171,34 @@ abstract class AAField
 			elseif($this->allowNull)
 				return new CDbExpression('NULL');
 			else
-				throw new AAException(Yii::t('AutoAdmin.errors', 'The field "{field}" cannot be NULL but it can be passed by the form', array('{field}'=>$this->name)));
+				$this->throwErrorNull();
+		}
+		elseif($this->value==='')
+		{
+			if($this->allowNull)
+				return new CDbExpression('NULL');
+			else
+				$this->throwErrorNull();
 		}
 		else
 			return $this->value;
 	}
 
 	/**
-	 * public function modifySqlQuery();
+	 * Throws an error in case of inadmissible NULL value.
+	 * @throws AAException 
 	 */
+	public function throwErrorNull()
+	{
+		throw new AAException(Yii::t('AutoAdmin.errors', 'The field "{field}" cannot be NULL but it\'s been passing by the form', array('{field}'=>$this->name)));
+	}
+
+	/**
+	 * Throws an error in case of wrong value.
+	 * @throws AAException 
+	 */
+	public function throwErrorValue()
+	{
+		throw new AAException(Yii::t('AutoAdmin.errors', 'Incorrect value "{value}" for field {column}', array('{value}'=>$this->value, '{field}'=>$this->name)));
+	}
 }

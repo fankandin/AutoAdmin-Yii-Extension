@@ -25,7 +25,7 @@
 #data-list th.data.sort-asc:hover {background-image: url('../../../i/ico/go-down.png');}
 #data-list th.data.sort-desc {background-image: url('../../../i/ico/go-down.png');}
 #data-list th.data.sort-desc:hover {background-image: url('../../../i/ico/go-up.png');}
-#data-list thead tr th.data a small {font-size: 50%; text-decoration: none; display: inline-block; margin-top: 3px;}
+#data-list thead tr th.data a small, #data-list thead tr th small {color: #FFCD05; font-size: 50%; text-decoration: none; display: inline-block; margin-top: 3px;}
 #data-list tr.enlighted td {background-color: #ffda8d;}
 
 #panel-up {border-bottom: 1px solid #F04200; width: 100%;}

@@ -38,8 +38,6 @@ class AAFieldText extends AAFieldString
 		$inputID = "i_{$inputName}";
 		echo CHtml::label($this->label, $inputID);
 		echo CHtml::tag('br');
-		if($this->allowNull)
-			$this->printFormNullCB();
 		
 		$value = str_replace('<br/>', "\n", $this->value);
 		$value = AAHelperForm::prepareTextForForm($value);
@@ -85,5 +83,13 @@ class AAFieldText extends AAFieldString
 		$this->value = preg_replace("/((<\/li>)|(<\/ol>)|(<\/ul>)|(<\/div>)|(<\/table>)|(<\/h[0-9]>))\n*((<\/p>)|(<br\/>))/i", "\\1", $this->value);
 		$this->value = preg_replace("/<p><\/div>/i", "</div>", $this->value);	//crutch :(
 		$this->value = preg_replace("/(<div[^>]*>)<\/p>/i", "\\1", $this->value);
+	}
+	
+	public function valueForSql()
+	{
+		if(!is_null($this->value) && $this->value==='' && !$this->allowNull)
+			$this->value = '';	//In case of string we do not throw an exception, we can use '' as value
+		else
+			return parent::valueForSql();
 	}
 }

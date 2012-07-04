@@ -21,10 +21,9 @@ class AAFieldString extends AAField implements AAIField
 	
 	public function valueForSql()
 	{
-		if($this->value==='' && $this->allowNull)
-			return new CDbExpression('NULL');
+		if(!is_null($this->value) && $this->value==='' && !$this->allowNull)
+			$this->value = '';	//In case of string we do not throw an exception, we can use '' as value
 		else
 			return parent::valueForSql();
 	}
-
 }

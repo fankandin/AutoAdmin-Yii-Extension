@@ -25,9 +25,17 @@ class AAFieldNum extends AAField implements AAIField
 			$this->printFormNullCB();
 
 		$tagOptions['id'] = $inputID;
-		$tagOptions['maxlength'] = 10;
 		if($this->isReadonly)
 			$tagOptions['disabled'] = true;
+		if(isset($this->options['min']))
+			$tagOptions['min'] = $this->options['min'];
+		if(isset($this->options['max']))
+			$tagOptions['max'] = $this->options['max'];
+		if(isset($this->options['pattern']))
+			$tagOptions['pattern'] = $this->options['pattern'];
+		if(!isset($this->options['max']) && !isset($this->options['pattern']))
+			$tagOptions['maxlength'] = 10;
+
 		echo CHtml::textField($inputName, (!is_null($this->value) ? $this->value : $this->defaultValue), $tagOptions);
 
 		switch($this->options['numType'])
@@ -71,5 +79,13 @@ class AAFieldNum extends AAField implements AAIField
 		?><div class="num-tip"><?=CHtml::dropDownList(null, (!is_null($this->value) ? $this->value : $this->defaultValue), $numOptions);?></div><?
 
 		return ob_get_clean();
+	}
+
+	public function valueForSql()
+	{
+		$value = parent::valueForSql();
+		if(!is_numeric($this->value))
+			$this->throwErrorValue();
+		return $value;
 	}
 }

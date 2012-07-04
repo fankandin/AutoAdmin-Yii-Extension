@@ -53,8 +53,6 @@ class AAFieldFile extends AAField implements AAIField
 		$inputID = "i_{$inputName}";
 		echo CHtml::label($this->label, $inputID);
 		echo CHtml::tag('br');
-		if($this->allowNull)
-			$this->printFormNullCB();
 		if($this->isReadonly)
 			$tagOptions['disabled'] = true;
 

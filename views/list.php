@@ -77,7 +77,10 @@ $numCols = 2;
 <?
 if(!empty($urlSub))
 {
-		?><th></th><?
+		?><th>
+			<?=(!empty($clientData['subHrefTitle']) ? $clientData['subHrefTitle'].'<br/>' : '')?>
+			<small><?=Yii::t('AutoAdmin.common', 'Click on the icons below to go the next interface')?></small>
+		</th><?
 	$numCols++;
 }
 
@@ -129,7 +132,7 @@ foreach($dataRows as $rowI=>$dataRow)
 	if(!empty($urlSub))
 	{
 		?>
-		<td class="subtable"><?=CHtml::link('-', AAHelperUrl::addParam($urlSub, 'bk', $dataRow->pk), array('title'=>(!empty($clientData['subHrefTitle']) ? $clientData['subHrefTitle'] : null)))?></td>
+		<td class="subtable"><?=CHtml::link('-', AAHelperUrl::addParam($urlSub, 'bk', $dataRow->pk))?></td>
 		<?
 	}
 

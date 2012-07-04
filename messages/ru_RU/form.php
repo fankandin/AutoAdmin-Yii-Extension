@@ -15,6 +15,6 @@ return array(
 	'File upload' => 'Загрузка файла',
 	'Text for ALT=""' => 'Текст для ALT=""',
 	'File to upload' => 'Загружаемый файл',
-	'' => '',
+	'Error:' => 'Ошибка:',
 );
 ?>

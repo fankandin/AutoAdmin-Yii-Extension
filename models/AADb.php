@@ -121,15 +121,18 @@ class AADb
 				if(method_exists($field, 'modifySqlQuery'))
 				{
 					$sqlModifing = $field->modifySqlQuery();
-					if(!empty($sqlModifing['select']))
-						$selectFields = array_merge($selectFields, $sqlModifing['select']);
-					if(!empty($sqlModifing['join']))
+					if($sqlModifing)
 					{
-						if(empty($sqlModifing['join']['type']) || $sqlModifing['join']['type']=='inner')
-							$joinF = 'join';
-						else
-							$joinF = strtolower($sqlModifing['join']['type'])."Join";
-						$q->{$joinF}($this->getFullTableName($sqlModifing['join']['table']), $sqlModifing['join']['conditions'], (!empty($sqlModifing['join']['params']) ? $sqlModifing['join']['params'] : array()));
+						if(!empty($sqlModifing['select']))
+							$selectFields = array_merge($selectFields, $sqlModifing['select']);
+						if(!empty($sqlModifing['join']))
+						{
+							if(empty($sqlModifing['join']['type']) || $sqlModifing['join']['type']=='inner')
+								$joinF = 'join';
+							else
+								$joinF = strtolower($sqlModifing['join']['type'])."Join";
+							$q->{$joinF}($this->getFullTableName($sqlModifing['join']['table']), $sqlModifing['join']['conditions'], (!empty($sqlModifing['join']['params']) ? $sqlModifing['join']['params'] : array()));
+						}
 					}
 				}
 			}

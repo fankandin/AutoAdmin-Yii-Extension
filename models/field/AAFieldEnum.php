@@ -35,12 +35,21 @@ class AAFieldEnum extends AAField implements AAIField
 		$inputID = "i_{$inputName}";
 		echo CHtml::label($this->label, $inputID);
 		echo CHtml::tag('br');
-		if($this->allowNull)
-			$this->printFormNullCB();
 
 		$tagOptions['id'] = $inputID;
-		echo CHtml::dropDownList($inputName, ($this->value ? $this->value : $this->defaultValue), $this->options['enumValues'], $tagOptions);
+		$options = $this->options['enumValues'];
+		if($this->allowNull)
+			$options= array_merge(array(''=>''), $valueOptions);
+		echo CHtml::dropDownList($inputName, ($this->value ? $this->value : $this->defaultValue), $options, $tagOptions);
 
 		return ob_get_clean();
+	}
+	
+	public function valueForSql()
+	{
+		$value = parent::valueForSql();
+		if(is_string($value) && !isset($this->options['enumValues'][$value]))
+			$this->throwErrorValue();
+		return $value;
 	}
 }

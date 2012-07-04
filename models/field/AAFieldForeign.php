@@ -14,15 +14,15 @@ class AAFieldForeign extends AAField implements AAIField
 	{
 		if(!isset($this->options['foreign']))
 			throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "{paramName}" must be set for the field {fieldName}', array('parameter'=>'foreign', '{fieldName}'=>$this->name)));
-		$oblParams = array('table', 'pk');
-		foreach($oblParams as $paramName)
+		$mandParams = array('table', 'pk');
+		foreach($mandParams as $paramName)
 		{
 			if(isset($this->options['foreign'][$paramName]))
 				$this->options[$paramName] = $this->options['foreign'][$paramName];
 			else
 				throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "{paramName}" must be set for the field {fieldName}', array('parameter'=>'foreign['.$paramName.']', '{fieldName}'=>$this->name)));
 		}
-	
+
 		$this->options['foreignValues'] = array();
 		if(empty($this->options['foreign']['tableAlias']))
 		{
@@ -31,17 +31,20 @@ class AAFieldForeign extends AAField implements AAIField
 		}
 		else
 			$this->options['tableAlias'] = $this->options['foreign']['tableAlias'];
-		if(empty($this->options['foreign']['select']))
-			$this->options['select'] = array();
-		else
+
+		$this->options['select'] = array();
+		if(!empty($this->options['foreign']['select']))
 		{	//Setting aliases for fields
-			$select = array();
 			foreach($this->options['foreign']['select'] as $fieldName)
-			{
-				$select[$fieldName] = "{$this->options['tableAlias']}_$fieldName";
-			}
-			$this->options['select'] = $select;
+				$this->options['select'][$fieldName] = "{$this->options['tableAlias']}_$fieldName";
 		}
+		if(!empty($this->options['foreign']['searchBy']))
+			$this->options['searchBy'] = $this->options['foreign']['searchBy'];
+		elseif($this->options['select'])
+			$this->options['searchBy'] = $this->options['select'];
+		else
+			throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "{paramName}" must be set for the field {fieldName}', array('parameter'=>'foreign[searchBy]', '{fieldName}'=>$this->name)));
+			
 		$this->options['limit'] = isset($this->options['foreign']['limit']) ? $this->options['foreign']['limit'] : self::defaultSelectLimit;
 	}
 
@@ -78,19 +81,20 @@ class AAFieldForeign extends AAField implements AAIField
 
 		echo CHtml::label($this->label, $inputID);
 		echo CHtml::tag('br');
-		if($this->allowNull)
-			$this->printFormNullCB();
 		$tagOptions['id'] = $inputID;
 		$value = (!is_null($this->value) ? $this->value : $this->defaultValue);
 
 		if(!$this->isReadonly && $this->getPossibleValuesCount() <= $this->options['limit'])
 		{
+			if(!$this->allowNull)
+				$tagOptions['required'] = 'required';
 			echo CHtml::dropDownList($inputName, $value, $this->getOptValues(), $tagOptions);
 		}
 		else
 		{
 			echo CHtml::dropDownList('', $value, array($this->getTitleByFields($this->selectDefault())), array('disabled'=>true));
 			echo CHtml::hiddenField($inputName, $value);
+
 			if(!$this->isReadonly && !empty($this->options['searchBy']))
 			{
 				$options = array();
@@ -138,10 +142,6 @@ class AAFieldForeign extends AAField implements AAIField
 		}
 	}
 
-	/**
-	 * Prepares SELECT and JOIN parts for the base SQL query.
-	 * @return array|false Data in internal format. Will be used to modificate SQL query.
-	 */
 	public function modifySqlQuery()
 	{
 		//Joining tables by foreign key (one to many relation)
@@ -226,6 +226,8 @@ class AAFieldForeign extends AAField implements AAIField
 	private function getOptValues()
 	{
 		$optValues = array();
+		if($this->allowNull)
+			$optValues[''] = '';
 		$q = Yii::app()->db->createCommand();
 		$q->from($this->options['table']);
 		if($this->options['select'])

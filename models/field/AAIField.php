@@ -53,4 +53,17 @@ interface AAIField
 	 * @return string|\CDbExpression A value ready to insert in DB (or update another one).
 	 */
 	public function valueForSql();
+
+	/**
+	 * Checks a value whether it's like a NULL and returns the converted value.
+	 * E.g. as NULL should be presented: strings with value '', enums without predefined value and etc.
+	 * Of course, a value can't be NULL, if AAField::$allowNull is set to false.
+	 * 
+	 * @param mixed $value A value of any type, typified for the children classes.
+	 * @return mixed
+	 */
+	/*
+	public function nullValue($value=null);
+	 * 
+	 */
 }

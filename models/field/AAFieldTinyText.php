@@ -21,8 +21,6 @@ class AAFieldTinyText extends AAFieldString
 		echo CHtml::label($this->label, $inputID);
 		echo CHtml::tag('br');
 		$tagOptions['id'] = $inputID;
-		if($this->allowNull)
-			$this->printFormNullCB();
 		if($this->isReadonly)
 			$tagOptions['disabled'] = true;
 			
@@ -43,5 +41,13 @@ class AAFieldTinyText extends AAFieldString
 		$this->value = str_replace("\r", "", trim($formData[$this->name]));
 		$this->value = str_replace("\n", "<br/>", $this->value);
 		$this->value = AAHelperForm::prepareTextForDb($this->value);
+	}
+	
+	public function valueForSql()
+	{
+		if(!is_null($this->value) && $this->value==='' && !$this->allowNull)
+			$this->value = '';	//In case of string we do not throw an exception, we can use '' as value
+		else
+			return parent::valueForSql();
 	}
 }

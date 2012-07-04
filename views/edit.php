@@ -3,7 +3,7 @@ Yii::app()->clientScript
 	->registerCssFile(AutoAdmin::$assetPath.'/css/edit.css')
 	->registerScriptFile(AutoAdmin::$assetPath.'/js/edit.js');
 
-$url = AAHelperUrl::replaceParam($baseURL, 'action', ($actionType == 'edit' ? 'update' : 'insert'));
+$url = AAHelperUrl::replaceParam($baseURL, 'action', ($manageAction == 'edit' ? 'update' : 'insert'));
 
 if(empty($this->breadcrumbs))
 	$this->breadcrumbs[$this->pageTitle] = AAHelperUrl::stripParam($url, array('action', 'id'));
@@ -28,7 +28,7 @@ if(!empty($clientData['subhtml']))
 	echo $clientData['subhtml'];
 }
 
-if($actionType == 'edit')
+if($manageAction == 'edit')
 {	//Display subheader within information about data unit (which is beeing edited now)
 	$h2MaxParts = 2;
 	$h2 = '';
@@ -59,10 +59,24 @@ $itemsI = 0;
 $tabindex = 1;
 $commonTagOptions = array('tabindex'=>&$tabindex);
 
-foreach($fields as $field)
+if(!empty($formError))
 {
 	?>
-	<div class="item<?=(($itemsI%4 < 2) ? ' m':'')?> block_<?=$field->type?><?=($field->allowNull ? ' nullf' : '')?>">
+	<p class="error"><?=Yii::t('AutoAdmin.form', 'Error:')?> <?=$formError['message']?></p>
+	<?
+}
+
+foreach($fields as $field)
+{
+	$class = 'item block_'.$field->type;
+	if($itemsI%4 < 2)
+		$class .= ' m';
+	if($field->allowNull)
+		$class .= ' nullf';
+	if(!empty($formError) && $formError['field']->name == $field->name)
+		$class .= ' error';
+	?>
+	<div class="<?=$class?>">
 		<?=$field->formInput($this, $commonTagOptions)?>
 		<?
 		if($field->description)
@@ -83,7 +97,7 @@ if(!empty($iframes))
 	?>
 	
 	<?
-	if($actionType == 'add')
+	if($manageAction == 'add')
 	{
 		?><div class="item"><div class="iframe-na"><i><?=Yii::t('AutoAdmin.form', 'Submit the form in order to be able to edit additional links')?>.</i></div></div><?
 	}
