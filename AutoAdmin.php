@@ -130,7 +130,7 @@ class AutoAdmin extends CWebModule
 	public $viewsPath = 'ext.autoAdmin.views.';
 	/**
 	 * 
-	 * @var array Additional view scripts to display in data listing mode
+	 * @var array Additional view scripts to display in the list & edit modes
 	 */
 	public $partialViews = array();
 	/**

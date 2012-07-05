@@ -16,9 +16,7 @@ $urlDelete = AAHelperUrl::addParam($baseURL, 'action', 'delete');
 <h1><?=$this->pageTitle?></h1>
 <?
 if(!empty($partialViews['up']))
-{
 	$this->renderPartial($partialViews['up'], $clientData);
-}
 
 if(!empty($clientData['subtitle']))
 {
@@ -283,9 +281,8 @@ if(in_array('add', $rights))
 </table>
 <?
 if(!empty($partialViews['down']))
-{
 	$this->renderPartial($partialViews['down'], $clientData);
-}
+
 if(empty($iframeMode))
 	$this->renderPartial($viewsPath.'footer', array('isGuest'=>$isGuest, 'userName'=>$userName, 'userLevel'=>$userLevel));
 ?>

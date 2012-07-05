@@ -7,6 +7,16 @@
 class AAHelperFile
 {
 	/**
+	 * Converts HTML-oriented path (SRC="") to a strict full file path. Also converts directory separators.
+	 * @param string $src HTML-oriented path (SRC="").
+	 * @return string Full file path.
+	 */
+	public static function srcToPath($src)
+	{
+		return Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.Yii::app()->modules['autoadmin']['wwwDirName'].str_replace('/', DIRECTORY_SEPARATOR, $src);
+	}
+
+	/**
 	 * Delete the file (uploaded by AutoAdmin).
 	 * @param string $fileName File name
 	 * @return boolean Success of deletion
@@ -16,7 +26,8 @@ class AAHelperFile
 	{
 		if(!$fileName)
 			return false;
-		$fpath = Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.Yii::app()->modules['autoadmin']['wwwDirName'].str_replace('/', DIRECTORY_SEPARATOR, $fileName);
+		$fpath = self::srcToPath($fileName);
+		
 		if(file_exists($fpath))
 		{
 			if(@unlink($fpath))
@@ -43,7 +54,7 @@ class AAHelperFile
 		$uploadedFileName =& $_FILES[AutoAdmin::INPUT_PREFIX]['name'][$paramName];
 
 		$newfname = '';
-		$toDir = Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.Yii::app()->modules['autoadmin']['wwwDirName'].str_replace('/', DIRECTORY_SEPARATOR, $fileBaseDir);
+		$toDir = self::srcToPath($fileBaseDir);
 		$newfname = mb_strtolower(mb_substr($uploadedFileName, 0, mb_strrpos($uploadedFileName, '.')));
 		$newfname = AAHelperText::translite($newfname);
 		$newfname = str_replace(' ', '_', $newfname);
