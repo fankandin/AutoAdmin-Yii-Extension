@@ -30,5 +30,9 @@ return array(
 	'Incorrect table fields configuration. Error: {exception}' => 'Некорректная конфигурация полей таблицы. Ошибка: {exception}',
 	'The directory "{dirname}" cannot be created' => 'Директория "{dirname}" не может быть создана',
 	'Incorrect validation condition for field "{fieldName}"' => 'Некорректное условие валидации для поля "{fieldName}"',
+	//Breadcrumbs generation
+	'Breadcrumbs can be generated only after AABreadcrumbs->query->select()->from() initializing. Or use call with static label.' => 'Хлебные крошки могут быть сгенерированы только после AABreadcrumbs->query->select()->from() инициализации. Или используйте вызов со статической меткой ссылки.',
+	'Auto-generation of the breadcrumbs can be done only with the default inside-controller navigation.' => 'Автогенерация хлебных крошек может быть выполнена только при навигации внутри контроллера «по умолчанию».',
+	'Incorrect breadcrumbs level.' => 'Некорректный уровень хлебных крошек.',
 );
 ?>

@@ -23,7 +23,6 @@ Yii::import('ext.autoAdmin.models.*');
 Yii::import('ext.autoAdmin.models.field.*');
 Yii::import('ext.autoAdmin.helpers.*');
 Yii::import('ext.autoAdmin.controllers.*');
-Yii::import('ext.autoAdmin.views.layouts.*');
 
 class AutoAdmin extends CWebModule
 {
@@ -125,6 +124,11 @@ class AutoAdmin extends CWebModule
 	public $confirmDelete = true;
 	/**
 	 *
+	 * @var string Path to default layout. Can be configured.
+	 */
+	public $layout = 'ext.autoAdmin.views.layouts.main';
+	/**
+	 *
 	 * @var string Path to layout extension views.
 	 */
 	public $viewsPath = 'ext.autoAdmin.views.';
@@ -203,7 +207,7 @@ class AutoAdmin extends CWebModule
 			$this->_controller->layout = 'ext.autoAdmin.views.layouts.iframe';
 		}
 		else
-			$this->_controller->layout = $this->layout;	//property layout is a parameter from config. @see $layout
+			$this->_controller->layout = $this->layout;
 
 		$this->_manageAction = Yii::app()->request->getParam('action', 'list');
 		if(!in_array($this->_manageAction, array('add', 'insert', 'edit', 'update', 'delete', 'upload', 'empty')))

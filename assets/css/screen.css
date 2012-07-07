@@ -1,0 +1,74 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: Tahoma, Arial, Verdana;
+	font-size: 13px;
+	color: #555555;
+	background: repeat-x #fff;
+}
+::selection {background: #69B168; color: #ffffff;}
+::-moz-selection {background: #69B168; color: #ffffff;}
+
+#tm {float: right; width: 90px;}
+#up {background: #000; font-size: 11px; float: right; margin-top: 60px;}
+#tools,#login {float: right; width: 100px; text-align: right; padding-top: 5px; font-size: 10px;}
+#login {clear: right;}
+#head {background: #000; height: 83px;}
+#site-name {color: #444; font-size: 38px; position: absolute; padding: 18px 10px 0; font-family: Georgia;}
+#logo {width: 78px; height: 78px; padding: 0px 20px 5px 16px; float: left;}
+#logo a {width: 80px; height: 80px; display: block; overflow: hidden; text-indent: -300px; background: none;}
+#logo a:hover {background: none !important;}
+
+#menu {margin: 0; padding: 0; background: #b83434; width: 100%; display: table; box-shadow: 0 -8px 4px -4px rgba(0, 0, 0, 0.5);}
+#menu li {float: left; list-style-type: none; height: 28px; border-right: 1px solid #ccc;}
+#menu li a {background: #B83434; color: #FFCD05; display: table-cell; vertical-align: middle; height: 28px; padding: 0 12px;}
+#menu li a:hover {background: #DE2F0F;}
+.breadcrumbs {margin: 0 20px 12px 10px; font-size: 90%; color: #999; clear: both; padding: 5px 0 5px 0; font-size: 85%; border-bottom: 1px solid #f0f0f0;}
+.breadcrumbs a, .breadcrumbs a:visited {color: #999; text-decoration: underline;}
+.breadcrumbs a:hover {color: #FA5B00;}
+.breadcrumbs #home {background: url('../../../i/ico/go-home.png') no-repeat; padding-left: 20px; height: 16px; margin-right: 3px; display: table-cell; float: left;}
+
+#content {padding: 0; background: #fff;}
+.narrow-content {padding: 15px;}
+.br {clear: both; height: 0;}
+
+#editform {border-left: 5px solid #FFCD05; padding-left: 3px;}
+#panel_up {clear: both; width: 100%;}
+#panel_down {clear: both; width: 100%;}
+#listForm {clear: both;}
+
+div.menu a:link, div.menu a:visited {font-size: 14px; font-weight: bold;}
+div.menu a:hover {text-decoration: underline;}
+
+table {border: none;}
+
+h1 {color: #000; font-size: 26px; font-weight: normal; margin: 0 0 1px 0; padding: 0 10px 3px 10px; border-left: 5px solid #69b168;}
+h2 {color: #333; background: #f0f0f0; font-size: 13px; font-weight: bold; clear: both; padding: 2px 0 4px 5px; border-top: 1px solid #999; border-bottom: 1px solid #999;}
+
+a, a:visited {color: #DC3737; text-decoration: underline; font-weight: bold;}
+a:hover   {color: #69a367; font-weight: bold;}
+
+a.sm:link, a.sm:visited, a.sm:hover {font-weight: normal; font-size: 0.75em; padding: 0px;}
+a.nonbold:link, a.nonbold:visited, a.nonbold:hover {font-weight: normal; padding: 0px;}
+
+a img {border: none; padding: 0px; background: none;}
+.marked {color: #999; font-weight: bold; font-style: italic;}
+
+.error {color: #ff0000; font-weight: bold;}
+.warning {color: #ff8800;}
+
+tr.h td {background-color: #f8f8f8;}
+
+form {margin: 20px;}
+form.list {margin: 0;}
+
+#footer {border-top: 1px dashed #ADADAD; padding: 10px; margin-top: 40px;}
+
+.sourcecode .code {display: none; margin: 5px 30px; padding: 5px 10px; border: 1px solid #ccc; background-color: #f8f8f8;}
+.sourcecode a, .sourcecode a:visited {color: #398138; background: url('../../../i/ico/plus.png') no-repeat 0 center #f8f8f8; display: inline-block; margin: 10px 20px 5px 20px; padding: 3px 6px 5px 20px; cursor: pointer;}
+.sourcecode a:hover {color: #DC3737;}
+.sourcecode a.opened, .sourcecode a.opened:visited {color: #DC3737; background-image: url('../../../i/ico/minus.png');}
+.sourcecode a span.show, .sourcecode a.opened span.hide {display: inline;}
+.sourcecode a span.hide, .sourcecode a.opened span.show {display: none;}
+.sourcecode code {font-family: 'Consolas, Monospace'; line-height: 140%; font-size: 140%;}
+.top-tip {border: 1px dotted #69b168; background: url('../../../i/ico/lightbulb.png') no-repeat 2px center; padding: 5px 5px 5px 22px; display: inline-block; margin: 5px 20px; font-size: 110%;}

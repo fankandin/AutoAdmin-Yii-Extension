@@ -87,4 +87,13 @@ class AAHelperText
 	{
 		return preg_replace('/('.preg_quote($fragment).')/ui', '<span class="marked">$1</span>', $text);
 	}
+
+	/**
+	 * mb_ucfirst
+	 * @param string $str 
+	 */
+	public static function ucfirst($str)
+	{
+		return mb_strtoupper(mb_substr($str, 0, 1)).mb_substr($str, 1);
+	}
 }

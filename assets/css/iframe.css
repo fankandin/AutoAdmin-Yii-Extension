@@ -12,7 +12,7 @@ body {margin: 0 auto; padding: 0;
 
 div.br {clear: both; height: 1px;}
 
-.breadcrumbs {margin: 0 20px 12px 10px; font-size: 90%; color: #999;}
+.breadcrumbs {margin: 0 20px 12px 10px; font-size: 90%; color: #999; clear: both; padding: 5px 0 5px 0; font-size: 85%; border-bottom: 1px solid #f0f0f0;}
 .breadcrumbs a, .breadcrumbs a:visited {color: #999; text-decoration: underline;}
 .breadcrumbs a:hover {color: #FA5B00;}
 .breadcrumbs #home {background: url('../../../i/ico/go-home.png') no-repeat; padding-left: 20px; height: 16px; margin-right: 3px; display: table-cell; float: left;}
