@@ -45,10 +45,6 @@ class AutoAdminAccess
 			throw new CHttpException(403, Yii::t('AutoAdmin.access', 'Open Mode is inactive, but the interface {alias} is unknown. There is need to to set the correct configuration.', array('{alias}'=>$interfaceAlias)));
 		}
 		$this->setOpenMode(!empty(Yii::app()->modules['autoadmin']['openMode']));
-		if(!Yii::app()->user->isGuest)
-		{
-			
-		}
 	}
 
 	/**
