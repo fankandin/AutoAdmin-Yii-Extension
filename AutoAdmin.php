@@ -31,17 +31,17 @@ class AutoAdmin extends CWebModule
 	 */
 	const INPUT_PREFIX = 'AA';
 
-	private $_manageAction;
-	private $_access;
-	private $_interface;
+	protected $_manageAction;
+	protected $_access;
+	protected $_interface;
 
-	private $_controller;
-	private $_trigger;
+	protected $_controller;
+	protected $_trigger;
 
-	private $_data;
-	private $_db;
-	private $_iframeMode = false;
-	private $_viewData = array();
+	protected $_data;
+	protected $_db;
+	protected $_iframeMode = false;
+	protected $_viewData = array();
 
 	/**
 	 *
@@ -308,7 +308,7 @@ class AutoAdmin extends CWebModule
 	 * @return boolean
 	 * @throws AAException 
 	 */
-	private function loadPK()
+	protected function loadPK()
 	{
 		$pkValues = Yii::app()->request->getParam('id', array());
 		if(!$pkValues)
@@ -412,7 +412,7 @@ class AutoAdmin extends CWebModule
 	/**
 	 * Initiates AutoAdminAccess object.
 	 */
-	private function initAccess()
+	protected function initAccess()
 	{
 		$this->_access = new AutoAdminAccess($this->_interface);
 		$this->_access->setOpenMode($this->openMode);
@@ -548,7 +548,7 @@ class AutoAdmin extends CWebModule
 	/**
 	 * Data list mode.
 	 */
-	private function listMode()
+	protected function listMode()
 	{
 		$dataToPass = $this->_viewData;
 		if($this->subHref)	//ссылка на вложенный раздел
@@ -622,7 +622,7 @@ class AutoAdmin extends CWebModule
 	/**
 	 * Outputs form for inserting or updating data.
 	 */
-	private function editMode()
+	protected function editMode()
 	{
 		$dataToPass = $this->_viewData;
 		if($this->_manageAction == 'edit')
@@ -670,7 +670,7 @@ class AutoAdmin extends CWebModule
 	 * Outputs results of operations.
 	 * @param array $dataToPass Specific data to pass into the view script.
 	 */
-	private function resultMode($dataToPass=array())
+	protected function resultMode($dataToPass=array())
 	{
 		$dataToPass['redirectURL'] = AAHelperUrl::stripParam(Yii::app()->request->requestUri, array('action', 'sure'));
 		foreach($this->_data->pk as $pkField=>$value)
@@ -682,7 +682,7 @@ class AutoAdmin extends CWebModule
 	 * Inserts the data into DB.
 	 * @return mixed
 	 */
-	private function insert()
+	protected function insert()
 	{
 		if(!isset($_POST[self::INPUT_PREFIX]))
 			throw new CHttpException(400);
@@ -748,7 +748,7 @@ class AutoAdmin extends CWebModule
 	 * Updates the data in DB.
 	 * @return mixed
 	 */
-	private function update()
+	protected function update()
 	{
 		if(!isset($_POST[self::INPUT_PREFIX]))
 			throw new CHttpException(400);
@@ -806,7 +806,7 @@ class AutoAdmin extends CWebModule
 	 * @param Data from a deleting row. Need for additional delete operations (and not to query these data twice).
 	 * @return integer Number of rows affected by the execution.
 	 */
-	private function delete(&$deletingRow)
+	protected function delete(&$deletingRow)
 	{
 		$affected = 0;
 		$transaction = $this->_db->beginTransaction();
@@ -902,7 +902,7 @@ class AutoAdmin extends CWebModule
 	 * @param AAIField A field object with AAIField interface.
 	 * @param string $errorMEssage Error message.
 	 */
-	private function processFormError(&$field, $errorMessage='')
+	protected function processFormError(&$field, $errorMessage='')
 	{
 		$this->_viewData['formError'] = array(
 			'field' => $field,
@@ -921,7 +921,7 @@ class AutoAdmin extends CWebModule
 	 * Logs the problem and renders the view.
 	 * @param AAException $e 
 	 */
-	private function processQueryError($e)
+	protected function processQueryError($e)
 	{
 		$this->resultMode(array(
 				'errorOccured'=>true,
