@@ -79,13 +79,21 @@ class AAFieldText extends AAFieldString
 		$this->value = preg_replace("~>\n(<|\w)~ui", "><br/>\n\\1", $this->value);
 
 		$notInParagraphTags = array('ol', 'ul', 'li', 'div', 'table', 'code', 'cite', 'thead', 'tbody', 'tr', 'td', 'pre', 'h[0-9]');
-		$this->value = preg_replace("~<p>(<h[0-9]>.*?</h[0-9]>)<br\s*/?>\n(\w)~ui", "\\1\n<p>\\2", $this->value);
-		$this->value = preg_replace("~<p>(<h[0-9]>.*?</h[0-9]>)</p>(<br\s*/?>)?~i", "\\1", $this->value);
-		$this->value = preg_replace("~<p>\n*((<".implode(')|(<', $notInParagraphTags)."))~i", "\\1", $this->value);
-		$this->value = preg_replace("~((</".implode('>)|(</', $notInParagraphTags).">)|(</h[0-9]>))\n*((</p>)|(<br\s*/?>))~i", "\\1", $this->value);
+		$this->value = preg_replace("~<p>(<h[0-9]>.*?</h[0-9]>)<br\s*/?>\n(\w)~usi", "\\1\n<p>\\2", $this->value);
+		$this->value = preg_replace("~<p>(<h[0-9]>.*?</h[0-9]>)</p>(<br\s*/?>)?~is", "\\1", $this->value);
+		$this->value = preg_replace("~<p>\n*((<".implode(')|(<', $notInParagraphTags)."))~is", "\\1", $this->value);
+		$this->value = preg_replace("~((</".implode('>)|(</', $notInParagraphTags).">)|(</h[0-9]>))\n*((</p>)|(<br\s*/?>))~is", "\\1", $this->value);
 		$this->value = preg_replace("~<p>((</".implode('>)|(</', $notInParagraphTags)."))~i", "\\1", $this->value);	//crutch :(
 		$this->value = preg_replace("~((<".implode('[^>]*>)|(<', $notInParagraphTags)."[^>]*>))</p>~i", "\\1", $this->value);
 		$this->value = preg_replace("~((<".implode('[^>]*>)|(<', $notInParagraphTags)."[^>]*>))<br\s*/?>~i", "\\1", $this->value);
+		$this->value = preg_replace_callback(
+				'~(<(code)|(pre)[^>]*>)(.*?)(</(code)|(pre)>)~is', 
+				create_function(
+						'$matches',
+						'return $matches[1].preg_replace("~(</?p>)|(<br\s*/?>)~i", "", $matches[4]).$matches[5];'
+				),
+				$this->value
+		);
 	}
 	
 	public function valueForSql()

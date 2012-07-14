@@ -13,7 +13,7 @@ $this->breadcrumbs = array(
 <?
 switch($manageAction)
 {
-	case 'read':
+	case 'list':
 		$message = Yii::t('AutoAdmin.access', 'You don\'t have permissions to read the data here');
 		break;
 	case 'add':

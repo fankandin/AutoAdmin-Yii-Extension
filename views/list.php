@@ -77,7 +77,7 @@ if(!empty($urlSub))
 {
 		?><th>
 			<?=(!empty($clientData['subHrefTitle']) ? $clientData['subHrefTitle'].'<br/>' : '')?>
-			<small><?=Yii::t('AutoAdmin.common', 'Click on the icons below to go the next interface')?></small>
+			<small><?=Yii::t('AutoAdmin.common', 'Click on the icons below to go down to the next interface')?></small>
 		</th><?
 	$numCols++;
 }

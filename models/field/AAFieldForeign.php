@@ -180,7 +180,7 @@ class AAFieldForeign extends AAField implements AAIField
 	 */
 	private function getPossibleValuesCount()
 	{
-		$q = Yii::app()->db->createCommand();
+		$q = Yii::app()->{AADb::$dbConnection}->createCommand();
 		$q->from($this->options['table']);
 		$q->select(new CDbExpression('COUNT(*)'));
 		$qWhere = array();
@@ -201,7 +201,7 @@ class AAFieldForeign extends AAField implements AAIField
 	 */
 	private function selectDefault()
 	{
-		$q = Yii::app()->db->createCommand();
+		$q = Yii::app()->{AADb::$dbConnection}->createCommand();
 		$q->from($this->options['table']);
 		if($this->options['select'])
 			$q->select(array_merge(array($this->options['pk']), array_keys($this->options['select'])));
@@ -228,7 +228,7 @@ class AAFieldForeign extends AAField implements AAIField
 		$optValues = array();
 		if($this->allowNull)
 			$optValues[''] = '';
-		$q = Yii::app()->db->createCommand();
+		$q = Yii::app()->{AADb::$dbConnection}->createCommand();
 		$q->from($this->options['table']);
 		if($this->options['select'])
 			$q->select(array_merge(array($this->options['pk']), array_keys($this->options['select'])));

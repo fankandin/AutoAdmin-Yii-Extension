@@ -11,7 +11,9 @@
 #data-list .row-number {font-family: Garamond; font-weight: bold; padding: 0 8px 0 0; width: 20px;}
 #data-list .row-number span {background-color: #ccc; color: #fff; padding: 0 4px; display: block; margin-left: 3px;}
 #data-list .null {color: #aaa;}
-#data-list .subtable a {background: url('../../../i/ico/folder-in.png') no-repeat; display: block; width: 40px; height: 24px; overflow: hidden; text-indent: 500px;}
+#data-list .subtable {padding: 0;}
+#data-list .subtable:hover {background-color: #fff2d9;}
+#data-list .subtable a {background: url('../../../i/ico/folder-in.png') no-repeat 5px center; display: block; width: 100%; min-height: 38px; overflow: hidden; text-indent: -1000px;}
 #data-list .subtable a:hover {background-image: url('../../../i/ico/folder-in-open.png');}
 #data-list .t-text {font-size: 80%;}
 #data-list .t-foreign span {background-color: #fff4dd; display: inline-block; border-right: 1px dotted #999; border-left: 1px dotted #999; padding: 2px 3px;}

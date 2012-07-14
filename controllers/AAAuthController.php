@@ -71,20 +71,6 @@ class AAAuthController extends CExtController
 		$this->module->tableName(AutoAdminAccess::sqlAdminTableName('users'));
 		$this->module->setPK('id');
 
-		/*
-		 $rules = array(
-			array('password, password2, level, login, surname, firstname, email', 'required'),
-			array('password', 'match', 'pattern'=>'/^[a-zа-яё0-9_\-\.\,]+$/iu'),
-			array('password', 'length', 'min'=>5, 'max'=>32),
-			array('password2', 'compare', 'compareAttribute'=>'password'),
-			array('level', 'in', 'range'=>array_keys(self::$knownLevels)),
-			array('level', 'default', 'value'=>'user'), 
-
-			array('surname, firstname, middlename', 'match', 'pattern'=>'/^[a-zа-яё\-\']*$/iu'),
-			array('firstname,surname,middlename', 'length', 'max'=>32),
-			array('email', 'email'),
-		);
-		*/
 		$fieldsConf = array(
 			array('login', 'string', Yii::t('AutoAdmin.access', 'Login'), array('search', 'show')),
 			array('password', 'password', Yii::t('AutoAdmin.access', 'Password'), array()),

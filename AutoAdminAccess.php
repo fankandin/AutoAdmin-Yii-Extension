@@ -30,11 +30,11 @@ class AutoAdminAccess
 	 */
 	public function __construct($interfaceAlias)
 	{
-		$q = Yii::app()->dbAdmin->createCommand();
-		$q->select('id, level');
-		$q->from(self::sqlAdminTableName('interfaces'));
-		$q->where("alias = :alias", array(':alias'=>$interfaceAlias));
-		$interface = $q->queryRow();
+		$interface = Yii::app()->dbAdmin->createCommand()
+			->select('id, level')
+			->from(self::sqlAdminTableName('interfaces'))
+			->where("alias = :alias", array(':alias'=>$interfaceAlias))
+			->queryRow();
 		if($interface)
 		{
 			$this->interfaceID = $interface['id'];
@@ -60,16 +60,16 @@ class AutoAdminAccess
 			elseif(!in_array(Yii::app()->user->level, array('root', 'admin')))
 			{
 				$this->rights = array();
-				$q = Yii::app()->dbAdmin->createCommand();
-				$q->select(array('read', 'add', 'edit', 'delete'));
-				$q->from(self::sqlAdminTableName('access'));
-				$q->where(array('AND',
-							"interface_id = :interfaceID",
-							"user_id = :userID"
-						),
-						array(':interfaceID'=>$this->interfaceID, ':userID'=>Yii::app()->user->id)
-					);
-				$uRights = $q->queryRow();
+				$uRights = Yii::app()->dbAdmin->createCommand()
+					->select(array('read', 'add', 'edit', 'delete'))
+					->from(self::sqlAdminTableName('access'))
+					->where(array('AND',
+								"interface_id = :interfaceID",
+								"user_id = :userID"
+							),
+							array(':interfaceID'=>$this->interfaceID, ':userID'=>Yii::app()->user->id)
+						)
+					->queryRow();
 				if($uRights)
 				{
 					if($uRights['read'])

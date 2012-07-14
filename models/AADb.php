@@ -13,7 +13,7 @@ class AADb
 	 *
 	 * @var string An alias of CDbConnection that set up in config. It will be used as Yii::app()->{$dbConnection}.
 	 */
-	public $dbConnection = 'db';
+	public static $dbConnection = 'db';
 	/**
 	 *
 	 * @var string DB schema that contains tables which are operated by a user.
@@ -108,7 +108,7 @@ class AADb
 	 */
 	private function getBaseQuery($strictShowInList=true)
 	{
-		$q = Yii::app()->{$this->dbConnection}->createCommand();
+		$q = Yii::app()->{self::$dbConnection}->createCommand();
 		$selectFields = array();
 		foreach($this->_data->pk as $pkField=>$pkValue)
 			$selectFields[] = "{$this->tableName}.{$pkField}";
@@ -151,8 +151,8 @@ class AADb
 	public function getListOverallCount()
 	{
 		//$dependency = new CGlobalStateCacheDependency($this->_listQuery->text);
-		//$q = Yii::app()->{$this->dbConnection}->cache(600, $dependency)->createCommand();
-		$q = Yii::app()->{$this->dbConnection}->createCommand();
+		//$q = Yii::app()->{self::$dbConnection}->cache(600, $dependency)->createCommand();
+		$q = Yii::app()->{self::$dbConnection}->createCommand();
 		$q->select(new CDbExpression("COUNT(*)"));
 		$q->from($this->tableName);
 		if($this->_listQuery->join)
@@ -185,7 +185,7 @@ class AADb
 		if(!$nativeKeys)
 			return $data;
 
-		$q = Yii::app()->{$this->dbConnection}->createCommand();
+		$q = Yii::app()->{self::$dbConnection}->createCommand();
 		foreach($this->_data->foreignLinks as $outAlias=>$link)
 		{
 			$q->from($this->getFullTableName($link['linkTable'])." AS t1, ".$this->getFullTableName($link['targetTable'])." AS t2");
@@ -322,7 +322,7 @@ class AADb
 	 */
 	public function insert($values)
 	{
-		return Yii::app()->{$this->dbConnection}->createCommand()
+		return Yii::app()->{self::$dbConnection}->createCommand()
 				->insert($this->getFullTableName(), $values);
 	}
 
@@ -339,7 +339,7 @@ class AADb
 			$where[] = "{$this->tableName}.{$pkField} = :_id{$pkField}";
 			$params[":_id{$pkField}"] = $pkValue;
 		}
-		return Yii::app()->{$this->dbConnection}->createCommand()
+		return Yii::app()->{self::$dbConnection}->createCommand()
 				->update($this->getFullTableName(), $values, $where, $params);
 	}
 
@@ -356,7 +356,7 @@ class AADb
 			$where[] = "{$this->tableName}.{$pkField} = :_id{$pkField}";
 			$params[":_id{$pkField}"] = $pkValue;
 		}
-		return Yii::app()->{$this->dbConnection}->createCommand()
+		return Yii::app()->{self::$dbConnection}->createCommand()
 				->delete($this->getFullTableName(), $where, $params);
 	}
 
@@ -367,9 +367,9 @@ class AADb
 	 */
 	public function getInsertedPKs(&$values)
 	{
-		$tableSchema = Yii::app()->{$this->dbConnection}->schema->getTable($this->tableName);
+		$tableSchema = Yii::app()->{self::$dbConnection}->schema->getTable($this->tableName);
 		if(count($this->_data->pk) == 1)	//Can use a sequence (AutoIncrement)
-			$pk = array($this->_data->pk[$this->_data->getPKField(0)] => Yii::app()->{$this->dbConnection}->getLastInsertID(($tableSchema->sequenceName ? $tableSchema->sequenceName : null)));
+			$pk = array($this->_data->pk[$this->_data->getPKField(0)] => Yii::app()->{self::$dbConnection}->getLastInsertID(($tableSchema->sequenceName ? $tableSchema->sequenceName : null)));
 		else
 			$pk = $this->_data->rowPK($values);
 	}
@@ -380,7 +380,7 @@ class AADb
 	 */
 	public function beginTransaction()
 	{
-		return Yii::app()->{$this->dbConnection}->beginTransaction();
+		return Yii::app()->{self::$dbConnection}->beginTransaction();
 	}
 
 	/**

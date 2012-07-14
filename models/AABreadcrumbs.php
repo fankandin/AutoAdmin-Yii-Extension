@@ -15,7 +15,7 @@ class AABreadcrumbs
 	public function __construct(&$controller)
 	{
 		$this->controller = $controller;
-		$this->query = new AABreadcrumbsQuery(Yii::app()->{$controller->module->dbConnection});
+		$this->query = new AABreadcrumbsQuery(Yii::app()->{AADb::$dbConnection});
 	}
 
 	/**

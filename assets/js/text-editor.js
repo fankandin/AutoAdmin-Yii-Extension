@@ -42,8 +42,15 @@ aaOptions['is_win'] = ((aaOptions['clientPC'].indexOf("win")!=-1) || (aaOptions[
 aaOptions['is_mac'] = (aaOptions['clientPC'].indexOf("mac")!=-1);
 
 $(document).ready(function(){
-	$('#editform .item.block_text input[type=button]').each(aaPrepareTextEditorButton);
-	$('#editform .item.block_text textarea').click(aaStoreCaret).select(aaStoreCaret).keyup(aaStoreCaret);
+	var $form = $('#editform');
+	$form.find('.item.block_text input[type=button]').each(aaPrepareTextEditorButton);
+	$form.find('.item.block_text textarea').click(aaStoreCaret).select(aaStoreCaret).keyup(aaStoreCaret);
+	$form.find('.item.block_text textarea').each(function() {
+		if(this.addEventListener)
+			this.addEventListener('keydown', tabKeyHandler, false);
+		else if(this.attachEvent)
+			this.attachEvent('onkeydown', tabKeyHandler);
+	})
 });
 
 function aaPrepareTextEditorButton()
@@ -214,4 +221,15 @@ function aaImgUploadWindow($textEditor)
 	var wtop = (screen.height/2)-(160/2)-20;
 	var wleft = (screen.width/2)-(500/2);
 	window.open('./?action=upload&field='+$textEditor.attr('name'), 'imguploadWindow'+Math.floor(Math.random()*10),'top='+wtop+', left='+wleft+',titlebar=no,toolbar=no,width=500,height=220,directories=no,status=no,scrollbars=no, resize=no,menubar=no');
+}
+
+function tabKeyHandler(e)
+{
+	if(e.keyCode == 9)
+	{
+		aaInsert("\t", $(this));
+		if(e.preventDefault)
+			e.preventDefault();
+		return false;
+	}
 }

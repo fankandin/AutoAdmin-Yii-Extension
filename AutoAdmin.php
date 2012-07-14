@@ -172,7 +172,7 @@ class AutoAdmin extends CWebModule
 		$this->_data = new AAData();
 		$this->_db = new AADb($this->_data);
 		//Link AADb properties with AutoAdmin properties for more convenient configurating these properties by a user.
-		$this->_db->dbConnection =& $this->dbConnection;
+		AADb::$dbConnection =& $this->dbConnection;
 		$this->_db->dbSchema =& $this->dbSchema;
 	}
 

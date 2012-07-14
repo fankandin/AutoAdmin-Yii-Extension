@@ -16,6 +16,6 @@ return array(
 	'Go back' => 'Вернуться',
 	'Search' => 'Поиск',
 	'Reset' => 'Сброс',
-	'Click on the icons below to go the next interface' => 'Кликните на одну из иконок в столбце, чтобы перейти к следующему интерфейсу',
+	'Click on the icons below to go down to the next interface' => 'Кликните на одну из иконок в столбце, чтобы перейти к следующему интерфейсу',
 );
 ?>

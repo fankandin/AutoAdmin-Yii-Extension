@@ -27,7 +27,7 @@ class AAAjaxController extends CExtController
 
 		$data = array();
 		$matches = array();
-		$q = Yii::app()->db->createCommand()
+		$q = Yii::app()->{AADb::$dbConnection}->createCommand()
 			->from($field->options['table'])
 			->select(array_merge(array($field->options['pk']), array_keys($field->options['select'])))
 			->where(array('LIKE', "{$field->options['table']}.{$fieldBy}", AADb::metaToLike($term)))
