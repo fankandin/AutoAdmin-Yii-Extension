@@ -91,6 +91,17 @@ function checkboxNewPassword()
 	$input.attr('disabled', !$this.attr('checked'));
 }
 
+function tabKeyHandler(e)
+{
+	if(e.keyCode == 9)
+	{
+		this.value += "\t";
+		if(e.preventDefault)
+			e.preventDefault();
+		return false;
+	}
+}
+
 $(document).ready(function(){
 	var $form = $('#editform');
 	filteredInputs($form).each(snapshotInputValue);
@@ -118,6 +129,13 @@ $(document).ready(function(){
 
 		$timePanel.find('.calendar input').datepicker(datePickerOpts);
 	});
+
+	$form.find('.block_tinytext textarea, .block_text textarea').each(function() {
+		if(this.addEventListener)
+			this.addEventListener('keydown', tabKeyHandler, false);
+		else if(this.attachEvent)
+			this.attachEvent('onkeydown', tabKeyHandler);
+	})
 
 	$form.submit(function() {
 		filteredInputs($form).each(markChangedField);

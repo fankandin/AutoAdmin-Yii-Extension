@@ -76,13 +76,16 @@ class AAFieldText extends AAFieldString
 		if($this->value)
 			$this->value = "<p>".str_replace("\n\n", "</p>\n\n<p>", $this->value)."</p>";	//transform line breaks into paragraphs
 		$this->value = AAHelperForm::prepareTextForDb($this->value);
-		$this->value = preg_replace("/>\n(<|\w)/ui", "><br/>\n\\1", $this->value);
-		$this->value = preg_replace("/<p>(<h[0-9]>.*?<\/h[0-9]>)<br\/>\n(\w)/ui", "\\1\n<p>\\2", $this->value);
-		$this->value = preg_replace("/<p>(<h[0-9]>.*?<\/h[0-9]>)<\/p>(<br\/>)?/i", "\\1", $this->value);
-		$this->value = preg_replace("/<p>\n*((<ol)|(<ul)|(<li)|(<div)|(<table))/i", "\\1", $this->value);
-		$this->value = preg_replace("/((<\/li>)|(<\/ol>)|(<\/ul>)|(<\/div>)|(<\/table>)|(<\/h[0-9]>))\n*((<\/p>)|(<br\/>))/i", "\\1", $this->value);
-		$this->value = preg_replace("/<p><\/div>/i", "</div>", $this->value);	//crutch :(
-		$this->value = preg_replace("/(<div[^>]*>)<\/p>/i", "\\1", $this->value);
+		$this->value = preg_replace("~>\n(<|\w)~ui", "><br/>\n\\1", $this->value);
+
+		$notInParagraphTags = array('ol', 'ul', 'li', 'div', 'table', 'code', 'cite', 'thead', 'tbody', 'tr', 'td', 'pre', 'h[0-9]');
+		$this->value = preg_replace("~<p>(<h[0-9]>.*?</h[0-9]>)<br\s*/?>\n(\w)~ui", "\\1\n<p>\\2", $this->value);
+		$this->value = preg_replace("~<p>(<h[0-9]>.*?</h[0-9]>)</p>(<br\s*/?>)?~i", "\\1", $this->value);
+		$this->value = preg_replace("~<p>\n*((<".implode(')|(<', $notInParagraphTags)."))~i", "\\1", $this->value);
+		$this->value = preg_replace("~((</".implode('>)|(</', $notInParagraphTags).">)|(</h[0-9]>))\n*((</p>)|(<br\s*/?>))~i", "\\1", $this->value);
+		$this->value = preg_replace("~<p>((</".implode('>)|(</', $notInParagraphTags)."))~i", "\\1", $this->value);	//crutch :(
+		$this->value = preg_replace("~((<".implode('[^>]*>)|(<', $notInParagraphTags)."[^>]*>))</p>~i", "\\1", $this->value);
+		$this->value = preg_replace("~((<".implode('[^>]*>)|(<', $notInParagraphTags)."[^>]*>))<br\s*/?>~i", "\\1", $this->value);
 	}
 	
 	public function valueForSql()

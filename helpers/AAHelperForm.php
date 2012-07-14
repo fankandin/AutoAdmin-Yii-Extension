@@ -25,12 +25,13 @@ class AAHelperForm
 	public static function prepareTextForDb($text)
 	{
 		$text = trim($text);
+		$text = preg_replace('~<script.+?</script>~iu', '', $text);
 		$text = str_replace('<<', '&laquo;', $text);
 		$text = str_replace('>>', '&raquo;', $text);
 		$text = str_replace('--', '&mdash;', $text);
 		$text = str_replace('...', '&hellip;', $text);
 		$text = str_replace('..', '&nbsp;', $text);
-		$text = preg_replace('/\=\"([^\"\s]*)\"/i', '={quot}$1{quot}', $text);
+		$text = preg_replace('~\=\"([^\"\s]*)\"~i', '={quot}$1{quot}', $text);
 		$text = str_replace('"', '&quot;', $text);
 		$text = str_replace('{quot}', '"', $text);
 		//$text = str_replace ("'", '&prime;', $text);
