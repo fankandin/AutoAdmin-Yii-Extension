@@ -41,7 +41,7 @@ return array(
 	'Section' => 'Секция',
 	'Section Title' => 'Наименование секции',
 	'Sections of interfaces' => 'Секции интерфейсов',
-	'User {user} access rights to the interface "{interface}"' => 'Права пользователя {user} на доступ к интерфейсу «{interface}»',
+	'User "{user}" access rights to the interface "{interface}"' => 'Права пользователя "{user}" на доступ к интерфейсу «{interface}»',
 	'User' => 'Пользователь',
 	'Interface' => 'Interface',
 	'Import' => 'Импорт',

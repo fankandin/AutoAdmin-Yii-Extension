@@ -245,7 +245,7 @@ class AAAuthController extends CExtController
 							'params'	=> array(':level'=>'user'),
 						),
 					)),
-				array('interface_id', 'foreign', Yii::t('AutoAdmin.access', 'Interface'), array('group', 'default'=>$interfaceID, 'readonly',
+				array('interface_id', 'foreign', Yii::t('AutoAdmin.access', 'Interface'), array('group', 'bindBy'=>'id', 'default'=>$interfaceID, 'readonly',
 						'foreign'=>array(
 							'table'		=> AutoAdminAccess::sqlAdminTableName('interfaces'),
 							'pk'		=> 'id',
@@ -265,7 +265,7 @@ class AAAuthController extends CExtController
 		$this->breadcrumbs[$this->breadcrumbSections($bkp[1]['id'])] = '../sections/'.($bkp[1]['id'] ? "?bk[id]={$bkp[1]['id']}" : '');
 		$breadcrumbInterfaces = $this->breadcrumbInterfaces($interfaceID);
 		$this->breadcrumbs[$breadcrumbInterfaces] = '../interfaces/'.(($bkp[1]['id'] && $bkp[0]['id']) ? "?bkp[0][id]={$bkp[0]['id']}&bk[id]={$bkp[1]['id']}" : '');
-		$this->pageTitle = Yii::t('AutoAdmin.access', 'User {user} access rights to the interface "{interface}"',
+		$this->pageTitle = Yii::t('AutoAdmin.access', 'User "{user}" access rights to the interface "{interface}"',
 				array(
 					'{user}' => (preg_match('/\(\-\>([^\(\)]+)\)/iu', $breadcrumbUsers, $m) ? $m[1] : ''),
 					'{interface}' => (preg_match('/\(\-\>([^\(\)]+)\)/iu', $breadcrumbInterfaces, $m) ? $m[1] : ''),
