@@ -32,7 +32,7 @@ class AAFieldBoolean extends AAField implements AAIField
 			$tagOptions['disabled'] = true;
 
 		$tagOptions['id'] = $inputID;
-		echo CHtml::checkBox($inputName, (bool)($this->value ? $this->value : $this->defaultValue), $tagOptions);
+		echo CHtml::checkBox($inputName, (bool)(isset($this->value) ? $this->value : $this->defaultValue), $tagOptions);
 
 		return ob_get_clean();
 	}
