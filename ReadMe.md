@@ -1,4 +1,5 @@
-AutoAdmin is a "CMS framework". It's a perfect solution for web projects with free designed databases. It really does for portals as well as for "turnkey websites". Easy-to-Learn and easy-to-use.
+AutoAdmin is a "CMS framework". It's a perfect solution for web projects with **free designed databases**. It really does for portals as well as for "turnkey websites". Easy-to-Learn and easy-to-use.
+
 AutoAdmin includes built-in module to provide shared access to interfaces with different rights.
 
 ##Links
@@ -60,22 +61,22 @@ Default AutoAdmin's skin is designed with Overcast jQuery UI style. For example 
 ~~~
 [php]
 $main['components'] = array(
-	//...
-	'clientScript'=>array(
-		'scriptMap'=>array(
-			'jquery.js'		=> 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js',
-			'jquery.min.js'	=> 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js',
-			'jquery.ui'		=> 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js',
-			'jquery-ui.css'	=> 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/overcast/jquery-ui.css',
-		)
-	),
+//...
+'clientScript'=>array(
+	'scriptMap'=>array(
+		'jquery.js'		=> 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js',
+		'jquery.min.js'	=> 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js',
+		'jquery.ui'		=> 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js',
+		'jquery-ui.css'	=> 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/overcast/jquery-ui.css',
+	)
+),
 ~~~
 
 ##Usage
 
 You may try real working AutoAdmin CMS [here](http://palamarchuk.info/autoadmin/). In that "showroom" you'll find several good examples of interfaces with source PHP and SQL code.
 
-###Trivial interface:
+###Trivial interface
 ~~~
 [php]
 class SportController extends Controller
@@ -94,7 +95,7 @@ class SportController extends Controller
 }
 ~~~
 
-###Complicated interface:
+###Complicated interface
 ~~~
 [php]
 public function actionTeams()
@@ -112,13 +113,13 @@ public function actionTeams()
 					'table'		=> 'countries',	//Table which it belongs to
 					'pk'		=> 'id',	//Foreign table's PK
 					'select'	=> array('name_en'),	//Foreign field to select for listing
-					'searchBy'	=> array('name_en'=>'Country name'),	//Foreign field to search by
+					'searchBy'	=> array('name_en'=>'Country name'),//Foreign field to search by
 					'order'		=> 'name_en',	//Foreign field to order by
 				)
 			)),
 		array('emblem', 'image', 'Team emblem', array(
 				'null',	//Field can be NULL
-				'directoryPath'=>'/i/teams/football',	//Directory to upload images (web-based style)
+				'directoryPath'=>'/i/teams/football',//Directory to upload images (web-based style)
 			)),
 		array('emblem_sm', 'image', 'Team emblem <small>(small size)</small>', array('show', 'null', 'directoryPath'=>'/i/teams/football/sm')),
 	));
@@ -126,14 +127,16 @@ public function actionTeams()
 	$this->module->rowsOnPage = 20;	//Customizing "rows on page" in List mode
 	$this->pageTitle = 'Sports teams';
 
-	Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/css/sport.css');	//Customizing CSS
-	$this->module->setPartialView('teams-up', $area='up');	//Attaching the custom view that is displaying this information to you.
+	//Customizing CSS
+	Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/css/sport.css');
+	//Attaching the custom view that is displaying this information to you.
+	$this->module->setPartialView('teams-up', $area='up');
 
 	$this->module->process();	//Initiate main processing
 }
 ~~~
 
-###Many to many link:
+###Many to many link
 ~~~
 [php]
 $this->module->foreignLink('spheres', array(
