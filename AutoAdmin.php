@@ -439,7 +439,7 @@ class AutoAdmin extends CWebModule
 			'interface'		=> $this->_interface,
 			'bindKeys'		=> Yii::app()->request->getParam('bk', array()),
 			'bindKeysParent'=> Yii::app()->request->getParam('bkp', array()),
-			'manageAction'	=> $this->_manageAction,
+			'manageAction'	=> &$this->_manageAction,
 		));
 
 		switch($this->_manageAction)
@@ -627,7 +627,10 @@ class AutoAdmin extends CWebModule
 		$dataToPass = $this->_viewData;
 		if($this->_manageAction == 'edit')
 		{
-			$dataToPass['fields'] = $this->_db->getCurrentRow();
+			if(!empty($this->_viewData['formError']))
+				$dataToPass['fields'] = $this->_data->fields;
+			else
+				$dataToPass['fields'] = $this->_db->getCurrentRow();
 			if(!$dataToPass['fields'])
 				throw new CHttpException(404, Yii::t('AutoAdmin.errors', 'Can\'t find the record'));
 		}
@@ -760,6 +763,18 @@ class AutoAdmin extends CWebModule
 		{
 			if($field->isChanged)
 			{
+				if(!is_null($field->value))
+				{
+					try
+					{
+						if(!$field->validateValue($field->value))
+							$this->processFormError($field, Yii::t('AutoAdmin.form', 'Incorrect value'));
+					}
+					catch(AAException $e)
+					{	//Validation rule may be set incorrectly
+						throw new AAException(Yii::t('AutoAdmin.errors', 'Incorrect validation condition for field "{fieldName}"', array('fieldName'=>$field->name)));
+					}
+				}
 				try
 				{
 					$values[$field->name] = $field->valueForSql();

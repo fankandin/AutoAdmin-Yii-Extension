@@ -20,8 +20,6 @@ class AAFieldDatetime extends AAFieldDate
 
 		echo CHtml::label($this->label, "{$inputName}[d]");
 		echo CHtml::tag('br');
-		if($this->allowNull)
-			$this->printFormNullCB();
 		if($this->isReadonly)
 			$tagOptions['disabled'] = true;
 
