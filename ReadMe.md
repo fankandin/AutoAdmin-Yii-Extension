@@ -179,6 +179,9 @@ Dates. Usually used with DATE type.
 #### datetime
 Date and time. Usually used with DATETIME and TIMESTAMP types.
 
+#### time
+Time. Usually used with TIME type in SQL. Fully supports 'limit' options to restrict lower and upper values.
+
 #### boolean
 Boolean checkbox (yes or no). Usually used with BOOLEAN type.
 
