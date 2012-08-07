@@ -21,8 +21,6 @@ class AAFieldNum extends AAField implements AAIField
 		$inputID = "i_{$inputName}";
 		echo CHtml::label($this->label, $inputID);
 		echo CHtml::tag('br');
-		if($this->allowNull)
-			$this->printFormNullCB();
 
 		$tagOptions['id'] = $inputID;
 		if($this->isReadonly)
@@ -92,7 +90,7 @@ class AAFieldNum extends AAField implements AAIField
 	public function validateValue($value)
 	{
 		if(!parent::validateValue($value))
-		 return false;
+			return false;
 		if(isset($this->options['min']))
 		{
 			if(!is_numeric($this->options['min']))
