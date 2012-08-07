@@ -17,12 +17,14 @@ The extension uses PDO interfaces and was tested on MySQL and PostgreSQL databas
 
 There are only four steps to install the AutoAdmin extension:
 
-1. Put the distributive files into [protected/extensions] folder of your Yii application.
-2. Edit the config: add the AutoAdmin module and set urlManager rules (see below).
-3. Create any folder in [www] (your DocumentRoot) directory to serve as the point of entrance by web (e.g. /_admin/).
-4. Create module folder [autoadmin] in [protected/modules] directory using a standart Yii module structure, but without module class (which inherites CWebModule) - it will be included from the extension. 
+1. Put the distributive files into _[protected/extensions]_ folder of your Yii application.
+2. Edit the config: add the AutoAdmin module and set _urlManager_ rules (see below).
+3. Create any folder in _[www]_ (your DocumentRoot) directory to serve as the point of entrance by web (e.g. /_admin/).
+4. Create module folder _[autoadmin]_ in _[protected/modules]_ directory using a standart Yii module structure, but without module class (which inherites _CWebModule_) - it will be included from the extension. 
 
-If you plan to use the built-in AutoAdmin shared access system, you also need to import SQL dump which you can find in [autoAdmin/schemas] of the distributive directory.
+If you plan to use the built-in AutoAdmin shared access system, you also need to import SQL dump which you can find in _[autoAdmin/schemas]_ of the distributive directory.
+
+The distributive includes _[iconpack]_ directory. Those are images for the default skin. Copy them to public _[i]_ directory of your CMS (e.g. _[/_admin/i/]_).
 
 ###Yii config setup
 
@@ -57,16 +59,13 @@ $main['components'] = array(
 		//...
 ~~~
 
-Default AutoAdmin's skin is designed with Overcast jQuery UI style. For example you may use these options:
+Default AutoAdmin's skin is designed with _Overcast jQuery UI_ style. For example you may use these options:
 ~~~
 [php]
 $main['components'] = array(
 //...
 'clientScript'=>array(
 	'scriptMap'=>array(
-		'jquery.js'		=> 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js',
-		'jquery.min.js'	=> 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js',
-		'jquery.ui'		=> 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js',
 		'jquery-ui.css'	=> 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/overcast/jquery-ui.css',
 	)
 ),
@@ -74,7 +73,7 @@ $main['components'] = array(
 
 ##Usage
 
-You may try real working AutoAdmin CMS [here](http://palamarchuk.info/autoadmin/). In that "showroom" you'll find several good examples of interfaces with source PHP and SQL code.
+You may try real working AutoAdmin CMS [here](http://palamarchuk.info/autoadmin/). In this "showroom" you'll find several good examples of interfaces with source PHP and SQL code.
 
 ###Trivial interface
 ~~~
@@ -94,6 +93,7 @@ class SportController extends Controller
 	}
 }
 ~~~
+![Illustration of the trivial interface](http://palamarchuk.info/i/autoadmin/autoadmin_sh1.jpg "")
 
 ###Complicated interface
 ~~~
@@ -119,7 +119,7 @@ public function actionTeams()
 			)),
 		array('emblem', 'image', 'Team emblem', array(
 				'null',	//Field can be NULL
-				'directoryPath'=>'/i/teams/football',//Directory to upload images (web-based style)
+				'directoryPath'=>'/i/teams/football',//Directory to upload images (web-based)
 			)),
 		array('emblem_sm', 'image', 'Team emblem <small>(small size)</small>', array('show', 'null', 'directoryPath'=>'/i/teams/football/sm')),
 	));
@@ -135,6 +135,7 @@ public function actionTeams()
 	$this->module->process();	//Initiate main processing
 }
 ~~~
+![Illustration of the complicated interface](http://palamarchuk.info/i/autoadmin/autoadmin_sh2.jpg "")
 
 ###Many to many link
 ~~~
@@ -150,6 +151,7 @@ $this->module->foreignLink('spheres', array(
 	'targetFields'	=> array('title_en'),	//Fields to select for listing
 ));
 ~~~
+![Illustration of many-to-many interface](http://palamarchuk.info/i/autoadmin/autoadmin_sh3.jpg "")
 
 Much more examples you can find in [the AutoAdmin showroom](http://palamarchuk.info/autoadmin/).
 
@@ -179,6 +181,9 @@ Dates. Usually used with DATE type.
 #### datetime
 Date and time. Usually used with DATETIME and TIMESTAMP types.
 
+#### time
+Time. Usually used with TIME type in SQL. Fully supports 'limit' options to restrict lower and upper values.
+
 #### boolean
 Boolean checkbox (yes or no). Usually used with BOOLEAN type.
 
@@ -192,7 +197,10 @@ To upload files in public areas and give links to them. Uses database to store p
 To upload images. Uses database to store path to file only.
 
 #### foreign
-For values from other tables which are linked with the field through a foreign key (you may use virtual connection like in MyISAM).
+For values from other tables which are linked with the field through a foreign key (you may use virtual connection like as in MyISAM).
+
+##Supported languages
+English, russian.
 
 ##What's next?
 
