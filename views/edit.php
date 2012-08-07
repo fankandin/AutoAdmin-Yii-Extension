@@ -56,7 +56,7 @@ if(!empty($clientData['subtitle']))
 	?><h2><?=$clientData['subtitle']?></h2><?
 }
 
-echo CHtml::form($url, 'post', array('id'=>'editform', 'enctype'=>'multipart/form-data'));
+echo CHtml::form($url, 'post', array('id'=>'editform', 'enctype'=>'multipart/form-data', 'autocomplete'=>'off'));
 echo CHtml::hiddenField('interface', $interface);
 $itemsI = 0;
 $tabindex = 1;
