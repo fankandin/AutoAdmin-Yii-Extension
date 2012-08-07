@@ -39,7 +39,7 @@ $this->widget('zii.widgets.CMenu',array(
 if(isset($this->breadcrumbs))
 {
 	$this->widget('zii.widgets.CBreadcrumbs', array(
-		'homeLink'=>'<a href="/autoadmin/" id="home">Main panel</a>',
+		'homeLink'=>'<a href="'.$this->createUrl('/').'/" id="home">Main panel</a>',
 		'links'=>$this->breadcrumbs,
 	));
 }
