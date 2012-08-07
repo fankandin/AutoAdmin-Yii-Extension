@@ -345,7 +345,7 @@ class AutoAdmin extends CWebModule
 			if(is_string($key))
 			{
 				$right = $key;
-				$permition = ($value==-1 ? false : (bool)$value);
+				$permition = ($value===-1 ? false : (bool)$value);
 			}
 			else
 			{
