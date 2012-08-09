@@ -31,7 +31,7 @@ class AAHelperForm
 		$text = str_replace('--', '&mdash;', $text);
 		$text = str_replace('...', '&hellip;', $text);
 		$text = str_replace('..', '&nbsp;', $text);
-		$text = preg_replace('~\=\"([^\"\s]*)\"~i', '={quot}$1{quot}', $text);
+		$text = preg_replace('~\=\"([^\"]*)\"~iu', '={quot}$1{quot}', $text);
 		$text = str_replace('"', '&quot;', $text);
 		$text = str_replace('{quot}', '"', $text);
 		//$text = str_replace ("'", '&prime;', $text);
