@@ -39,7 +39,7 @@ class AAFieldEnum extends AAField implements AAIField
 		$tagOptions['id'] = $inputID;
 		$valueOptions = $this->options['enumValues'];
 		if($this->allowNull)
-			$valueOptions = array_merge(array(''=>''), $valueOptions);
+			$valueOptions = array(''=>'') + $valueOptions;
 		echo CHtml::dropDownList($inputName, ($this->value ? $this->value : $this->defaultValue), $valueOptions, $tagOptions);
 
 		return ob_get_clean();
