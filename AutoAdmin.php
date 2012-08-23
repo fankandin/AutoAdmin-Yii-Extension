@@ -2,7 +2,7 @@
 /**
  * 
  * AutoAdmin. Flexible DataBase Management System.
- * @version 0.9a (Yii Framework Edition)
+ * @version 1.03a (Yii Framework Edition)
  * @author Alexander Palamarchuk <a@palamarchuk.info>. 2003-2012
  * @copyright Alexander Palamarchuk <a@palamarchuk.info>. 2003-2012
  * 
@@ -159,6 +159,14 @@ class AutoAdmin extends CWebModule
 	public $searchOptions;
 
 	/**
+	 *
+	 * @var array AutoAdmin specific extensions. An array of names which will be tried to use as "E"-prefixed ending part of folder name.
+	 * @example "gis" key leads to "autoAdminEGis" folder.
+	 */
+	public $extensions = array();
+
+	
+	/**
 	 * Inits of the class.
 	 */
 	public function init()
@@ -174,6 +182,16 @@ class AutoAdmin extends CWebModule
 		//Link AADb properties with AutoAdmin properties for more convenient configurating these properties by a user.
 		AADb::$dbConnection =& $this->dbConnection;
 		$this->_db->dbSchema =& $this->dbSchema;
+
+		if($this->extensions)
+		{
+			foreach($this->extensions as $extension)
+			{
+				Yii::import("ext.autoAdminE{$extension}.*");
+				$extClass = "AutoAdminE{$extension}";
+				$extClass::init();
+			}
+		}
 	}
 
 	/**
