@@ -9,7 +9,6 @@ Yii::app()->clientScript
 	->registerCoreScript('jquery');
 ?>
 	<title><?=CHtml::encode($this->pageTitle);?></title>
-	<link rel="shortcut icon" href="/favicon.ico"/>
 </head>
 
 <body>

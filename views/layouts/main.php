@@ -6,7 +6,6 @@
 	<meta name="author" content="Alexander Palamarchuk, a@palamarchuk.info"/>
 	<meta name="copyright" content="Alexander Palamarchuk, a@palamarchuk.info"/>
 	<title><?=CHtml::encode($this->pageTitle);?> | <?=Yii::app()->name?></title>
-	<link rel="shortcut icon" href="/favicon.ico"/>
 	<?Yii::app()->clientScript->registerCssFile(AutoAdmin::$assetPath.'/css/screen.css');?>
 </head>
 
