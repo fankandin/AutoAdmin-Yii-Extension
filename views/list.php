@@ -3,7 +3,7 @@ Yii::app()->clientScript
 	->registerCssFile(AutoAdmin::$assetPath.'/css/list.css')
 	->registerScriptFile(AutoAdmin::$assetPath.'/js/list.js')
 	->registerCssFile(AutoAdmin::$assetPath.'/css/lightbox.css')
-	->registerScriptFile(AutoAdmin::$assetPath.'/js/jquery.lightbox-0.5.min.js', CClientScript::POS_END);
+	->registerScriptFile(AutoAdmin::$assetPath.'/js/lightbox.js', CClientScript::POS_END);
 
 if(empty($this->breadcrumbs))
 	$this->breadcrumbs = array($this->pageTitle);

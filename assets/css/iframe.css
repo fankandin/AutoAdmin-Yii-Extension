@@ -15,7 +15,7 @@ div.br {clear: both; height: 1px;}
 .breadcrumbs {margin: 0 20px 12px 10px; font-size: 90%; color: #999; clear: both; padding: 5px 0 5px 0; font-size: 85%; border-bottom: 1px solid #f0f0f0;}
 .breadcrumbs a, .breadcrumbs a:visited {color: #999; text-decoration: underline;}
 .breadcrumbs a:hover {color: #FA5B00;}
-.breadcrumbs #home {background: url('../../../i/ico/go-home.png') no-repeat; padding-left: 20px; height: 16px; margin-right: 3px; display: table-cell; float: left;}
+.breadcrumbs #home {background: url('../images/go-home.png') no-repeat; padding-left: 20px; height: 16px; margin-right: 3px; display: table-cell; float: left;}
 
 #content {}
 
@@ -49,4 +49,4 @@ input.tip {color: #999; font-style: italic; font-size: 90%;}
 p.msg, div.msg {margin: 20px 0;}
 .orderPanel select {font-size: 90%;}
 #iframe-content .nav-pages {width: 30% !important;}
-#iframe-content .panel-add a {font-weight: bold; background-image: url('../../../i/ico/new-small.png'); height: 24px; padding-left: 28px; font-size: 120%; padding-top: 3px;}
+#iframe-content .panel-add a {font-weight: bold; background-image: url('../images/new-small.png'); height: 24px; padding-left: 28px; font-size: 120%; padding-top: 3px;}

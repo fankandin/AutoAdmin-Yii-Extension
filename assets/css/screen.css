@@ -26,7 +26,7 @@ body {
 .breadcrumbs {margin: 0 20px 12px 10px; font-size: 90%; color: #999; clear: both; padding: 5px 0 5px 0; font-size: 85%; border-bottom: 1px solid #f0f0f0;}
 .breadcrumbs a, .breadcrumbs a:visited {color: #999; text-decoration: underline;}
 .breadcrumbs a:hover {color: #FA5B00;}
-.breadcrumbs #home {background: url('../../../i/ico/go-home.png') no-repeat; padding-left: 20px; height: 16px; margin-right: 3px; display: table-cell; float: left;}
+.breadcrumbs #home {background: url('../images/go-home.png') no-repeat; padding-left: 20px; height: 16px; margin-right: 3px; display: table-cell; float: left;}
 
 #content {padding: 0; background: #fff;}
 .narrow-content {padding: 15px;}
@@ -65,10 +65,10 @@ form.list {margin: 0;}
 #footer {border-top: 1px dashed #ADADAD; padding: 10px; margin-top: 40px;}
 
 .sourcecode .code {display: none; margin: 5px 30px; padding: 5px 10px; border: 1px solid #ccc; background-color: #f8f8f8;}
-.sourcecode a, .sourcecode a:visited {color: #398138; background: url('../../../i/ico/plus.png') no-repeat 0 center #f8f8f8; display: inline-block; margin: 10px 20px 5px 20px; padding: 3px 6px 5px 20px; cursor: pointer;}
+.sourcecode a, .sourcecode a:visited {color: #398138; background: url('../images/plus.png') no-repeat 0 center #f8f8f8; display: inline-block; margin: 10px 20px 5px 20px; padding: 3px 6px 5px 20px; cursor: pointer;}
 .sourcecode a:hover {color: #DC3737;}
-.sourcecode a.opened, .sourcecode a.opened:visited {color: #DC3737; background-image: url('../../../i/ico/minus.png');}
+.sourcecode a.opened, .sourcecode a.opened:visited {color: #DC3737; background-image: url('../images/minus.png');}
 .sourcecode a span.show, .sourcecode a.opened span.hide {display: inline;}
 .sourcecode a span.hide, .sourcecode a.opened span.show {display: none;}
 .sourcecode code {font-family: 'Consolas, Monospace'; line-height: 140%; font-size: 140%;}
-.top-tip {border: 1px dotted #69b168; background: url('../../../i/ico/lightbulb.png') no-repeat 2px center; padding: 5px 5px 5px 22px; display: inline-block; margin: 5px 20px; font-size: 110%;}
+.top-tip {border: 1px dotted #69b168; background: url('../images/lightbulb.png') no-repeat 2px center; padding: 5px 5px 5px 22px; display: inline-block; margin: 5px 20px; font-size: 110%;}

@@ -188,6 +188,7 @@ class AutoAdmin extends CWebModule
 			foreach($this->extensions as $extension)
 			{
 				Yii::import("ext.autoAdminE{$extension}.*");
+				//Yii::import("ext.autoAdminE{$extension}.AutoAdminE{$extension}");	//fix for "E"-prefix for case-sensitive file systems
 				$extClass = "AutoAdminE{$extension}";
 				$extClass::init();
 			}

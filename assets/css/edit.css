@@ -7,12 +7,12 @@ form {margin: 0;}
 .item label {font-weight: bold; color: #555;}
 .item textarea, .item select {margin: 5px 0 10px 10px; width: 100%;}
 .item.block_foreign select {width: 40%; float: left;}
-.item .foreign-search {float: left; margin: 0 0 4px 10px; background: url('../../../i/ico/go-left.png') no-repeat left 8px #eee; border: #ddd dashed 1px; padding: 2px 2px 2px 18px;}
+.item .foreign-search {float: left; margin: 0 0 4px 10px; background: url('../images/go-left.png') no-repeat left 8px #eee; border: #ddd dashed 1px; padding: 2px 2px 2px 18px;}
 .item.m .foreign-search {background-color: #ddd; border-color: #ccc;}
-.item .foreign-search label {background: url('../../../i/ico/search.png') no-repeat; padding-left: 24px; height: 24px; display: inline-block; vertical-align: middle;}
+.item .foreign-search label {background: url('../images/search.png') no-repeat; padding-left: 24px; height: 24px; display: inline-block; vertical-align: middle;}
 .item .foreign-search select {width: 120px; float: none; margin-top: 5px; margin-bottom: 2px;}
 .item .foreign-search input {width: 170px; margin-top: 5px; margin-bottom: 10px; margin-bottom: 5px;}
-.item .num-tip {background: url('../../../i/ico/go-left.png') no-repeat left 8px #eee; border: #ddd dashed 1px; padding: 2px 2px 2px 16px; display: inline-block;}
+.item .num-tip {background: url('../images/go-left.png') no-repeat left 8px #eee; border: #ddd dashed 1px; padding: 2px 2px 2px 16px; display: inline-block;}
 .item.m .num-tip {background-color: #ddd; border-color: #ccc;}
 .item .num-tip select {width: 50px; margin-bottom: 5px;}
 .item input.focused, .item textarea.focused, .item select.focused {box-shadow: 0 0 6px rgba(222, 47, 16, 0.9);}
@@ -49,7 +49,7 @@ input.helpline {border: none; font-size: 10px; color: #777; width: 327px; backgr
 .time-panel input, .time-panel select {margin: 0;}
 .time-panel input[type=text] {width: 30px;}
 .time-panel input.i-year {width: 45px;}
-.time-panel .calendar {background: url('../../../i/ico/calendar.png') no-repeat center left; width: 16px; min-height: 15px; padding: 0;}
+.time-panel .calendar {background: url('../images/calendar.png') no-repeat center left; width: 16px; min-height: 15px; padding: 0;}
 .time-panel .calendar input {width: 16px; height: 15px; opacity: 0; cursor: pointer; margin: 0;}
 .time-panel .calendar span.mindate, .time-panel .calendar span.maxdate {display: none;}
 label.delfile {margin: 0 5px 0 0; display: block; font-weight: normal; padding-left: 20px;}
