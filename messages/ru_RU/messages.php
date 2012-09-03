@@ -8,4 +8,3 @@ return array(
 	'The record has not been deleted' => 'Запись не была удалена',
 	'The record will be deleted' => 'Запись будет удалена',
 );
-?>

@@ -36,14 +36,16 @@ class AAFieldImage extends AAFieldFile
 			unset($oldOptions['readonly']);
 			?>
 			<label class="delfile">
-				<?=Yii::t('AutoAdmin.form', '<b class="warning">Delete</b> the image')?> <span class="tip">(<?=Yii::t('AutoAdmin.form', 'set checkbox on for confirm')?>)</span>:
-				<?=CHtml::checkBox("{$inputName}[del]", false, $oldOptions);?>
+				<?php echo Yii::t('AutoAdmin.form', '<b class="warning">Delete</b> the image')?> <span class="tip">(<?php echo Yii::t('AutoAdmin.form', 'set checkbox on for confirm')?>)</span>:
+				<?php echo CHtml::checkBox("{$inputName}[del]", false, $oldOptions)?>
 			</label>
-			<?
+			<?php
 		}
 		$tagOptions['id'] = $inputID;
 		echo CHtml::label(Yii::t('AutoAdmin.form', 'New image').':', $inputID);
-		?><div class="tip inline">&lt;img src=<?=$this->options['directoryPath']?>/</div><?
+		?>
+		<div class="tip inline">&lt;img src=<?php echo $this->options['directoryPath']?>/</div>
+		<?php
 		echo CHtml::fileField(AutoAdmin::INPUT_PREFIX."[{$this->name}_new]", null, $tagOptions);
 
 		return ob_get_clean();

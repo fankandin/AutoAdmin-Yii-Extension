@@ -1,4 +1,4 @@
-<?
+<?php
 return array(
 	'You don\'t have permissions to add data here' => 'У Вас нет прав на добавление этих данных',
 	'You don\'t have permissions to read the data here' => 'У Вас нет прав на просмотр этих данных',
@@ -55,4 +55,3 @@ return array(
 	'Following interfaces have been added' => 'Следующие интерфейсы были добавлены',
 	'Access denied' => 'Доступ запрещён',
 );
-?>

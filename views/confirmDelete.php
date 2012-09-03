@@ -1,4 +1,4 @@
-<?
+<?php
 Yii::app()->clientScript
 	->registerCssFile(AutoAdmin::$assetPath.'/css/confirm.css');
 
@@ -9,13 +9,13 @@ $this->breadcrumbs = array(
 
 <div class="narrow-content">
 
-<h1><?=Yii::t('AutoAdmin.common', 'Delete record')?></h1>
-<?
+<h1><?php echo Yii::t('AutoAdmin.common', 'Delete record')?></h1>
+<?php
 echo CHtml::form($confirmUrl, 'post', array('id'=>'confirm-delete'));
 echo CHtml::hiddenField('sure', 1);
 ?>
-<p class="msg"><b><?=Yii::t('AutoAdmin.common', 'Attention!')?></b><br/><?=Yii::t('AutoAdmin.messages', 'The record will be deleted')?></p>
-<?
+<p class="msg"><b><?php echo Yii::t('AutoAdmin.common', 'Attention!')?></b><br/><?php echo Yii::t('AutoAdmin.messages', 'The record will be deleted')?></p>
+<?php
 $cbForDel = array();
 foreach($fields as $i=>&$field)
 {
@@ -27,14 +27,14 @@ foreach($fields as $i=>&$field)
 if($cbForDel)
 {
 	?>
-	<fieldset><?=CHtml::checkBoxList('filesToDelF', null, $cbForDel);?></fieldset>
-	<?
+	<fieldset><?php echo CHtml::checkBoxList('filesToDelF', null, $cbForDel);?></fieldset>
+	<?php
 }
 ?>
 <br/>
-<?=CHtml::submitButton(Yii::t('AutoAdmin.common', 'Confirm'), array('name'=>null));?>
-<div class="cancel">[ <a href="<?=$cancelUrl?>"><?=Yii::t('AutoAdmin.common', 'Cancel')?></a> ]</div>
+<?php echo CHtml::submitButton(Yii::t('AutoAdmin.common', 'Confirm'), array('name'=>null));?>
+<div class="cancel">[ <a href="<?php echo $cancelUrl?>"><?php echo Yii::t('AutoAdmin.common', 'Cancel')?></a> ]</div>
 
-<?=CHtml::closeTag('form');?>
+<?php echo CHtml::closeTag('form');?>
 
 </div>

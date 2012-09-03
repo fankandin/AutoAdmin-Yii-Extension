@@ -1,4 +1,4 @@
-<?
+<?php
 return array(
 	'Yes' => 'Да',
 	'No' => 'Нет',
@@ -18,4 +18,3 @@ return array(
 	'Reset' => 'Сброс',
 	'Click on the icons below to go down to the next interface' => 'Кликните на одну из иконок в столбце, чтобы перейти к следующему интерфейсу',
 );
-?>

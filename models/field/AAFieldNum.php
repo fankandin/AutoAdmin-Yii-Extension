@@ -74,7 +74,7 @@ class AAFieldNum extends AAField implements AAIField
 		{
 			$numOptions[$j] = $j;
 		}
-		?><div class="num-tip"><?=CHtml::dropDownList(null, (!is_null($this->value) ? $this->value : $this->defaultValue), $numOptions);?></div><?
+		?><div class="num-tip"><?php echo CHtml::dropDownList(null, (!is_null($this->value) ? $this->value : $this->defaultValue), $numOptions);?></div><?php
 
 		return ob_get_clean();
 	}

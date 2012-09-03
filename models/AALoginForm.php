@@ -1,5 +1,4 @@
 <?php
-
 /**
  * LoginForm class.
  * LoginForm is the data structure for keeping

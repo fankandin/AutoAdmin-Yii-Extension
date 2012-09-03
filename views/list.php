@@ -1,4 +1,4 @@
-<?
+<?php
 Yii::app()->clientScript
 	->registerCssFile(AutoAdmin::$assetPath.'/css/list.css')
 	->registerScriptFile(AutoAdmin::$assetPath.'/js/list.js')
@@ -13,14 +13,14 @@ $urlAdd = AAHelperUrl::addParam($baseURL, 'action', 'add');
 $urlDelete = AAHelperUrl::addParam($baseURL, 'action', 'delete');
 ?>
 
-<h1><?=$this->pageTitle?></h1>
-<?
+<h1><?php echo $this->pageTitle?></h1>
+<?php
 if(!empty($partialViews['up']))
 	$this->renderPartial($partialViews['up'], $clientData);
 
 if(!empty($clientData['subtitle']))
 {
-	?><h2><?=$clientData['subtitle']?></h2><?
+	?><h2><?php echo $clientData['subtitle']?></h2><?php
 }
 if(!empty($clientData['subhtml']))
 {
@@ -32,37 +32,37 @@ if(!empty($clientData['subhtml']))
 	<tr>
 		<td class="nav-pages">
 			<div>
-				<?=Yii::t('AutoAdmin.common', 'Pages')?>: 
-				<?$this->widget('AAWidgetPager', array('total'=>$total, 'maxPerPage'=>$rowsOnPage, 'currentPage'=>$currentPage))?>
+				<?php echo Yii::t('AutoAdmin.common', 'Pages')?>: 
+				<?php $this->widget('AAWidgetPager', array('total'=>$total, 'maxPerPage'=>$rowsOnPage, 'currentPage'=>$currentPage))?>
 			</div>
 		</td>
-<?
+<?php
 if(!empty($searchAvailable))
 {
 	?>
 		<td>
-			<?=$this->renderPartial($viewsPath.'searchPanel', array(
+			<?php echo $this->renderPartial($viewsPath.'searchPanel', array(
 				'searchOptions'	=> $searchOptions,
 				'fields'	=> $fields,
 				'baseURL'	=> $baseURL,
 			))?>
 		</td>
-	<?
+	<?php
 }
 if(in_array('add', $rights))
 {
 	?>
 		<td class="panel-add">
-			<a href="<?=$urlAdd?>"><?=Yii::t('AutoAdmin.common', 'Add')?></a>
+			<a href="<?php echo $urlAdd?>"><?php echo Yii::t('AutoAdmin.common', 'Add')?></a>
 		</td>
-	<?
+	<?php
 }
 ?>
 	</tr>
 </tbody>
 </table>
 
-<?
+<?php
 if($checkboxes)
 	echo CHtml::form('./', 'post', array('id'=>'listForm', 'class'=>'list'));
 
@@ -72,13 +72,13 @@ $numCols = 2;
 <thead>
 	<tr>
 		<th></th>
-<?
+<?php
 if(!empty($urlSub))
 {
 		?><th>
-			<?=(!empty($clientData['subHrefTitle']) ? $clientData['subHrefTitle'].'<br/>' : '')?>
-			<small><?=Yii::t('AutoAdmin.common', 'Click on the icons below to go down to the next interface')?></small>
-		</th><?
+			<?php echo (!empty($clientData['subHrefTitle']) ? $clientData['subHrefTitle'].'<br/>' : '')?>
+			<small><?php echo Yii::t('AutoAdmin.common', 'Click on the icons below to go down to the next interface')?></small>
+		</th><?php
 	$numCols++;
 }
 
@@ -109,8 +109,8 @@ if(!empty($_data['foreignKeysLinks']))
 		if(!empty($foreignData[$k]) && !empty($foreignLink['show']))
 		{
 			?>
-			<th class="foreign"><?=$foreignLink['label']?></th>
-			<?
+			<th class="foreign"><?php echo $foreignLink['label']?></th>
+			<?php
 			$numCols++;
 		}
 	}
@@ -120,18 +120,18 @@ if(!empty($_data['foreignKeysLinks']))
 	</tr>
 </thead>
 <tbody>
-<?
+<?php
 foreach($dataRows as $rowI=>$dataRow)
 {
 	?>
-	<tr id="tr_<?=(1)?>">
-		<td class="row-number"><span><?=(($rowI+1) + $rowsOnPage*($currentPage-1))?>.</span></td>
-	<?
+	<tr id="tr_<?php echo (1)?>">
+		<td class="row-number"><span><?php echo (($rowI+1) + $rowsOnPage*($currentPage-1))?>.</span></td>
+	<?php
 	if(!empty($urlSub))
 	{
 		?>
-		<td class="subtable"><?=CHtml::link('-', AAHelperUrl::addParam($urlSub, 'bk', $dataRow->pk))?></td>
-		<?
+		<td class="subtable"><?php echo CHtml::link('-', AAHelperUrl::addParam($urlSub, 'bk', $dataRow->pk))?></td>
+		<?php
 	}
 
 	foreach($dataRow as $k=>$field)
@@ -139,11 +139,11 @@ foreach($dataRows as $rowI=>$dataRow)
 		if(!$field->showInList)
 			continue;
 		?>
-		<td class="t-<?=$field->type?>">
-		<?
+		<td class="t-<?php echo $field->type?>">
+		<?php
 		if(is_null($field->value))
 		{
-			?><span class="null">NULL</span><?
+			?><span class="null">NULL</span><?php
 		}
 		else
 		{
@@ -170,7 +170,7 @@ foreach($dataRows as $rowI=>$dataRow)
 		}
 		?>
 		</td>
-		<?
+		<?php
 	}
 	//Additional columns through a table of links
 	if(!empty($_data['foreignLinks']))
@@ -215,14 +215,14 @@ foreach($dataRows as $rowI=>$dataRow)
 					$foreignValue .= "<span>{$t}</span>";
 				}
 				?>
-				<td class="foreign"><?=$foreignValue?></td>
-				<?
+				<td class="foreign"><?php echo $foreignValue?></td>
+				<?php
 			}
 		}
 	}
 	?>
 		<td class="control">
-	<?
+	<?php
 	$urlPK = '';
 	foreach($dataRow->pk as $pkField=>$pkValue)	//To take into account composite PK
 		$urlPK .= "&id[{$pkField}]=".urlencode($pkValue);
@@ -250,12 +250,12 @@ foreach($dataRows as $rowI=>$dataRow)
 	?>
 		</td>
 	</tr>
-	<?
+	<?php
 }
 ?>
 </tbody>
 </table>
-<?
+<?php
 if($checkboxes)
 	echo CHtml::closeTag('form');
 ?>
@@ -264,22 +264,22 @@ if($checkboxes)
 	<tr>
 		<td class="nav-pages">
 			<div>
-				<?=Yii::t('AutoAdmin.common', 'Pages')?>: 
-				<?$this->widget('AAWidgetPager', array('total'=>$total, 'maxPerPage'=>$rowsOnPage, 'currentPage'=>$currentPage))?>
+				<?php echo Yii::t('AutoAdmin.common', 'Pages')?>: 
+				<?php $this->widget('AAWidgetPager', array('total'=>$total, 'maxPerPage'=>$rowsOnPage, 'currentPage'=>$currentPage))?>
 			</div>
 		</td>
-<?
+<?php
 if(in_array('add', $rights))
 {
 	?>
-		<td class="panel-add"><a href="<?=$urlAdd?>"><?=Yii::t('AutoAdmin.common', 'Add')?></a></td>
-	<?
+		<td class="panel-add"><a href="<?php echo $urlAdd?>"><?php echo Yii::t('AutoAdmin.common', 'Add')?></a></td>
+	<?php
 }
 ?>
 	</tr>
 </tbody>
 </table>
-<?
+<?php
 if(!empty($partialViews['down']))
 	$this->renderPartial($partialViews['down'], $clientData);
 

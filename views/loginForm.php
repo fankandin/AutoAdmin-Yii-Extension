@@ -8,9 +8,9 @@ $this->breadcrumbs = array(
 );
 ?>
 
-<h1><?=$this->pageTitle?></h1>
+<h1><?php echo $this->pageTitle?></h1>
 
-<?
+<?php
 $form = $this->beginWidget('CActiveForm', array(
 	'id'=>'login-form',
 	'action'=>"./",
@@ -21,27 +21,27 @@ $form = $this->beginWidget('CActiveForm', array(
 ));
 ?>
 	<div class="row">
-		<?=$form->labelEx($model, 'login');?>
-		<?=$form->textField($model,'login');?>
-		<?=$form->error($model,'login');?>
+		<?php echo $form->labelEx($model, 'login');?>
+		<?php echo $form->textField($model,'login');?>
+		<?php echo $form->error($model,'login');?>
 	</div>
 
 	<div class="row">
-		<?=$form->labelEx($model, 'password');?>
-		<?=$form->passwordField($model, 'password');?>
-		<?=$form->error($model,'password');?>
+		<?php echo $form->labelEx($model, 'password');?>
+		<?php echo $form->passwordField($model, 'password');?>
+		<?php echo $form->error($model,'password');?>
 	</div>
 
 <!--
 	<div class="row rememberMe">
-		<?//$form->checkBox($model,'rememberMe');?>
-		<?//$form->label($model,'rememberMe');?>
-		<?//$form->error($model,'rememberMe');?>
+		<?php //$form->checkBox($model,'rememberMe');?>
+		<?php //$form->label($model,'rememberMe');?>
+		<?php //$form->error($model,'rememberMe');?>
 	</div>
 -->
 
 	<div class="row buttons">
-		<?=CHtml::submitButton(Yii::t('AutoAdmin.access', 'Enter'), array('class'=>'submit'));?>
+		<?php echo CHtml::submitButton(Yii::t('AutoAdmin.access', 'Enter'), array('class'=>'submit'))?>
 	</div>
 
-<? $this->endWidget(); ?>
+<?php $this->endWidget()?>

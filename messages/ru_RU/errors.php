@@ -35,4 +35,3 @@ return array(
 	'Auto-generation of the breadcrumbs can be done only with the default inside-controller navigation.' => 'Автогенерация хлебных крошек может быть выполнена только при навигации внутри контроллера «по умолчанию».',
 	'Incorrect breadcrumbs level.' => 'Некорректный уровень хлебных крошек.',
 );
-?>
