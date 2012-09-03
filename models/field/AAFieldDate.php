@@ -29,7 +29,7 @@ class AAFieldDate extends AAField implements AAIField
 		<table class="time-panel"><tbody>
 			<tr>
 				<td class="calendar"><input type="text"/>
-				<?
+				<?php
 				if(!empty($this->options['min']))
 					echo CHtml::tag('span', array('class'=>'mindate'), strtotime($this->options['min']));
 				if(!empty($this->options['max']))
@@ -37,7 +37,7 @@ class AAFieldDate extends AAField implements AAIField
 				?>
 				</td>
 				<td>
-					<?
+					<?php
 					$days = array();
 					for($j = 1; $j <= 31; $j++)
 						$days[$j] = $j;
@@ -46,14 +46,14 @@ class AAFieldDate extends AAField implements AAIField
 					?>
 				</td>
 				<td>
-					<?
+					<?php
 					$tagOptions['id'] = "{$inputName}[m]";
 					$tagOptions['tabindex'] = $tabindex++;
 					echo CHtml::dropDownList("{$inputName}[m]", (int)$month, Yii::app()->locale->getMonthNames(), $tagOptions);
 					?>
 				</td>
 				<td>
-					<?
+					<?php
 					$tagOptions['id'] = "{$inputName}[m]";
 					$tagOptions['tabindex'] = $tabindex++;
 					CHtml::textField("{$inputName}[y]", $year, $tagOptions, array_merge($tagOptions, array('maxlength'=>4, 'class'=>'i-year')));
@@ -61,7 +61,7 @@ class AAFieldDate extends AAField implements AAIField
 				</td>
 			</tr>
 		</tbody></table>
-		<?
+		<?php
 
 		return ob_get_clean();
 	}

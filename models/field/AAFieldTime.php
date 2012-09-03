@@ -28,7 +28,7 @@ class AAFieldTime extends AAField implements AAIField
 		<table class="time-panel"><tbody>
 			<tr>
 				<td>
-					<?
+					<?php
 					$tagOptions['id'] = "{$inputName}[h]";
 					$tagOptions['tabindex']++;
 					$tagOptions['maxlength'] = 4;
@@ -37,7 +37,7 @@ class AAFieldTime extends AAField implements AAIField
 				</td>
 				<td>:</td>
 				<td>
-					<?
+					<?php
 					$tagOptions['id'] = "{$inputName}[n]";
 					$tagOptions['tabindex']++;
 					echo CHtml::textField("{$inputName}[n]", $minute, $tagOptions);
@@ -45,7 +45,7 @@ class AAFieldTime extends AAField implements AAIField
 				</td>
 				<td>:</td>
 				<td>
-					<?
+					<?php
 					$tagOptions['id'] = "{$inputName}[s]";
 					$tagOptions['tabindex']++;
 					echo CHtml::textField("{$inputName}[s]", $second, $tagOptions);
@@ -53,8 +53,7 @@ class AAFieldTime extends AAField implements AAIField
 				</td>
 			</tr>
 		</tbody></table>
-		<?
-
+		<?php
 		return ob_get_clean();
 	}
 

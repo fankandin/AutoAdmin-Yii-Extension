@@ -1,12 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?=Yii::app()->language?>" lang="<?=Yii::app()->language?>">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo Yii::app()->language?>" lang="<?php echo Yii::app()->language?>">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<meta name="language" content="<?=Yii::app()->language?>"/>
+	<meta name="language" content="<?php echo Yii::app()->language?>"/>
 	<meta name="author" content="Alexander Palamarchuk, a@palamarchuk.info"/>
 	<meta name="copyright" content="Alexander Palamarchuk, a@palamarchuk.info"/>
-	<title><?=CHtml::encode($this->pageTitle);?> | <?=Yii::app()->name?></title>
-	<?Yii::app()->clientScript->registerCssFile(AutoAdmin::$assetPath.'/css/screen.css');?>
+	<title><?php echo CHtml::encode($this->pageTitle)?> | <?php echo Yii::app()->name?></title>
+	<?php Yii::app()->clientScript->registerCssFile(AutoAdmin::$assetPath.'/css/screen.css')?>
 </head>
 
 <body>
@@ -22,7 +22,7 @@
 		<div class="br">&nbsp;</div>
 	</div>
 </div>
-<?
+<?php
 /*
 $menu = array(
 	array('label'=>'Sport', 'url'=>array('/sport/countries/'), 'itemOptions'=>array('id'=>'menu_item1')),
@@ -33,8 +33,6 @@ $this->widget('zii.widgets.CMenu',array(
 	'id'=>'menu'
 ));
 */
-?>
-<?
 if(isset($this->breadcrumbs))
 {
 	$this->widget('zii.widgets.CBreadcrumbs', array(
@@ -44,7 +42,7 @@ if(isset($this->breadcrumbs))
 }
 ?>
 <div id="content">
-	<?=$content;?>
+	<?php echo $content?>
 </div>
 <div id="footer"></div>
 

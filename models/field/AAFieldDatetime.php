@@ -30,7 +30,7 @@ class AAFieldDatetime extends AAFieldDate
 		<table class="time-panel"><tbody>
 			<tr>
 				<td class="calendar"><input type="text"/>
-				<?
+				<?php
 				if(!empty($this->options['min']))
 					echo CHtml::tag('span', array('class'=>'mindate'), strtotime($this->options['min']));
 				if(!empty($this->options['max']))
@@ -38,7 +38,7 @@ class AAFieldDatetime extends AAFieldDate
 				?>
 				</td>
 				<td>
-					<?
+					<?php
 					$days = array();
 					for($j = 1; $j <= 31; $j++)
 						$days[$j] = $j;
@@ -47,14 +47,14 @@ class AAFieldDatetime extends AAFieldDate
 					?>
 				</td>
 				<td>
-					<?
+					<?php
 					$tagOptions['id'] = "{$inputName}[m]";
 					$tagOptions['tabindex']++;
 					echo CHtml::dropDownList("{$inputName}[m]", (int)$month, Yii::app()->locale->getMonthNames(), $tagOptions);
 					?>
 				</td>
 				<td>
-					<?
+					<?php
 					$tagOptions['id'] = "{$inputName}[m]";
 					$tagOptions['tabindex']++;
 					echo CHtml::textField("{$inputName}[y]", $year, $tagOptions, array_merge($tagOptions, array('maxlength'=>4, 'class'=>'i-year')));
@@ -62,7 +62,7 @@ class AAFieldDatetime extends AAFieldDate
 				</td>
 				<td></td>
 				<td>
-					<?
+					<?php
 					$tagOptions['id'] = "{$inputName}[h]";
 					$tagOptions['tabindex']++;
 					$tagOptions['maxlength'] = 2;
@@ -71,7 +71,7 @@ class AAFieldDatetime extends AAFieldDate
 				</td>
 				<td>:</td>
 				<td>
-					<?
+					<?php
 					$tagOptions['id'] = "{$inputName}[n]";
 					$tagOptions['tabindex']++;
 					echo CHtml::textField("{$inputName}[n]", $minute, $tagOptions);
@@ -79,7 +79,7 @@ class AAFieldDatetime extends AAFieldDate
 				</td>
 				<td>:</td>
 				<td>
-					<?
+					<?php
 					$tagOptions['id'] = "{$inputName}[s]";
 					$tagOptions['tabindex']++;
 					echo CHtml::textField("{$inputName}[s]", $second, $tagOptions);
@@ -87,7 +87,7 @@ class AAFieldDatetime extends AAFieldDate
 				</td>
 			</tr>
 		</tbody></table>
-		<?
+		<?php
 
 		return ob_get_clean();
 	}

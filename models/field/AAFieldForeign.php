@@ -104,9 +104,9 @@ class AAFieldForeign extends AAField implements AAIField
 				}
 				?>
 				<div class="foreign-search">
-					<?=CHtml::label('', "foreignSearchQ_{$this->name}");?>
-					<?=CHtml::dropDownList(null, null, $options, array('id'=>"foreignSearchBy_{$this->name}"));?>:
-					<?
+					<?php
+					echo CHtml::label('', "foreignSearchQ_{$this->name}");
+					echo CHtml::dropDownList(null, null, $options, array('id'=>"foreignSearchBy_{$this->name}")).':';
 					//Searching the ForeignKey value
 					$controller->widget('zii.widgets.jui.CJuiAutoComplete', array(
 							'name'		=> '',
@@ -124,7 +124,7 @@ class AAFieldForeign extends AAField implements AAIField
 						));
 					?>
 				</div>
-				<?
+				<?php
 			}
 		}
 		

@@ -1,4 +1,4 @@
-<?
+<?php
 return array(
 	'set checkbox on for confirm' => 'отметьте для подтвержения',
 	'<span class="warning">Replace</span> password' => '<span class="warning">Заменить</span> пароль',
@@ -17,4 +17,3 @@ return array(
 	'File to upload' => 'Загружаемый файл',
 	'Error:' => 'Ошибка:',
 );
-?>

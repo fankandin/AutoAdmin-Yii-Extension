@@ -1,4 +1,4 @@
-<?
+<?php
 Yii::app()->clientScript
 	->registerCssFile(AutoAdmin::$assetPath.'/css/edit.css')
 	->registerScriptFile(AutoAdmin::$assetPath.'/js/edit.js');
@@ -17,14 +17,14 @@ else
 	}
 }
 ?>
-<h1><?=$this->pageTitle?></h1>
-<?
+<h1><?php echo $this->pageTitle?></h1>
+<?php
 if(!empty($partialViews['up']))
 	$this->renderPartial($partialViews['up'], $clientData);
 
 if(!empty($clientData['subtitle']))
 {
-	?><h2><?=$clientData['subtitle']?></h2><?
+	?><h2><?php echo $clientData['subtitle']?></h2><?php
 }
 if(!empty($clientData['subhtml']))
 {
@@ -47,13 +47,13 @@ if($manageAction == 'edit')
 	}
 	if($h2)
 	{
-		?><h2><?=$h2?></h2><?
+		?><h2><?php echo $h2?></h2><?php
 		$this->pageTitle = $h2;
 	}
 }
 if(!empty($clientData['subtitle']))
 {
-	?><h2><?=$clientData['subtitle']?></h2><?
+	?><h2><?php echo $clientData['subtitle']?></h2><?php
 }
 
 echo CHtml::form($url, 'post', array('id'=>'editform', 'enctype'=>'multipart/form-data', 'autocomplete'=>'off'));
@@ -65,8 +65,8 @@ $commonTagOptions = array('tabindex'=>&$tabindex);
 if(!empty($formError))
 {
 	?>
-	<p class="error"><?=Yii::t('AutoAdmin.form', 'Error:')?> <?=$formError['message']?></p>
-	<?
+	<p class="error"><?php echo Yii::t('AutoAdmin.form', 'Error:').' '.$formError['message']?></p>
+	<?php
 }
 
 foreach($fields as $field)
@@ -79,30 +79,27 @@ foreach($fields as $field)
 	if(!empty($formError) && $formError['field']->name == $field->name)
 		$class .= ' error';
 	?>
-	<div class="<?=$class?>">
-		<?=$field->formInput($this, $commonTagOptions)?>
-		<?
+	<div class="<?php echo $class?>">
+	<?php
+		echo $field->formInput($this, $commonTagOptions);
 		if($field->description)
 		{
-			?><div class="desc"><?=$field->description?></div><?
+			?><div class="desc"><?php echo $field->description?></div><?
 		}
-		?>
+	?>
 	</div>
-	<?
+	<?php
 	if(!(++$itemsI%2))
 	{
-		?><br clear="all"/><?
+		?><br clear="all"/><?php
 	}
 	$tabindex++;
 }
 if(!empty($iframes))
 {
-	?>
-	
-	<?
 	if($manageAction == 'add')
 	{
-		?><div class="item"><div class="iframe-na"><i><?=Yii::t('AutoAdmin.form', 'Submit the form in order to be able to edit additional links')?>.</i></div></div><?
+		?><div class="item"><div class="iframe-na"><i><?php echo Yii::t('AutoAdmin.form', 'Submit the form in order to be able to edit additional links')?>.</i></div></div><?php
 	}
 	else
 	{
@@ -117,28 +114,28 @@ if(!empty($iframes))
 					'foreign'	=> AAHelperUrl::encodeParam($iframe['foreign']),
 				));
 			?>
-			<div class="item<?=(!empty($iframe['wide']) || in_array('wide', $iframe) ? ' wide' : '')?>">
-			<?
+			<div class="item<?php echo (!empty($iframe['wide']) || in_array('wide', $iframe) ? ' wide' : '')?>">
+			<?php
 			echo CHtml::tag('iframe', array(
 					'src'	=> $iframeUrl,
 				),
 				null, true);
 			if($field->description)
 			{
-				?><div class="desc"><?=$field->description?></div><?
+				?><div class="desc"><?php echo $field->description?></div><?
 			}
 			?>
 			</div>
-			<?
+			<?php
 		}
 	}
 }
 ?>
 <div class="br">&nbsp;</div>
-<?=CHtml::submitButton(Yii::t('AutoAdmin.common', 'Save'), array('name'=>null));?>
-<?=CHtml::closeTag('form');?>
+<?php
+echo CHtml::submitButton(Yii::t('AutoAdmin.common', 'Save'), array('name'=>null));
 
-<?
+echo CHtml::closeTag('form');
 if(!empty($partialViews['down']))
 	$this->renderPartial($partialViews['down'], $clientData);
 if(empty($iframeMode))

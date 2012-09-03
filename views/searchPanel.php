@@ -1,4 +1,4 @@
-<?
+<?php
 $actionURL = HelperUrl::update($baseURL, array('searchQ', 'searchBy'));
 $getParams = HelperUrl::uriToParamsArray($actionURL);
 if($getParams)

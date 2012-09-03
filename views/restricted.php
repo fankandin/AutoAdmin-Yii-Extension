@@ -1,4 +1,4 @@
-<?
+<?php
 $this->pageTitle = Yii::t('AutoAdmin.access', 'Access denied');
 Yii::app()->clientScript
 	->registerCssFile(AutoAdmin::$assetPath.'/css/edit-result.css');
@@ -8,9 +8,9 @@ $this->breadcrumbs = array(
 );
 ?>
 
-<h1><?=$this->pageTitle?></h1>
+<h1><?php echo $this->pageTitle?></h1>
 
-<?
+<?php
 switch($manageAction)
 {
 	case 'list':
@@ -27,5 +27,5 @@ switch($manageAction)
 		break;
 }
 ?>
-<p class="msg"><?=$message?></p>
-<p>[<a href="#" onclick="window.history.go(-1)"><?=Yii::t('AutoAdmin.common', 'Go back')?></a>]</p>
+<p class="msg"><?php echo $message?></p>
+<p>[<a href="#" onclick="window.history.go(-1)"><?php echo Yii::t('AutoAdmin.common', 'Go back')?></a>]</p>

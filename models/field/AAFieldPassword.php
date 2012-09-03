@@ -29,8 +29,8 @@ class AAFieldPassword extends AAField implements AAIField
 			$tagOptions['value'] = 1;
 			?>
 			<div>
-				<?=Yii::t('AutoAdmin.form', '<span class="warning">Replace</span> password')?> (<?=Yii::t('AutoAdmin.form', 'set checkbox on for confirm')?>):
-				<br/><label><?=CHtml::checkBox("{$inputName}[is_new]", null, $tagOptions)?>&nbsp;<?=Yii::t('AutoAdmin.common', 'Yes')?></label>
+				<?php echo Yii::t('AutoAdmin.form', '<span class="warning">Replace</span> password')?> (<?php echo Yii::t('AutoAdmin.form', 'set checkbox on for confirm')?>):
+				<br/><label><?php echo CHtml::checkBox("{$inputName}[is_new]", null, $tagOptions)?>&nbsp;<?php echo Yii::t('AutoAdmin.common', 'Yes')?></label>
 			</div>
 			<?
 			echo CHtml::passwordField("{$inputName}[val]", '******', array('disabled'=>true));
