@@ -24,8 +24,6 @@ There are only four steps to install the AutoAdmin extension:
 
 If you plan to use the built-in AutoAdmin shared access system, you also need to import SQL dump which you can find in _[autoAdmin/schemas]_ of the distributive directory.
 
-The distributive includes _[iconpack]_ directory. Those are images for the default skin. Copy them to public _[i]_ directory of your CMS (e.g. _[/_admin/i/]_).
-
 ###Yii config setup
 
 We recommend use a separate config for AutoAdmin.

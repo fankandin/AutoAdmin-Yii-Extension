@@ -161,8 +161,8 @@ class AAData
 	 *			'targetFields'	=> array('title'),
 	 *		));
 	 * </pre>
-	 * @param type $outAlias
-	 * @param type $linkConf 
+	 * @param string $outAlias
+	 * @param array $linkConf 
 	 * @todo $linkConf format checking.
 	 */
 	public function setForeignLink($outAlias, $linkConf)

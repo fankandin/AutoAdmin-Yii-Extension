@@ -11,7 +11,12 @@ class AAFieldImage extends AAFieldFile
 	public function printValue()
 	{
 		if($this->value)
-			return CHtml::image("{$this->options['directoryPath']}/{$this->value}");
+		{
+			if(!empty($this->options['popup']))
+				return CHtml::link(Yii::t('AutoAdmin.form', 'Popup image'), "{$this->options['directoryPath']}/{$this->value}", array('rel'=>"lightbox[{$this->name}]"));
+			else
+				return CHtml::image("{$this->options['directoryPath']}/{$this->value}");
+		}
 		else
 			return null;
 	}

@@ -16,4 +16,5 @@ return array(
 	'Text for ALT=""' => 'Текст для ALT=""',
 	'File to upload' => 'Загружаемый файл',
 	'Error:' => 'Ошибка:',
+	'Popup image' => 'Показать в новом окне',
 );

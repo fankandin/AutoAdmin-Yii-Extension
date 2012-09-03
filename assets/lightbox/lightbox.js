@@ -48,8 +48,12 @@ lightbox = new Lightbox options
   LightboxOptions = (function() {
 
     function LightboxOptions() {
-      this.fileLoadingImage = 'images/loading.gif';
-      this.fileCloseImage = 'images/close.png';
+/* Customized for AutoAdmin { */
+		var matches = $('script:last').attr('src').match(/^(.*)\/(.*?)$/);
+		var srcBase = matches[1]+'/';
+/* } Customized for AutoAdmin */
+      this.fileLoadingImage = srcBase+'images/loading.gif';
+      this.fileCloseImage = srcBase+'images/close.png';
       this.resizeDuration = 700;
       this.fadeDuration = 500;
       this.labelImage = "Image";

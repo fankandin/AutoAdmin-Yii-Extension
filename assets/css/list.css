@@ -29,6 +29,7 @@
 #data-list th.data.sort-desc:hover {background-image: url('../images/go-up.png');}
 #data-list thead tr th.data a small, #data-list thead tr th small {color: #FFCD05; font-size: 50%; text-decoration: none; display: inline-block; margin-top: 3px;}
 #data-list tr.enlighted td {background-color: #ffda8d;}
+#data-list td.t-image a[rel^="lightbox"] {width: 24px; height: 24px; display: inline-block; overflow: hidden; background: url('../images/img-popup.png') no-repeat; text-indent: -1000%; text-decoration: none;}
 
 #panel-up {border-bottom: 1px solid #F04200; width: 100%;}
 #panel-down {border-top: 1px solid #F04200; width: 100%;}

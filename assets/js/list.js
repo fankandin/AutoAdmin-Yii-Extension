@@ -28,7 +28,6 @@ function enlightRow()
 $(document).ready(function(){
 	$('#data-list td.control .popup').click(openPopupWindow);
 	$('#data-list tr').click(enlightRow);
-	$('#data-list .t-file a').lightBox();
 	$('#search-panel input[type=reset]').click(function() {
 		var $form = $(this.form);
 		$form.find('[name=searchBy], [name=searchQ]').attr('disabled', true);
