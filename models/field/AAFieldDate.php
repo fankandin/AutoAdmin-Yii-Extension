@@ -48,14 +48,14 @@ class AAFieldDate extends AAField implements AAIField
 				<td>
 					<?php
 					$tagOptions['id'] = "{$inputName}[m]";
-					$tagOptions['tabindex'] = $tabindex++;
+					$tagOptions['tabindex']++;
 					echo CHtml::dropDownList("{$inputName}[m]", (int)$month, Yii::app()->locale->getMonthNames(), $tagOptions);
 					?>
 				</td>
 				<td>
 					<?php
-					$tagOptions['id'] = "{$inputName}[m]";
-					$tagOptions['tabindex'] = $tabindex++;
+					$tagOptions['id'] = "{$inputName}[y]";
+					$tagOptions['tabindex']++;
 					CHtml::textField("{$inputName}[y]", $year, $tagOptions, array_merge($tagOptions, array('maxlength'=>4, 'class'=>'i-year')));
 					?>
 				</td>
