@@ -12,7 +12,7 @@ echo CHtml::textField('searchQ', (isset($searchOptions['query']) && !is_array($s
 $inSearch = array();
 $selectedIndex = null;
 
-foreach($fields as $k=>&$field)
+foreach($fields as $k=>$field)
 {
 	if(!empty($field->options['inSearch']))
 	{

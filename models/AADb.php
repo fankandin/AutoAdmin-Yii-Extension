@@ -54,7 +54,7 @@ class AADb
 		$qWhere = $this->_listQuery->getWhere() ? array($this->_listQuery->getWhere()) : array();
 		$qParams = $this->_listQuery->params ? $this->_listQuery->params : array();
 		
-		foreach($this->_data->fields as &$field)
+		foreach($this->_data->fields as $field)
 		{
 			if(!is_null($field->bind))
 			{
@@ -112,7 +112,7 @@ class AADb
 		$selectFields = array();
 		foreach($this->_data->pk as $pkField=>$pkValue)
 			$selectFields[] = "{$this->tableName}.{$pkField}";
-		foreach($this->_data->fields as &$field)
+		foreach($this->_data->fields as $field)
 		{
 			if($field->showInList || !$strictShowInList)
 			{

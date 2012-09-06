@@ -599,7 +599,7 @@ class AutoAdmin extends CWebModule
 			$dataToPass['searchAvailable'] = true;
 		else
 		{
-			foreach($this->_data->fields as &$field)
+			foreach($this->_data->fields as $field)
 			{
 				if(!empty($field->options['inSearch']))
 				{
@@ -633,7 +633,7 @@ class AutoAdmin extends CWebModule
 		if($this->_data->orderBy)
 		{
 			$k = 0;
-			foreach($this->_data->fields as $k=>&$field)
+			foreach($this->_data->fields as $k=>$field)
 			{	//Display table header
 				if($this->_data->orderBy[0]['field']->name == $field->name)
 				{
@@ -722,7 +722,7 @@ class AutoAdmin extends CWebModule
 
 		$this->fillFieldsWithForm();
 		$values = array();
-		foreach($this->_data->fields as &$field)
+		foreach($this->_data->fields as $field)
 		{
 			if(!is_null($field->value))
 			{
@@ -788,7 +788,7 @@ class AutoAdmin extends CWebModule
 
 		$this->fillFieldsWithForm();
 		$values = array();
-		foreach($this->_data->fields as &$field)
+		foreach($this->_data->fields as $field)
 		{
 			if($field->isChanged)
 			{
@@ -998,7 +998,7 @@ class AutoAdmin extends CWebModule
 	{
 		if($fieldsConf && is_array($fieldsConf))
 		{
-			foreach($fieldsConf as $k=>&$fieldData)
+			foreach($fieldsConf as $k=>$fieldData)
 			{
 				if($fieldData[0]==$fieldName)
 					return $k;

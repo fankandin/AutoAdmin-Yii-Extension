@@ -287,7 +287,7 @@ class AAData
 	public function loadRow($queryRow)
 	{
 		$dataRow = new AADataRow;
-		foreach($this->fields as &$field)
+		foreach($this->fields as $field)
 		{
 			$newField = clone $field;
 			$newField->loadFromSql($queryRow);

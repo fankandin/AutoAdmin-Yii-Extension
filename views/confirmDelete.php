@@ -17,7 +17,7 @@ echo CHtml::hiddenField('sure', 1);
 <p class="msg"><b><?php echo Yii::t('AutoAdmin.common', 'Attention!')?></b><br/><?php echo Yii::t('AutoAdmin.messages', 'The record will be deleted')?></p>
 <?php
 $cbForDel = array();
-foreach($fields as $i=>&$field)
+foreach($fields as $i=>$field)
 {
 	if(in_array($field->type, array('image', 'file')))
 	{

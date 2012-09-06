@@ -125,7 +125,7 @@ class AABreadcrumbs
 			$bkp = Yii::app()->request->getParam('bkp', array());
 			if(isset($bkp[0]))
 			{
-				foreach($bkp as $pkLevel=>&$pk)
+				foreach($bkp as $pkLevel=>$pk)
 				{
 					if($pkLevel < abs($level)-1)
 						continue;

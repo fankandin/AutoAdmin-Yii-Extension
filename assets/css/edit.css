@@ -4,7 +4,7 @@ form {margin: 0;}
 .item.m {background: #f0f0f0;}
 .block_editor, .block_text {clear: both; width: 95%; margin-right: 0;}
 .block_text2 textarea {height: 100px; width: 500px;}
-.item label {font-weight: bold; color: #555;}
+.item label {font-weight: bold; color: #555; font-size: 110%;}
 .item textarea, .item select {margin: 5px 0 10px 10px; width: 100%;}
 .item.block_foreign select {width: 40%; float: left;}
 .item .foreign-search {float: left; margin: 0 0 4px 10px; background: url('../images/go-left.png') no-repeat left 8px #eee; border: #ddd dashed 1px; padding: 2px 2px 2px 18px;}
