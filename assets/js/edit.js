@@ -111,12 +111,12 @@ $(document).ready(function(){
 				changeYear: true
 			};
 		//If min or max validators were set
-		if($form.find('.time-panel .calendar span.mindate'))
-			datePickerOpts.minDate = new Date($form.find('.time-panel .calendar span.mindate').html()*1000);
-		if($form.find('.time-panel .calendar span.maxdate'))
-			datePickerOpts.maxDate = new Date($form.find('.time-panel .calendar span.maxdate').html()*1000);
-
-		$timePanel.find('.calendar input').datepicker(datePickerOpts);
+		var $calendar = $timePanel.find('.calendar');
+		if($calendar.find('span.mindate').length)
+			datePickerOpts.minDate = new Date($calendar.find('span.mindate').html()*1000);
+		if($calendar.find('span.maxdate').length)
+			datePickerOpts.maxDate = new Date($calendar.find('span.maxdate').html()*1000);
+		$calendar.find('input').datepicker(datePickerOpts);
 	});
 
 	$form.submit(function() {

@@ -56,7 +56,7 @@ class AAFieldDate extends AAField implements AAIField
 					<?php
 					$tagOptions['id'] = "{$inputName}[y]";
 					$tagOptions['tabindex']++;
-					CHtml::textField("{$inputName}[y]", $year, $tagOptions, array_merge($tagOptions, array('maxlength'=>4, 'class'=>'i-year')));
+					echo CHtml::textField("{$inputName}[y]", $year, $tagOptions, array_merge($tagOptions, array('maxlength'=>4, 'class'=>'i-year')));
 					?>
 				</td>
 			</tr>
