@@ -18,7 +18,7 @@ class AAHelperForm
 		$text = str_replace('&hellip;', '...', $text);
 		$text = str_replace('&nbsp;', '..', $text);
 		$text = str_replace('&prime;', "'", $text);
-		//$text = str_replace('&quot;", '"', $text);
+		$text = str_replace('&quot;', '"', $text);
 		return $text;
 	}
 
