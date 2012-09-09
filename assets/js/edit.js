@@ -116,6 +116,16 @@ $(document).ready(function(){
 			datePickerOpts.minDate = new Date($calendar.find('span.mindate').html()*1000);
 		if($calendar.find('span.maxdate').length)
 			datePickerOpts.maxDate = new Date($calendar.find('span.maxdate').html()*1000);
+		datePickerOpts.defaultDate = new Date();
+		var $dateParam = $timePanel.find('input[name$="[y]"]');
+		if($dateParam.val())
+			datePickerOpts.defaultDate.setFullYear($dateParam.val());
+		$dateParam = $timePanel.find('input[name$="[m]"]');
+		if($dateParam.val())
+			datePickerOpts.defaultDate.setMonth($dateParam.val());
+		$dateParam = $timePanel.find('input[name$="[d]"]');
+		if($dateParam.val())
+			datePickerOpts.defaultDate.setDate($dateParam.val());
 		$calendar.find('input').datepicker(datePickerOpts);
 	});
 

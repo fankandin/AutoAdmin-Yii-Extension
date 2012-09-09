@@ -10,7 +10,10 @@ class AAFieldDate extends AAField implements AAIField
 
 	public function printValue()
 	{
-		return Yii::app()->dateFormatter->formatDateTime($this->value, 'long', null);
+		if($this->value->format('Y') >= 1970)	//We can use Yii datetime formatter
+			return Yii::app()->dateFormatter->formatDateTime($this->value->getTimestamp(), 'long', null);
+		else
+			return $this->value->format('Y.m.d');
 	}
 
 	public function formInput(&$controller, $tagOptions=array())
@@ -23,17 +26,17 @@ class AAFieldDate extends AAField implements AAIField
 		if($this->isReadonly)
 			$tagOptions['disabled'] = true;
 
-		$d = $this->value ? $this->value : time();	//If not defined take current date
-		list($year, $month, $day) = explode('.', date('Y.m.d', $d));
+		$d = $this->value ? $this->value : new DateTime();	//If not defined take current date
+		list($year, $month, $day) = explode('.', $d->format('Y.m.d'));
 		?>
 		<table class="time-panel"><tbody>
 			<tr>
 				<td class="calendar"><input type="text"/>
 				<?php
 				if(!empty($this->options['min']))
-					echo CHtml::tag('span', array('class'=>'mindate'), strtotime($this->options['min']));
+					echo CHtml::tag('span', array('class'=>'mindate'), $this->options['min']);
 				if(!empty($this->options['max']))
-					echo CHtml::tag('span', array('class'=>'maxdate'), strtotime($this->options['max']));
+					echo CHtml::tag('span', array('class'=>'maxdate'), $this->options['max']);
 				?>
 				</td>
 				<td>
@@ -79,44 +82,58 @@ class AAFieldDate extends AAField implements AAIField
 		{
 			if(!isset($formData[$this->name]['y']) || !isset($formData[$this->name]['m']) || !isset($formData[$this->name]['d']))
 				throw new AAException(Yii::t('AutoAdmin.errors', 'Wrong data was passed for the field "{field}"', array('{field}'=>$this->name)));
-			$this->value = strtotime(sprintf("%04d-%02d-%02d", $formData[$this->name]['y'], $formData[$this->name]['m'], $formData[$this->name]['d']));
-			if(!$this->value)
+			try
+			{
+				$this->value = new DateTime(sprintf("%04d-%02d-%02d", $formData[$this->name]['y'], $formData[$this->name]['m'], $formData[$this->name]['d']));
+			}
+			catch(AAException $e)
+			{
 				throw new AAException(Yii::t('AutoAdmin.errors', 'Wrong data was passed for the field "{field}"', array('{field}'=>$this->name)));
+			}
 		}
 	}
 
 	public function loadFromSql($queryValue)
 	{
 		if(isset($queryValue[$this->name]))
-			$this->value = strtotime($queryValue[$this->name]);
+			$this->value = new DateTime($queryValue[$this->name]);
 	}
 
 	public function valueForSql()
 	{
 		if(!$this->value)
 			return parent::valueForSql();
-		return date('Y-m-d', $this->value);
+		return $this->value->format('Y-m-d');
 	}
 
 	public function validateValue($value)
 	{
 		if(!parent::validateValue($value))
-		 return false;
-		//Internal value format is UNIX TIMESTAMP
+			return false;
 		if(!empty($this->options['min']))
 		{	
-			$tsFrom = strtotime($this->options['min']);
-			if($tsFrom === false)
+			try
+			{
+				$dMin = new DateTime($this->options['min']);
+			}
+			catch (AAException $e)
+			{
 				throw new AAException;
-			if($value < $this->options['min'])
+			}
+			if($value < $dMin)
 				return false;
 		}
 		if(!empty($this->options['max']))
 		{
-			$tsTo = strtotime($this->options['max']);
-			if($tsTo === false)
+			try
+			{
+				$dMax = new DateTime($this->options['max']);
+			}
+			catch (AAException $e)
+			{
 				throw new AAException;
-			if($value > $this->options['max'])
+			}
+			if($value > $dMax)
 				return false;
 		}
 		return true;

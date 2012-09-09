@@ -10,7 +10,10 @@ class AAFieldDatetime extends AAFieldDate
 
 	public function printValue()
 	{
-		return Yii::app()->dateFormatter->formatDateTime($this->value, 'long');
+		if($this->value->format('Y') >= 1970)	//We can use Yii datetime formatter
+			return Yii::app()->dateFormatter->formatDateTime($this->value->getTimestamp(), 'long', null);
+		else
+			return $this->value->format('Y.m.d H:i:s');
 	}
 
 	public function formInput(&$controller, $tagOptions=array())
@@ -23,9 +26,9 @@ class AAFieldDatetime extends AAFieldDate
 		if($this->isReadonly)
 			$tagOptions['disabled'] = true;
 
-		$d = $this->value ? $this->value : time();	//If not defined take current date
-		list($year, $month, $day) = explode('.', date('Y.m.d', $d));
-		list($hour, $minute, $second) = explode(':', date("H:i:00", $d));
+		$d = $this->value ? $this->value : new DateTime();	//If not defined take current datetime
+		list($year, $month, $day) = explode('.', $d->format('Y.m.d'));
+		list($hour, $minute, $second) = explode(':', $d->format('H:i:00'));
 		?>
 		<table class="time-panel"><tbody>
 			<tr>
@@ -100,9 +103,15 @@ class AAFieldDatetime extends AAFieldDate
 		{
 			if(!isset($formData[$this->name]['h']) || !isset($formData[$this->name]['n']) || !isset($formData[$this->name]['s']))
 				throw new AAException(Yii::t('AutoAdmin.errors', 'Wrong data was passed for the field "{field}"', array('{field}'=>$this->name)));
-			$this->value = strtotime(date('Y-m-d', $this->value).' '.sprintf('%02d:%02d:%02d', $formData[$this->name]['h'], $formData[$this->name]['n'], $formData[$this->name]['s']));
-			if(!$this->value)
+			try
+			{
+				$this->value = new DateTime(sprintf("%04d-%02d-%02d", $formData[$this->name]['y'], $formData[$this->name]['m'], $formData[$this->name]['d']));
+				$this->value->setTime($formData[$this->name]['h'], $formData[$this->name]['n'], $formData[$this->name]['s']);
+			}
+			catch(AAException $e)
+			{
 				throw new AAException(Yii::t('AutoAdmin.errors', 'Wrong data was passed for the field "{field}"', array('{field}'=>$this->name)));
+			}
 		}
 	}
 
@@ -110,6 +119,6 @@ class AAFieldDatetime extends AAFieldDate
 	{
 		if(!$this->value)
 			return parent::valueForSql();
-		return date('Y-m-d H:s:i', $this->value);
+		return $this->value->format('Y-m-d H:s:i');
 	}
 }
