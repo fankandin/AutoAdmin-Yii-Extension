@@ -120,9 +120,9 @@ $(document).ready(function(){
 		var $dateParam = $timePanel.find('input[name$="[y]"]');
 		if($dateParam.val())
 			datePickerOpts.defaultDate.setFullYear($dateParam.val());
-		$dateParam = $timePanel.find('input[name$="[m]"]');
+		$dateParam = $timePanel.find('select[name$="[m]"]');
 		if($dateParam.val())
-			datePickerOpts.defaultDate.setMonth($dateParam.val());
+			datePickerOpts.defaultDate.setMonth($dateParam.val()-1);
 		$dateParam = $timePanel.find('input[name$="[d]"]');
 		if($dateParam.val())
 			datePickerOpts.defaultDate.setDate($dateParam.val());
