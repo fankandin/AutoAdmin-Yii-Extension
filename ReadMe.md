@@ -17,23 +17,60 @@ The extension uses PDO interfaces and was tested on MySQL and PostgreSQL databas
 
 There are only four steps to install the AutoAdmin extension:
 
-1. Put the distributive files into _[protected/extensions]_ folder of your Yii application.
+1. Put the distributive files into _[protected/extensions/autoAdmin]_ folder of your Yii application.
 2. Edit the config: add the AutoAdmin module and set _urlManager_ rules (see below).
-3. Create any folder in _[www]_ (your DocumentRoot) directory to serve as the point of entrance by web (e.g. /_admin/).
-4. Create module folder _[autoadmin]_ in _[protected/modules]_ directory using a standart Yii module structure, but without module class (which inherites _CWebModule_) - it will be included from the extension. 
+3. Create any folder in _[www]_ (your DocumentRoot) directory to serve as the point of entrance by web (e.g. _[www/_admin]_). Put there usual Yii public files set: _index.php_, _.htaccess_, _[assets]_ which are commonly created in DocumentRoot. Note that index.php should link (in source code) to a separate config (due to security reasons).
+4. Create module folder _[autoadmin]_ in _[protected/modules]_ directory using a standart Yii module structure, but without module class (which inherites _CWebModule_) - it will be included from the extension automatically. If you use Gii, delete _protected/modules/autoadmin.php_.
+
+So, after all, you	r common AutoAdmin file structure is something like this:
+~~~
+ - protected/
+ - - ...
+ - - extensions/
+ - - - ...
+ - - - autoAdmin/
+ - - - - assets/
+ - - - - controllers/
+ - - - - helpers/
+ - - - - messages/
+ - - - - models/
+ - - - - schemas/
+ - - - - views/
+ - - - - AutoAdmin.php
+ - - - - AutoAdminAccess.php
+ - - - - AutoAdminIExtension.php
+ - - - - LICENSE
+ - - - - ReadMe.md
+ - - ...
+ - - modules/
+ - - - ...
+ - - - autoadmin/
+ - - - - components/
+ - - - - controllers/
+ - - - - messages/
+ - - - - models/
+ - - - - views/
+ - www/
+ - - ...
+ - - _admin/
+ - - - assets/
+ - - - .htaccess
+ - - - index.php 
+
+~~~
 
 If you plan to use the built-in AutoAdmin shared access system, you also need to import SQL dump which you can find in _[autoAdmin/schemas]_ of the distributive directory.
 
 ###Yii config setup
 
-We recommend use a separate config for AutoAdmin.
+We recommend using a separate config for AutoAdmin.
 
-Set necessary parameters:
+Set necessary parameters (if you've used Gii, just edit an approriate section):
 ~~~
 [php]
 $main['modules'] = array(
 	'autoadmin'=>array(
-		'class'=>'application.modules.autoadmin.AutoAdminDemo',
+		'class'=>'application.modules.autoadmin.AutoAdmin',
 		'basePath' => dirname(__FILE__).'/../modules/autoadmin',
 		'wwwDirName' => 'www',	//your DocumentRoot
 		//Optional params:
@@ -47,6 +84,8 @@ $main['components'] = array(
 	'urlManager' => array(
 		//...
 		'rules'=>array(
+			//...
+			//AutoAdmin URL rules management:
 			'<controller:aa[a-z]+>/<action:\w+>' => 'autoadmin/<controller>/<action>',
 			'<controller:\w+>/foreign-<key:\w+>' => 'autoadmin/<controller>/foreign<key>',
 			//Module paths should be configured in a standart way
@@ -74,6 +113,11 @@ $main['components'] = array(
 You may try real working AutoAdmin CMS [here](http://palamarchuk.info/autoadmin/). In this "showroom" you'll find several good examples of interfaces with source PHP and SQL code.
 
 ###Trivial interface
+Let's suppose you have the SQL table:
+
+![SQL structure](http://palamarchuk.info/i/autoadmin/autoadmin_trivial1_sql.png "")
+
+Then your AutoAdmin action would be like this:
 ~~~
 [php]
 class SportController extends Controller
@@ -87,13 +131,34 @@ class SportController extends Controller
 			));
 		$this->module->setSubHref('countries');
 		$this->module->sortDefault(array('name_en'));
-		$this->module->setAccessRights(array('read'));
+	}
+
+	public function actionCountries()
+	{
+		$this->module->tableName('countries');
+		$this->module->setPK('id');
+		$this->module->fieldsConf(array(
+			array('flag_ico', 'image', 'Flag', array('show', 'directoryPath'=>'/i/flags')),
+			array('flag', 'image', 'Flag', array('directoryPath'=>'/i/flags/120', 'description'=>'120x80 px')),
+			array('name_en', 'string', 'Country name', array('show')),
+			array('continent_id', 'foreign', 'Continent', array('bindBy'=>'id', 'foreign'=>array(
+					'table'		=> 'continents',
+					'pk'		=> 'id',
+					'select'	=> array('name_en'),
+					'order'		=> 'name_en',
+			))),
+		));
+		$this->module->sortDefault(array('name_en'));
+
+		$this->module->process();
 	}
 }
 ~~~
 ![Illustration of the trivial interface](http://palamarchuk.info/i/autoadmin/autoadmin_sh1.jpg "")
 
 ###Complicated interface
+![SQL structure](http://palamarchuk.info/i/autoadmin/autoadmin_compl1_sql.png "")
+
 ~~~
 [php]
 public function actionTeams()
