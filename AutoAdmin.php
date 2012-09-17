@@ -165,7 +165,6 @@ class AutoAdmin extends CWebModule
 	 */
 	public $extensions = array();
 
-	
 	/**
 	 * Inits of the class.
 	 */
@@ -230,9 +229,9 @@ class AutoAdmin extends CWebModule
 				throw new CHttpException(403);
 		}
 
-		if(preg_match('/^foreign/i', $action->id))
+		if(Yii::app()->request->getQuery('foreign', null))
 		{
-			$this->_iframeMode = true;
+			$this->_iframeMode = Yii::app()->request->getQuery('foreign');
 			$this->_controller->layout = 'ext.autoAdmin.views.layouts.iframe';
 		}
 		else
@@ -400,19 +399,12 @@ class AutoAdmin extends CWebModule
 			if(!$this->_data->fields)
 				throw new AAException(Yii::t('AutoAdmin.errors', 'Function setSubHref() can be called only after fieldsConf()'));
 
-			if($this->_iframeMode)
-			{
-				$this->subHref = AAHelperUrl::update("../foreign-{$href}/", null, array(
-						'foreign'=>Yii::app()->request->getParam('foreign'),
-					));
-			}
-			else
-				$this->subHref = "../{$href}/";
+			$this->subHref = $this->_controller->createUrl("{$this->_controller->id}/{$href}");
 			//We have to store all parent "bk" sets. So we did it using "bkp" param as a stack.
 			$bk = Yii::app()->request->getParam('bk', array());
 			$bkp = Yii::app()->request->getParam('bkp', array());	//Parent interfaces' bindings
 			array_push($bkp, $bk);
-			$this->subHref = AAHelperUrl::addParam($this->subHref, 'bkp', $bkp);
+			$this->subHref = AAHelperUrl::replaceParam($this->subHref, 'bkp', $bkp);
 		}
 	}
 
@@ -457,7 +449,6 @@ class AutoAdmin extends CWebModule
 		if(!isset($this->_access))
 			$this->initAccess();
 		$this->loadPk();
-
 		if(!$this->testConf())
 			throw new AAException(Yii::t('AutoAdmin.errors', 'Incorrect configuration'));
 		$this->_viewData = array_merge($this->_viewData, array(
@@ -931,14 +922,65 @@ class AutoAdmin extends CWebModule
 	}
 
 	/**
-	 * The alias for AAFields::foreignLink().
+	 * Adds foreign data to the internal storage through for AAFields::foreignLink() or if in the iframe mode intercepts action and implements linked foreign action.
 	 * @see AAFields::foreignLink()
 	 * @param string $outAlias
 	 * @param array $linkConf 
 	 */
 	public function foreignLink($outAlias, $linkConf)
 	{
-		$this->_data->setForeignLink($outAlias, $linkConf);
+		if($this->_iframeMode)
+		{	//We are in the iframe mode. We should intercept the parent action and implement the child one.
+			$foreignActionID = "foreign".ucfirst(strtolower($this->_iframeMode));
+			if(method_exists($this->_controller, 'action'.ucfirst($foreignActionID)))
+			{
+				$this->reset();	//reinition
+				$this->_controller->forward($foreignActionID);
+			}
+			else
+			{	//an action for ForeignLink isn't configured. Do it by default.
+				$inTable = $this->tableName();
+				$inPK = key($this->_data->pk);
+				$inTitle = $this->_controller->pageTitle;
+				$select = array();
+				foreach($this->_data->fields as $field)
+				{
+					if(in_array($field->type, array('string', 'date', 'datetime', 'num')))
+						$select[] = $field->name;
+				}
+				if(!$select)
+					throw new AAException(Yii::t('AutoAdmin.errors', 'AutoAdmin cannot configure an automatic Action for the foreign interface on "{outAlias}": there is no selectable fields in the parent interface', array('{outAlias}' => $outAlias)));
+				$this->reset();	//reinition
+				$this->beforeControllerAction($this->_controller, $this->_controller->action);
+
+				$this->tableName($linkConf['linkTable']);
+				$outKey = key($linkConf['outKey']);
+				$this->setPK(array($linkConf['inKey'], $outKey));
+				$fields = array(
+					array($linkConf['inKey'], 'foreign', $inTitle, array('bindBy'=>'id', 'readonly',
+							'foreign'=>array(
+								'table'		=> $inTable,
+								'pk'		=> $inPK,
+								'select'	=> $select,
+							),
+						)),
+					array($outKey, 'foreign', $linkConf['label'], array('show',
+							'foreign'=>array(
+								'table'		=> $linkConf['targetTable'],
+								'pk'		=> $linkConf['outKey'][$outKey],
+								'select'	=> $linkConf['targetFields'],
+							),
+						)),
+				);
+				$this->fieldsConf($fields);
+				//$this->sortDefault(array($outKey));
+				$this->_controller->pageTitle = $linkConf['label'];
+				$this->process();
+				Yii::app()->end();
+			}
+		}
+		else
+			$this->_data->setForeignLink($outAlias, $linkConf);
 	}
 
 	/**
@@ -1032,5 +1074,27 @@ class AutoAdmin extends CWebModule
 	public function getInterface()
 	{
 		return $this->_interface;
+	}
+
+	/**
+	 * Resets all public-changeble data to default.
+	 * Can be used for re-calling or calling another controller avoiding previously set configuration.
+	 */
+	public function reset()
+	{
+		$refl = new ReflectionClass($this);
+		$properties = $refl->getDefaultProperties();
+		foreach($properties as $propName=>$value)
+		{
+			if($propName == '_controller')
+				continue;
+			$property = $refl->getProperty($propName);
+			if($property->isStatic())
+				//self::{$propName} = $value;
+				$property->setValue($value);
+			else
+				$this->{$propName} = $value;
+		}
+		$this->init();
 	}
 }

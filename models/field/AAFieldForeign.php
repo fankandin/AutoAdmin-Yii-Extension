@@ -43,7 +43,7 @@ class AAFieldForeign extends AAField implements AAIField
 		elseif($this->options['select'])
 			$this->options['searchBy'] = $this->options['select'];
 		else
-			throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "{paramName}" must be set for the field {fieldName}', array('parameter'=>'foreign[searchBy]', '{fieldName}'=>$this->name)));
+			throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "{paramName}" must be set for the field {fieldName}', array('{paramName}'=>'foreign[searchBy]', '{fieldName}'=>$this->name)));
 			
 		$this->options['limit'] = isset($this->options['foreign']['limit']) ? $this->options['foreign']['limit'] : self::defaultSelectLimit;
 	}

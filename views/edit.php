@@ -107,19 +107,24 @@ if(!empty($iframes))
 		array_push($bkp, $bindKeys);
 		foreach($iframes as $iframe)
 		{
+			/*
 			$iframeUrl = ($this->action->id=='index' ? './' : '../')."foreign-{$iframe['action']}/";
 			$iframeUrl = AAHelperUrl::update($iframeUrl, null, array(
-					'bkp'		=> $bkp,
-					'bk'		=> $fields->pk,
 					'foreign'	=> AAHelperUrl::encodeParam($iframe['foreign']),
 				));
+			 */
 			?>
 			<div class="item<?php echo (!empty($iframe['wide']) || in_array('wide', $iframe) ? ' wide' : '')?>">
 			<?php
 			echo CHtml::tag('iframe', array(
-					'src'	=> $iframeUrl,
-				),
-				null, true);
+				'src' => AAHelperUrl::update(Yii::app()->request->requestUri, 
+					array('id', 'action'),
+					array(
+							'foreign'	=> $iframe['action'],
+							'bkp'		=> $bkp,
+							'bk'		=> $fields->pk,
+						)
+				)), null, true);
 			if($field->description)
 			{
 				?><div class="desc"><?php echo $field->description?></div><?

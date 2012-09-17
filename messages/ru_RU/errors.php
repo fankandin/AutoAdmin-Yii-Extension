@@ -34,4 +34,5 @@ return array(
 	'Breadcrumbs can be generated only after AABreadcrumbs->query->select()->from() initializing. Or use call with static label.' => 'Хлебные крошки могут быть сгенерированы только после AABreadcrumbs->query->select()->from() инициализации. Или используйте вызов со статической меткой ссылки.',
 	'Auto-generation of the breadcrumbs can be done only with the default inside-controller navigation.' => 'Автогенерация хлебных крошек может быть выполнена только при навигации внутри контроллера «по умолчанию».',
 	'Incorrect breadcrumbs level.' => 'Некорректный уровень хлебных крошек.',
+	'AutoAdmin cannot configure an automatic Action for the foreign interface on "{outAlias}": there is no selectable fields in the parent interface' => 'AutoAdmin не может сконфигурировать автоматическое Действие для foreign-интерфейса на {outAlias}: отсутствуют подходящие для листинговой выборки поля.',
 );
