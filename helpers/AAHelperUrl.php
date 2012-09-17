@@ -92,8 +92,11 @@ class AAHelperUrl
 		foreach($paramPairs as $i=>$paramPair)
 		{
 			$pair = explode('=', $paramPair);
-			if($skipParams && in_array($pair[0], $skipParams))
-				unset($paramPairs[$i]);
+			if($skipParams)
+			{
+				if(in_array($pair[0], $skipParams) || (preg_match('/^([^\[]+)\[/', $pair[0], $matches) && in_array($matches[1], $skipParams)))
+					unset($paramPairs[$i]);
+			}
 		}
 		if($addParams)
 		{
