@@ -15,7 +15,7 @@ return array(
 	'Wrong data for DB Table Name' => 'Некорректный параметр имени таблицы БД',
 	'Wrong trigger configuration' => 'Некорректная конфигурация триггера',
 	'Unknown field type for column {column}' => 'Неизвестный тип для поля "{column}"',
-	'Incorrect value "{value}" for field {column}' => 'Некорректное значение "{value}" для поля "{column}"',
+	'Incorrect value "{value}" for field "{field}"' => 'Некорректное значение "{value}" для поля "{field}"',
 	'The PrimaryKey "{fieldName}" value absents in the selection row' => 'PrimaryKey «{fieldName}» отсутствует в строке выборки',
 	'The parameter "{paramName}" must be set for the field {fieldName}' => 'Параметр {paramName} должен быть установлен для поля {fieldName}',
 	'Incorrect options configuration of the field {fieldName}' => 'Неправильная конфигурация опций для поля {fieldName}',
