@@ -282,7 +282,5 @@ if(in_array('add', $rights))
 <?php
 if(!empty($partialViews['down']))
 	$this->renderPartial($partialViews['down'], $clientData);
-
-if(empty($iframeMode))
-	$this->renderPartial($viewsPath.'footer', array('isGuest'=>$isGuest, 'userName'=>$userName, 'userLevel'=>$userLevel));
+$this->widget('AAWidgetLoginpanel', array());
 ?>

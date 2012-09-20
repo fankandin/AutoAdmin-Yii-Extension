@@ -15,30 +15,28 @@ The extension uses PDO interfaces and was tested on MySQL and PostgreSQL databas
 
 ##Setup
 
-There are only four steps to install the AutoAdmin extension:
+_*Note:* There are several enhancements in version 1.1 that have simplified setup process. So for setup of previous versions see an appropriate ReadMe._
+
+There are only two steps to install the AutoAdmin extension:
 
 1. Put the distributive files into _[protected/extensions]_ folder of your Yii application.
-2. Edit the config: add the AutoAdmin module and set _urlManager_ rules (see below).
-3. Create any folder in _[www]_ (your DocumentRoot) directory to serve as the point of entrance by web (e.g. /_admin/).
-4. Create module folder _[autoadmin]_ in _[protected/modules]_ directory using a standart Yii module structure, but without module class (which inherites _CWebModule_) - it will be included from the extension. 
+2. Create module folder _[autoadmin]_ in _[protected/modules]_ directory using a standart Yii module structure, but without module class (which inherites _CWebModule_) - it will be included from the extension. 
 
 If you plan to use the built-in AutoAdmin shared access system, you also need to import SQL dump which you can find in _[autoAdmin/schemas]_ of the distributive directory.
 
 ###Yii config setup
-
-We recommend use a separate config for AutoAdmin.
 
 Set necessary parameters:
 ~~~
 [php]
 $main['modules'] = array(
 	'autoadmin'=>array(
-		'class'=>'application.modules.autoadmin.AutoAdminDemo',
+		'class'=>'application.modules.autoadmin.AutoAdmin',
 		'basePath' => dirname(__FILE__).'/../modules/autoadmin',
 		'wwwDirName' => 'www',	//your DocumentRoot
 		//Optional params:
-		'authMode' => true,	//Switch built-in authorization system
-		'openMode' => false,	//If true resets all limits on rights
+		'authMode' => false,	//Switch built-in authorization system
+		'openMode' => true,	//If true resets all limits on rights
 		'logMode' => false,	//Switch log mode
 	),
 );
@@ -47,8 +45,6 @@ $main['components'] = array(
 	'urlManager' => array(
 		//...
 		'rules'=>array(
-			'<controller:aa[a-z]+>/<action:\w+>' => 'autoadmin/<controller>/<action>',
-			'<controller:\w+>/foreign-<key:\w+>' => 'autoadmin/<controller>/foreign<key>',
 			//Module paths should be configured in a standart way
 			'/' => 'autoadmin/default/index',
 			'<controller:\w+>' => 'autoadmin/<controller>/index',
@@ -57,17 +53,7 @@ $main['components'] = array(
 		//...
 ~~~
 
-Default AutoAdmin's skin is designed with _Overcast jQuery UI_ style. For example you may use these options:
-~~~
-[php]
-$main['components'] = array(
-//...
-'clientScript'=>array(
-	'scriptMap'=>array(
-		'jquery-ui.css'	=> 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/overcast/jquery-ui.css',
-	)
-),
-~~~
+We recommend using a separate config for AutoAdmin. It can be easy made by creating a folder (e.g. _[/www/_admin]_) with copies of _.htaccess_ (with the same ModRewrite rules and perhaps HTTP authorization instructions) and _index.php_ which refers to a separate Yii configuration file.
 
 ##Usage
 
@@ -196,6 +182,14 @@ To upload images. Uses database to store path to file only.
 
 #### foreign
 For values from other tables which are linked with the field through a foreign key (you may use virtual connection like as in MyISAM).
+
+###Spatial field types
+You can manage spatial SQL data in AutoAdmin after installing [the AutoAdminGIS extension](http://www.yiiframework.com/extension/autoadmingis). After that the following field types will be accessible: *gispoint*, *gislinestring*, *gispolygon*. For more information see [AutoAdminGIS page](http://www.yiiframework.com/extension/autoadmingis).
+
+###Custom field types
+AudoAdmin is an extendable system. Particularly you can create your own field types by programming classes that implement *AAIField* interface.
+
+Complicated content-management tasks may require complex logic custom fields need. In that case you can create a subextension for AutoAdmin. An example of such development is [the AutoAdminGIS extension](http://www.yiiframework.com/extension/autoadmingis).
 
 ##Supported languages
 English, russian.

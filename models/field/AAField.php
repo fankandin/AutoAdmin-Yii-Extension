@@ -212,6 +212,6 @@ abstract class AAField
 	 */
 	public function throwErrorValue()
 	{
-		throw new AAException(Yii::t('AutoAdmin.errors', 'Incorrect value "{value}" for field {column}', array('{value}'=>$this->value, '{field}'=>$this->name)));
+		throw new AAException(Yii::t('AutoAdmin.errors', 'Incorrect value "{value}" for field "{field}"', array('{value}'=>$this->value, '{field}'=>$this->name)));
 	}
 }
