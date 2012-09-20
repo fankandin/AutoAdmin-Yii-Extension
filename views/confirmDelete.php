@@ -36,5 +36,5 @@ if($cbForDel)
 <div class="cancel">[ <a href="<?php echo $cancelUrl?>"><?php echo Yii::t('AutoAdmin.common', 'Cancel')?></a> ]</div>
 
 <?php echo CHtml::closeTag('form');?>
-
 </div>
+<?php $this->widget('AAWidgetLoginpanel', array()); ?>

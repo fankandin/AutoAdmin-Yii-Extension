@@ -59,5 +59,3 @@
 
 .t-file .file {background-repeat: no-repeat; displat: table-cell; padding-left: 20px; min-height: 16px;}
 .file.ext {font-size: 90%; font-style: italic; cursor: pointer;}
-
-#logout {clear: both; border-top: 3px double #ddd; border-bottom: 1px double #ddd; background: #f9f9f9; text-align: right; margin-top: 25px; padding: 7px 10px 7px 0;}

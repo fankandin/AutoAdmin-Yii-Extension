@@ -234,7 +234,7 @@ class AAAuthController extends CExtController
 		$this->module->tableName(AutoAdminAccess::sqlAdminTableName('access'));
 		$this->module->setPK('user_id', 'interface_id');
 		$fieldsConf = array(
-				array('user_id', 'foreign', Yii::t('AutoAdmin.access', 'User'), array('group', 'default'=>$userID, 'readonly',
+				array('user_id', 'foreign', Yii::t('AutoAdmin.access', 'User'), array('group', 'bind'=>$userID, 'readonly',
 						'foreign'=>array(
 							'table'		=> AutoAdminAccess::sqlAdminTableName('users'),
 							'pk'		=> 'id',
