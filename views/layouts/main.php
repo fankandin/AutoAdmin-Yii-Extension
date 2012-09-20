@@ -13,14 +13,8 @@
 
 <div id="head">
 	<div id="logo"><a href="/_admin/"></a></div>
-	<div id="site-name">AutoAdmin CMS FrameWork. The Showroom</div>
-	<div id="tm"><strong>AutoAdmin</strong> <sup><small>TM</small></sup></div>
-	<div id="up">
-		<div id="tools"></div>
-		<div id="login">
-		</div>
-		<div class="br">&nbsp;</div>
-	</div>
+	<div id="site-name"><?=Yii::app()->name?></div>
+	<div id="cms-name">[Powered by: AutoAdmin CMS&trade;]</div>
 </div>
 <?php
 /*
@@ -42,7 +36,12 @@ if(isset($this->breadcrumbs))
 }
 ?>
 <div id="content">
-	<?php echo $content?>
+<?php
+echo $content;
+
+if($this->id == 'default' && $this->action->id == 'index')
+	$this->widget('AAWidgetLoginpanel', array());
+?>
 </div>
 <div id="footer"></div>
 

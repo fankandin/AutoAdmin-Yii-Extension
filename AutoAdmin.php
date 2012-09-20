@@ -246,15 +246,14 @@ class AutoAdmin extends CWebModule
 
 		$this->_data->binding = Yii::app()->request->getParam('bk', array());
 
-		Yii::app()->clientScript->registerCoreScript('jquery')->registerCoreScript('jquery.ui')->registerCssFile('jquery-ui.css');
+		Yii::app()->clientScript->registerCoreScript('jquery')
+				->registerCoreScript('jquery.ui')
+				->registerCssFile(Yii::app()->clientScript->getCoreScriptUrl().'/jui/css/base/jquery-ui.css');
 
 		$this->_viewData = array(
 			'getParams'		=> $_GET,
 			'viewsPath'		=> $this->viewsPath,
 			'iframeMode'	=> $this->_iframeMode,
-			'isGuest'		=> Yii::app()->user->isGuest,
-			'userName'		=> (!Yii::app()->user->isGuest ? Yii::app()->user->getState('firstname').' '.Yii::app()->user->getState('surname') : ''),
-			'userLevel'		=> (!Yii::app()->user->isGuest ? Yii::app()->user->level : 0),
 		);
 
 		if(parent::beforeControllerAction($controller, $action))

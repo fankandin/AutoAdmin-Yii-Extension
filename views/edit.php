@@ -144,5 +144,5 @@ echo CHtml::closeTag('form');
 if(!empty($partialViews['down']))
 	$this->renderPartial($partialViews['down'], $clientData);
 if(empty($iframeMode))
-	$this->renderPartial($viewsPath.'footer', array('isGuest'=>$isGuest, 'userName'=>$userName, 'userLevel'=>$userLevel));
+	$this->widget('AAWidgetLoginpanel', array());
 ?>

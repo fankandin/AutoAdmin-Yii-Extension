@@ -56,7 +56,6 @@ label.delfile {margin: 0 5px 0 0; display: block; font-weight: normal; padding-l
 .iframe-na {margin-top: 15px; color: #FA5B00; border: 1px solid #ccc; float: left; width: 90%; padding: 2%;}
 .item.wide {width: 96%;}
 
-#logout {clear: both; border-top: 3px double #ddd; border-bottom: 1px double #ddd; background: #f9f9f9; text-align: right; margin-top: 25px; padding: 7px 10px 7px 0;}
 .warning {color: #ff8800;}
 
 #editform p.error {color: #B83434; font-size: 160%; font-weight: normal; margin: 4px 2px 10px;}

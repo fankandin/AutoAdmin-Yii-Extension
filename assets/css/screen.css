@@ -14,7 +14,8 @@ body {
 #tools,#login {float: right; width: 100px; text-align: right; padding-top: 5px; font-size: 10px;}
 #login {clear: right;}
 #head {background: #000; height: 83px;}
-#site-name {color: #444; font-size: 38px; position: absolute; padding: 18px 10px 0; font-family: Georgia;}
+#site-name {color: #555; font-size: 38px; padding: 18px 10px 0; font-family: Georgia; text-align: left;}
+#cms-name {position: absolute; right: 10px; top: 5px; color: #444;}
 #logo {width: 78px; height: 78px; padding: 0px 20px 5px 16px; float: left;}
 #logo a {width: 80px; height: 80px; display: block; overflow: hidden; text-indent: -300px; background: none;}
 #logo a:hover {background: none !important;}
@@ -62,6 +63,11 @@ tr.h td {background-color: #f8f8f8;}
 form {margin: 20px;}
 form.list {margin: 0;}
 
+#logout {clear: both; border-top: 3px double #ddd; border-bottom: 1px double #ddd; background: #f0f0f0; text-align: right; margin-top: 25px; padding: 7px 10px 7px 0;}
+#logout-link {background: url('../images/exit.png') no-repeat no-repeat right; display: inline-block; padding-right: 20px;}
+#access-link {background: url('../images/access.png') no-repeat no-repeat left; display: inline-block; padding-left: 18px; margin-top: 10px; vertical-align: middle;}
+#copyright {text-align: right; clear: both; margin-top: 15px; padding-right: 5px; font-size: 85%; color: #999;}
+#copyright a {color: #acc6e2; font-weight: normal;}
 #footer {border-top: 1px dashed #ADADAD; padding: 10px; margin-top: 40px;}
 
 .sourcecode .code {display: none; margin: 5px 30px; padding: 5px 10px; border: 1px solid #ccc; background-color: #f8f8f8;}
