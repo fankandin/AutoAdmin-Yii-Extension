@@ -22,8 +22,6 @@ There are only two steps to install the AutoAdmin extension:
 1. Put the distributive files into _[protected/extensions]_ folder of your Yii application.
 2. Create module folder _[autoadmin]_ in _[protected/modules]_ directory using a standart Yii module structure, but without module class (which inherites _CWebModule_) - it will be included from the extension. 
 
-If you plan to use the built-in AutoAdmin shared access system, you also need to import SQL dump which you can find in _[autoAdmin/schemas]_ of the distributive directory.
-
 ###Yii config setup
 
 Set necessary parameters:
@@ -34,10 +32,6 @@ $main['modules'] = array(
 		'class'=>'application.modules.autoadmin.AutoAdmin',
 		'basePath' => dirname(__FILE__).'/../modules/autoadmin',
 		'wwwDirName' => 'www',	//your DocumentRoot
-		//Optional params:
-		'authMode' => false,	//Switch built-in authorization system
-		'openMode' => true,	//If true resets all limits on rights
-		'logMode' => false,	//Switch log mode
 	),
 );
 //...
@@ -55,11 +49,104 @@ $main['components'] = array(
 
 We recommend using a separate config for AutoAdmin. It can be easy made by creating a folder (e.g. _[/www/_admin]_) with copies of _.htaccess_ (with the same ModRewrite rules and perhaps HTTP authorization instructions) and _index.php_ which refers to a separate Yii configuration file.
 
+After all, your common AutoAdmin file structure should be something like this:
+~~~
+ - protected/
+ - - ...
+ - - extensions/
+ - - - ...
+ - - - autoAdmin/
+ - - - - assets/
+ - - - - controllers/
+ - - - - helpers/
+ - - - - messages/
+ - - - - models/
+ - - - - schemas/
+ - - - - views/
+ - - - - AutoAdmin.php
+ - - - - AutoAdminAccess.php
+ - - - - AutoAdminIExtension.php
+ - - - - LICENSE
+ - - - - ReadMe.md
+ - - ...
+ - - modules/
+ - - - ...
+ - - - autoadmin/
+ - - - - controllers/
+ - - - - models/
+ - - - - views/
+ - www/
+ - - ...
+ - - _admin/
+ - - - assets/
+ - - - .htaccess
+ - - - index.php 
+~~~
+
+###Authentication system
+
+Optionally you can use the built-in AutoAdmin's shared access system.
+
+Firstly import SQL dump which you can find in _[autoAdmin/schemas]_ of the distributive directory. It's recommended to do it in a separate database (if you have such a possibility).
+
+Update the config:
+~~~
+[php]
+$main['modules'] = array(
+	'autoadmin'=>array(
+		//...
+		'authMode' => true,	//Switch on authorization system
+		'openMode' => true,	//Use for temporary switching off all access limitations
+		'logMode' => false,	//Switch log mode
+	),
+);
+~~~
+
+Create a dedicated user for imported with the dump AutoAdmin's service DB and grant him approriate access rights. If you use the only, common DB, just clone settings from a primary connection to "dbAdmin".
+
+~~~
+[php]
+$main['components'] = array(
+		//...
+	'dbAdmin' => array(
+		'class'=>'CDbConnection',
+		'connectionString' => 'mysql:host=localhost;dbname=yourdb_autoadmin',
+		'username' => 'yourlogin_aa',
+		'password' => 'root',
+		'charset' => 'utf8',
+			//...
+	),
+		//...
+~~~
+
+If you use different DB schemas, you may configure them using special params:
+~~~
+[php]
+$main['modules'] = array(
+	'autoadmin'=>array(
+		//...
+		'dbSchema' => 'public',
+		'dbAdminSchema' => 'autoadmin',
+	),
+);
+~~~
+
+At first time you enter AutoAdmin you'll be forwarded to the special form to create root (and other) users.
+
+Create actions (AutoAdmin interfaces) and only then grant personal rights to users on them. Use the link in the right bottom corner:
+![The link to access sharing interfaces](http://palamarchuk.info/i/autoadmin/autoadmin_shared1.png "")
+![Manipulating with interfaces' sharing](http://palamarchuk.info/i/autoadmin/autoadmin_shared2.jpg "")
+
 ##Usage
 
 You may try real working AutoAdmin CMS [here](http://palamarchuk.info/autoadmin/). In this "showroom" you'll find several good examples of interfaces with source PHP and SQL code.
 
 ###Trivial interface
+Let's suppose you have the SQL table:
+
+![SQL structure](http://palamarchuk.info/i/autoadmin/autoadmin_trivial1_sql.png "")
+
+Then your AutoAdmin action would be like this:
 ~~~
 [php]
 class SportController extends Controller
@@ -73,13 +160,35 @@ class SportController extends Controller
 			));
 		$this->module->setSubHref('countries');
 		$this->module->sortDefault(array('name_en'));
-		$this->module->setAccessRights(array('read'));
+		$this->module->process();
 	}
+
+	public function actionCountries()
+	{
+		$this->module->tableName('countries');
+		$this->module->setPK('id');
+		$this->module->fieldsConf(array(
+			array('flag_ico', 'image', 'Flag', array('show', 'directoryPath'=>'/i/flags')),
+			array('flag', 'image', 'Flag', array('directoryPath'=>'/i/flags/120', 'description'=>'120x80 px')),
+			array('name_en', 'string', 'Country name', array('show')),
+			array('continent_id', 'foreign', 'Continent', array('bindBy'=>'id', 'foreign'=>array(
+					'table'		=> 'continents',
+					'pk'		=> 'id',
+					'select'	=> array('name_en'),
+					'order'		=> 'name_en',
+			))),
+		));
+		$this->module->sortDefault(array('name_en'));
+
+		$this->module->process();
+ 	}
 }
 ~~~
 ![Illustration of the trivial interface](http://palamarchuk.info/i/autoadmin/autoadmin_sh1.jpg "")
 
 ###Complicated interface
+![SQL structure](http://palamarchuk.info/i/autoadmin/autoadmin_compl1_sql.png "")
+
 ~~~
 [php]
 public function actionTeams()

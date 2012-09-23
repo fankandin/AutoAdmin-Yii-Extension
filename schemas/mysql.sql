@@ -1,4 +1,4 @@
--- AutoAdmin system SQL schema for MySQL DataBase system.
+-- AutoAdmin SQL schema for MySQL DataBase system.
 -- @author Alexander Palamarchuk <a@palamarchuk.info>
 
 CREATE TABLE `aa_users` (

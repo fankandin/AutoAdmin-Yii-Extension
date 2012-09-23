@@ -1,4 +1,4 @@
--- AutoAdmin system SQL schema for PostgreSQL DataBase system.
+-- AutoAdmin SQL schema for PostgreSQL DataBase system.
 -- @author Alexander Palamarchuk <a@palamarchuk.info>
 
 CREATE SCHEMA admin AUTHORIZATION postgres;

@@ -58,12 +58,12 @@ class AutoAdmin extends CWebModule
 	 *
 	 * @var bool Whether to operate in open mode (without internal authentification and authorization)
 	 */
-	public $openMode = false;
+	public $openMode = true;
 	/**
 	 *
 	 * @var bool Whether to log all DB queries of update, insert or delete type.
 	 */
-	public $logMode = true;
+	public $logMode = false;
 	/**
 	 *
 	 * @var AACache The object to operate with the site's global cache.
@@ -1033,9 +1033,9 @@ class AutoAdmin extends CWebModule
 	 * Simple helper for customizing fields configs.
 	 * @param string $fieldName SQL name of the field.
 	 * @param array $fieldsConf An array with a fields configuration which is used in AutoAdmin::fieldsConf().
-	 * @return int|null Index of the row element. Returns null if nothing's found or nothing can be found.
+	 * @return int|false Index of the row element. Returns false if nothing's found or nothing can be found.
 	 */
-	public static function fByName($fieldName, &$fieldsConf)
+	public static function fByName($fieldName, $fieldsConf)
 	{
 		if($fieldsConf && is_array($fieldsConf))
 		{
@@ -1045,7 +1045,23 @@ class AutoAdmin extends CWebModule
 					return $k;
 			}
 		}
-		return null;
+		return false;
+	}
+
+	/**
+	 * Returns an array of options for a config row found by its SQL name.
+	 * Simple helper for customizing options.
+	 * @param string $fieldName SQL name of the field.
+	 * @param array $fieldsConf An array with a fields configuration which is used in AutoAdmin::fieldsConf().
+	 * @return array A reference to the section of options of the field by its name.
+	 * @throw AAException If the field with name $fieldName cannot be found.
+	 */
+	public static function &fByNameOpts($fieldName, &$fieldsConf)
+	{
+		$k = self::fByName($fieldName, $fieldsConf);
+		if($k === false)
+			throw new AAException(Yii::t('AutoAdmin.errors', 'There are no fields with the name {name} in the passed field configuration array', array('{name}'=>$fieldName)));
+		return $fieldsConf[$k][3];
 	}
 
 	/**
