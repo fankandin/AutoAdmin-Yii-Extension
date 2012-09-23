@@ -134,7 +134,9 @@ $main['modules'] = array(
 At first time you enter AutoAdmin you'll be forwarded to the special form to create root (and other) users.
 
 Create actions (AutoAdmin interfaces) and only then grant personal rights to users on them. Use the link in the right bottom corner:
+
 ![The link to access sharing interfaces](http://palamarchuk.info/i/autoadmin/autoadmin_shared1.png "")
+
 ![Manipulating with interfaces' sharing](http://palamarchuk.info/i/autoadmin/autoadmin_shared2.jpg "")
 
 ##Usage
