@@ -35,4 +35,5 @@ return array(
 	'Auto-generation of the breadcrumbs can be done only with the default inside-controller navigation.' => 'Автогенерация хлебных крошек может быть выполнена только при навигации внутри контроллера «по умолчанию».',
 	'Incorrect breadcrumbs level.' => 'Некорректный уровень хлебных крошек.',
 	'AutoAdmin cannot configure an automatic Action for the foreign interface on "{outAlias}": there is no selectable fields in the parent interface' => 'AutoAdmin не может сконфигурировать автоматическое Действие для foreign-интерфейса на {outAlias}: отсутствуют подходящие для листинговой выборки поля.',
+	'There are no fields with the name {name} in the passed field configuration array' => 'Не существует полей с именем {name} в переданном конфигурационном массиве',
 );

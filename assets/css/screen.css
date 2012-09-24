@@ -14,7 +14,7 @@ body {
 #tools,#login {float: right; width: 100px; text-align: right; padding-top: 5px; font-size: 10px;}
 #login {clear: right;}
 #head {background: #000; height: 83px;}
-#site-name {color: #555; font-size: 38px; padding: 18px 10px 0; font-family: Georgia; text-align: left;}
+#site-name {color: #555; font-size: 38px; padding: 18px 0 0; margin-left: 90px; font-family: Georgia; text-align: left; position: absolute; white-space: nowrap;}
 #cms-name {position: absolute; right: 10px; top: 5px; color: #444;}
 #logo {width: 78px; height: 78px; padding: 0px 20px 5px 16px; float: left;}
 #logo a {width: 80px; height: 80px; display: block; overflow: hidden; text-indent: -300px; background: none;}

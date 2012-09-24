@@ -72,8 +72,8 @@ class AAAuthController extends CExtController
 		$this->module->setPK('id');
 
 		$fieldsConf = array(
-			array('login', 'string', Yii::t('AutoAdmin.access', 'Login'), array('search', 'show')),
-			array('password', 'password', Yii::t('AutoAdmin.access', 'Password'), array()),
+			array('login', 'string', Yii::t('AutoAdmin.access', 'Login'), array('search', 'show', 'maxlength'=>21)),
+			array('password', 'password', Yii::t('AutoAdmin.access', 'Password'), array('maxlength'=>32, 'pattern'=>'.{4,}')),
 			array('level', 'enum', Yii::t('AutoAdmin.access', 'User level'), array(
 					'enum'=>array(
 						'root' => Yii::t('AutoAdmin.access', 'Master'),
@@ -84,21 +84,23 @@ class AAAuthController extends CExtController
 					'description'=>Yii::t('AutoAdmin.access', '<b>Master</b> can do everything. <b>Administrator</b> can do all but to create new Masters. <b>User</b> is a plain user whose rights can be restricted either by Master and Administrator.'),
 				)),
 			array('interface_level', 'num', Yii::t('AutoAdmin.access', 'Interface Level'), array('default'=>1, 'show')),
-			array('email', 'string', Yii::t('AutoAdmin.access', 'E-mail'), array('null')),
-			array('surname', 'string', Yii::t('AutoAdmin.access', 'Surname'), array('show', 'search')),
-			array('firstname', 'string', Yii::t('AutoAdmin.access', 'First name'), array('show')),
-			array('middlename', 'string', Yii::t('AutoAdmin.access', 'Middle name'), array('show')),
+			array('email', 'string', Yii::t('AutoAdmin.access', 'E-mail'), array('null', 'maxlength'=>40)),
+			array('surname', 'string', Yii::t('AutoAdmin.access', 'Surname'), array('show', 'search', 'maxlength'=>21)),
+			array('firstname', 'string', Yii::t('AutoAdmin.access', 'First name'), array('show', 'maxlength'=>21)),
+			array('middlename', 'string', Yii::t('AutoAdmin.access', 'Middle name'), array('show', 'maxlength'=>21)),
 			array('regdate', 'datetime', Yii::t('AutoAdmin.access', 'Registration date'), array('readonly', 'default'=>date('Y-m-d H:i:s'))),
 		);
-		$levelField =& $fieldsConf;
-
+		$levelOpts =& AutoAdmin::fByNameOpts('level', $fieldsConf);
 		if(!Yii::app()->user->isGuest && Yii::app()->user->level == 'admin')
 		{
-			unset($levelField[2][3]['enum']['root']);
-			unset($levelField[2][3]['enum']['admin']);
-			$levelField[2][3]['bind'] = 'user';
+			unset($levelOpts['enum']['root']);
+			unset($levelOpts['enum']['admin']);
+			$levelOpts['bind'] = 'user';
 		}
-			
+		elseif(Yii::app()->user->isGuest && !$this->isRootDefined())
+		{
+			$levelOpts['default'] = 'root';
+		}
 		$this->module->fieldsConf($fieldsConf);
 		
 		if(!Yii::app()->user->isGuest && in_array(Yii::app()->user->level, array('root', 'admin')))
