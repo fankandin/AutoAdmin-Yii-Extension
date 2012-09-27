@@ -20,16 +20,21 @@ _*Note:* There are several enhancements in version 1.1 that have simplified setu
 There are only two steps to install the AutoAdmin extension:
 
 1. Put the distributive files into _[protected/extensions]_ folder of your Yii application.
-2. Create module folder _[autoadmin]_ in _[protected/modules]_ directory using a standart Yii module structure, but without module class (which inherites _CWebModule_) - it will be included from the extension. 
+2. Create module folder _[autoadmin]_ in _[protected/modules]_ directory using a standart Yii module structure, but without module class AutoAdminModule.php (which inherites _CWebModule_) - it will be included from the extension. 
 
 ###Yii config setup
 
 Set necessary parameters:
 ~~~
 [php]
+<?php
+//In this example we read the main config.
+//Note if you use fully separate config just set approriate sections in the returning array.
+$main = require(dirname(__FILE__).'/main.php');
+
 $main['modules'] = array(
 	'autoadmin'=>array(
-		'class'=>'application.modules.autoadmin.AutoAdmin',
+		'class'=>'ext.autoAdmin.AutoAdmin',
 		'basePath' => dirname(__FILE__).'/../modules/autoadmin',
 		'wwwDirName' => 'www',	//your DocumentRoot
 	),
@@ -40,16 +45,19 @@ $main['components'] = array(
 		//...
 		'rules'=>array(
 			//Module paths should be configured in a standart way
-			'/' => 'autoadmin/default/index',
-			'<controller:\w+>' => 'autoadmin/<controller>/index',
-			'<controller:\w+>/<action:\w+>' => 'autoadmin/<controller>/<action>',
+			'/<module:autoadmin>' => 'autoadmin/default/index',
+			'/<module:autoadmin>/<controller:\w+>' => 'autoadmin/<controller>/index',
+			'/<module:autoadmin>/<controller:\w+>/<action:\w+>' => 'autoadmin/<controller>/<action>',
 		)
 		//...
 ~~~
 
-We recommend using a separate config for AutoAdmin. It can be easy made by creating a folder (e.g. _[/www/_admin]_) with copies of _.htaccess_ (with the same ModRewrite rules and perhaps HTTP authorization instructions) and _index.php_ which refers to a separate Yii configuration file.
+We recommend using a separate config for AutoAdmin. It can be easy made by creating a folder (e.g. _[/www/_admin]_) with a copy of _.htaccess_ (with the same ModRewrite rules and perhaps HTTP authorization instructions) and _index.php_ which refers to a separate Yii configuration file. In that case you'll be able to address the AutoAdmin CMS with the URL _http://www.your_site.com/_admin/_ in your browser (*[_admin]* is the just folder with a copy of index.php).
 
-After all, your common AutoAdmin file structure should be something like this:
+**Note** that if you use a separate www-folder as an entering point (e.g. _[/www/_admin]_) with an edited copy of index.php and a full copy of .htaccess, you should replace _'/<module:autoadmin>'_ with _'/'_ in the _urlManager_ rules.
+_Of course the same effect you can reach by editing the main index.php. But we try to make AutoAdmin be independent and vise versa._
+
+After all, your common AutoAdmin file structure should be something like this (recommended case):
 ~~~
  - protected/
  - - ...
@@ -264,6 +272,10 @@ Textareas for HTML-formatted texts. Usually used with TEXT type.
 #### tinytext
 Textareas for short texts without complicated formatting. Usually used with TEXT type.
 
+#### wysiwig
+TineMCE visual text editor. Usually used with TEXT type.
+Note: to use this field you need to install [TineMCE extension](http://www.yiiframework.com/extension/tinymce).
+
 #### num
 Numbers - integer and decimal. Usually used with INTEGER and DECIMAL (NUMERIC, FLOAT etc.) types.
 
@@ -295,7 +307,7 @@ To upload images. Uses database to store path to file only.
 For values from other tables which are linked with the field through a foreign key (you may use virtual connection like as in MyISAM).
 
 ###Spatial field types
-You can manage spatial SQL data in AutoAdmin after installing [the AutoAdminGIS extension](http://www.yiiframework.com/extension/autoadmingis). After that the following field types will be accessible: *gispoint*, *gislinestring*, *gispolygon*. For more information see [AutoAdminGIS page](http://www.yiiframework.com/extension/autoadmingis).
+You can manage spatial SQL data in AutoAdmin after installing [the AutoAdminGIS extension](http://www.yiiframework.com/extension/autoadmingis). After that the following field types will be accessible: **gispoint**, **gislinestring**, **gispolygon**. For more information see [AutoAdminGIS page](http://www.yiiframework.com/extension/autoadmingis).
 
 ###Custom field types
 AudoAdmin is an extendable system. Particularly you can create your own field types by programming classes that implement *AAIField* interface.
