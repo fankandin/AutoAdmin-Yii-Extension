@@ -67,8 +67,6 @@ class AAFieldText extends AAFieldString
 
 	public function loadFromForm($formData)
 	{
-		$inputName = $this->formInputName();
-
 		if(!isset($formData[$this->name]))
 			return;
 

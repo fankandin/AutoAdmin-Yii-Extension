@@ -170,6 +170,7 @@ class AutoAdmin extends CWebModule
 	 */
 	public function init()
 	{
+		Yii::app()->user->setStateKeyPrefix('AUTOADMIN');
 		$this->controllerMap['aafile'] = array('class'=>'ext.autoAdmin.controllers.AAFileController');
 		$this->controllerMap['aaajax'] = array('class'=>'ext.autoAdmin.controllers.AAAjaxController');
 		$this->controllerMap['aaauth'] = array('class'=>'ext.autoAdmin.controllers.AAAuthController');
