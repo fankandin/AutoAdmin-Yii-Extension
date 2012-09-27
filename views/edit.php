@@ -58,7 +58,6 @@ if(!empty($clientData['subtitle']))
 
 echo CHtml::form($url, 'post', array('id'=>'editform', 'enctype'=>'multipart/form-data', 'autocomplete'=>'off'));
 echo CHtml::hiddenField('interface', $interface);
-$itemsI = 0;
 $tabindex = 1;
 $commonTagOptions = array('tabindex'=>&$tabindex);
 
@@ -71,35 +70,29 @@ if(!empty($formError))
 
 foreach($fields as $field)
 {
-	$class = 'item block_'.$field->type;
-	if($itemsI%4 < 2)
-		$class .= ' m';
+	$itemContent = $field->formInput($this, $commonTagOptions);
+	if($field->description)
+		$itemContent .= CHtml::tag('div', array(), $field->description);
+	$itemClass = 'item block_'.$field->type;
 	if($field->allowNull)
-		$class .= ' nullf';
+		$itemClass .= ' nullf';
 	if(!empty($formError) && $formError['field']->name == $field->name)
-		$class .= ' error';
-	?>
-	<div class="<?php echo $class?>">
-	<?php
-		echo $field->formInput($this, $commonTagOptions);
-		if($field->description)
-		{
-			?><div class="desc"><?php echo $field->description?></div><?
-		}
-	?>
-	</div>
-	<?php
-	if(!(++$itemsI%2))
-	{
-		?><br clear="all"/><?php
-	}
+		$itemClass .= ' error';
+
+	echo CHtml::tag('div', array('class'=>$itemClass), $itemContent);
+
 	$tabindex++;
 }
+
 if(!empty($iframes))
 {
 	if($manageAction == 'add')
 	{
-		?><div class="item"><div class="iframe-na"><i><?php echo Yii::t('AutoAdmin.form', 'Submit the form in order to be able to edit additional links')?>.</i></div></div><?php
+		?>
+		<div class="item">
+			<div class="iframe-na"><?php echo Yii::t('AutoAdmin.form', 'Submit the form in order to be able to edit additional links')?>.</div>
+		</div>
+		<?php
 	}
 	else
 	{
@@ -107,37 +100,28 @@ if(!empty($iframes))
 		array_push($bkp, $bindKeys);
 		foreach($iframes as $iframe)
 		{
-			/*
-			$iframeUrl = ($this->action->id=='index' ? './' : '../')."foreign-{$iframe['action']}/";
-			$iframeUrl = AAHelperUrl::update($iframeUrl, null, array(
-					'foreign'	=> AAHelperUrl::encodeParam($iframe['foreign']),
-				));
-			 */
 			?>
-			<div class="item<?php echo (!empty($iframe['wide']) || in_array('wide', $iframe) ? ' wide' : '')?>">
-			<?php
-			echo CHtml::tag('iframe', array(
-				'src' => AAHelperUrl::update(Yii::app()->request->requestUri, 
-					array('id', 'action'),
-					array(
-							'foreign'	=> $iframe['action'],
-							'bkp'		=> $bkp,
-							'bk'		=> $fields->pk,
-						)
-				)), null, true);
-			if($field->description)
-			{
-				?><div class="desc"><?php echo $field->description?></div><?
-			}
-			?>
+			<div class="item">
+				<?php
+				echo CHtml::tag('iframe', array(
+					'src' => AAHelperUrl::update(Yii::app()->request->requestUri, 
+						array('id', 'action'),
+						array(
+								'foreign'	=> $iframe['action'],
+								'bkp'		=> $bkp,
+								'bk'		=> $fields->pk,
+							)
+					)), null, true);
+				if(!empty($iframe['foreign']->description))
+				{
+					?><div class="desc"><?php echo $iframe['foreign']->description?></div><?
+				}
+				?>
 			</div>
 			<?php
 		}
 	}
 }
-?>
-<div class="br">&nbsp;</div>
-<?php
 echo CHtml::submitButton(Yii::t('AutoAdmin.common', 'Save'), array('name'=>null));
 
 echo CHtml::closeTag('form');

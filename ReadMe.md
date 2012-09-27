@@ -264,6 +264,10 @@ Textareas for HTML-formatted texts. Usually used with TEXT type.
 #### tinytext
 Textareas for short texts without complicated formatting. Usually used with TEXT type.
 
+#### wysiwig
+TineMCE visual text editor. Usually used with TEXT type.
+Note: to use this field you need to install [TineMCE extension](http://www.yiiframework.com/extension/tinymce).
+
 #### num
 Numbers - integer and decimal. Usually used with INTEGER and DECIMAL (NUMERIC, FLOAT etc.) types.
 
@@ -295,7 +299,7 @@ To upload images. Uses database to store path to file only.
 For values from other tables which are linked with the field through a foreign key (you may use virtual connection like as in MyISAM).
 
 ###Spatial field types
-You can manage spatial SQL data in AutoAdmin after installing [the AutoAdminGIS extension](http://www.yiiframework.com/extension/autoadmingis). After that the following field types will be accessible: *gispoint*, *gislinestring*, *gispolygon*. For more information see [AutoAdminGIS page](http://www.yiiframework.com/extension/autoadmingis).
+You can manage spatial SQL data in AutoAdmin after installing [the AutoAdminGIS extension](http://www.yiiframework.com/extension/autoadmingis). After that the following field types will be accessible: **gispoint**, **gislinestring**, **gispolygon**. For more information see [AutoAdminGIS page](http://www.yiiframework.com/extension/autoadmingis).
 
 ###Custom field types
 AudoAdmin is an extendable system. Particularly you can create your own field types by programming classes that implement *AAIField* interface.

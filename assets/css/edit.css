@@ -1,11 +1,10 @@
-form {margin: 0;}
-
-.item {width: 46%; margin-right: 1%; float: left; padding: 5px 1%; border: 3px double #e0e0e0;}
-.item.m {background: #f0f0f0;}
-.block_editor, .block_text {clear: both; width: 95%; margin-right: 0;}
-.block_text2 textarea {height: 100px; width: 500px;}
-.item label {font-weight: bold; color: #555; font-size: 110%;}
-.item textarea, .item select {margin: 5px 0 10px 10px; width: 100%;}
+#editform {margin: 0;}
+.item {width: 45%; padding: 5px 1%; margin: 0 1% 12px; border: 3px double #d0d0d0; background-color: #fafafa; float: left;}
+.item .mceEditor {width: 100%;}
+.block_text, .block_wysiwig {clear: both; width: 75%;}
+.block_text2 textarea {height: 100px; width: 95%;}
+.item label {font-weight: bold; color: #555;}
+.item textarea, .item select {margin: 10px 0 20px; width: 100%;}
 .item.block_foreign select {width: 40%; float: left;}
 .item .foreign-search {float: left; margin: 0 0 4px 10px; background: url('../images/go-left.png') no-repeat left 8px #eee; border: #ddd dashed 1px; padding: 2px 2px 2px 18px;}
 .item.m .foreign-search {background-color: #ddd; border-color: #ccc;}
@@ -35,7 +34,7 @@ input.nullf[type=checkbox] {float: left; margin: 14px 10px 0 5px; box-shadow: 0 
 .nullf input[type=text] {width: 90%;}
 
 .block_num input[type=text] {margin: 10px 10px 20px 10px; width: 60px;}
-input[type=submit] {clear: both; display: block; margin-left: 1%; margin-top: 15px; height: 38px; width: 120px; font-size: 135%; vertical-align: middle;}
+#editform input[type=submit] {clear: both; display: block; margin: 15px 0 0 1%; height: 38px; width: 120px; font-size: 135%; vertical-align: middle;}
 textarea {margin: 2px 0 10px 0; width: 80%; height: 300px; font-size: 15px; font-family: Georgia; color: #000;}
 textarea.small {width: 500px; height: 100px;}
 .form1 {border-width: 2px !important; background-color:#F8320D; color:#FFFFFF; font-weight:bold; font-size:10px;}
@@ -53,7 +52,7 @@ input.helpline {border: none; font-size: 10px; color: #777; width: 327px; backgr
 .time-panel .calendar input {width: 16px; height: 15px; opacity: 0; cursor: pointer; margin: 0;}
 .time-panel .calendar span.mindate, .time-panel .calendar span.maxdate {display: none;}
 label.delfile {margin: 0 5px 0 0; display: block; font-weight: normal; padding-left: 20px;}
-.iframe-na {margin-top: 15px; color: #FA5B00; border: 1px solid #ccc; float: left; width: 90%; padding: 2%;}
+.iframe-na {margin-top: 15px; color: #FA5B00; border: 1px solid #ccc; float: left; width: 90%; padding: 2%; font-style: italic;}
 .item.wide {width: 96%;}
 
 .warning {color: #ff8800;}
