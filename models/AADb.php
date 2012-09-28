@@ -278,10 +278,10 @@ class AADb
 			{
 				$like = array('OR');
 				foreach($this->_data->searchOptions['query'] as $i=>$term)
-					$like[] = array('LIKE', $this->_data->searchOptions['field']->name, self::metaToLike($term));
+					$like[] = array('LIKE', "{$this->_data->searchOptions['field']->tableName}.{$this->_data->searchOptions['field']->name}", self::metaToLike($term));
 			}
 			else
-				$like = array('LIKE', $this->_data->searchOptions['field']->name, self::metaToLike($this->_data->searchOptions['query']));
+				$like = array('LIKE', "{$this->_data->searchOptions['field']->tableName}.{$this->_data->searchOptions['field']->name}", self::metaToLike($this->_data->searchOptions['query']));
 		}
 		$where = ($this->_listQuery->getWhere() ? array('AND', $this->_listQuery->getWhere(), $like) : $like);
 		$this->_listQuery->where($where, $this->_listQuery->params);

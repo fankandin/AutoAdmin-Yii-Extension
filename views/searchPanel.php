@@ -1,6 +1,6 @@
 <?php
-$actionURL = HelperUrl::update($baseURL, array('searchQ', 'searchBy'));
-$getParams = HelperUrl::uriToParamsArray($actionURL);
+$actionURL = AAHelperUrl::update($baseURL, array('searchQ', 'searchBy'));
+$getParams = AAHelperUrl::uriToParamsArray($actionURL);
 if($getParams)
 	$actionURL = HelperUrl::update($actionURL, array_keys($getParams));
 echo CHtml::form($actionURL, 'get', array('id'=>'search-panel'));
