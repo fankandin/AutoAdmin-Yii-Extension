@@ -182,6 +182,7 @@ class AutoAdmin extends CWebModule
 		//Link AADb properties with AutoAdmin properties for more convenient configurating these properties by a user.
 		AADb::$dbConnection =& $this->dbConnection;
 		$this->_db->dbSchema =& $this->dbSchema;
+		AutoAdminAccess::$dbTablePrefix = $this->dbAdminTablePrefix;
 
 		if($this->extensions)
 		{

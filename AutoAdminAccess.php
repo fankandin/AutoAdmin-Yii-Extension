@@ -22,7 +22,16 @@ class AutoAdminAccess
 	 * @var array Preset of the access rights.
 	 */
 	private $rights = array('read', 'add', 'edit', 'delete');
+	/**
+	 *
+	 * @var int Level of the current interface.
+	 */
 	public $level;
+	/**
+	 *
+	 * @var string Prefix for service tables. Can be changed from the config.
+	 */
+	public static $dbTablePrefix = 'aa_';
 
 	/**
 	 * AutoAdminAccess constructor.
@@ -202,6 +211,6 @@ class AutoAdminAccess
 	 */
 	public static function sqlAdminTableName($tableName)
 	{
-		return (!empty(Yii::app()->modules['autoadmin']['dbAdminSchema']) ? Yii::app()->modules['autoadmin']['dbAdminSchema'].'.' : '').Yii::app()->modules['autoadmin']['dbAdminTablePrefix'].$tableName;
+		return (!empty(Yii::app()->modules['autoadmin']['dbAdminSchema']) ? Yii::app()->modules['autoadmin']['dbAdminSchema'].'.' : '').self::$dbTablePrefix.$tableName;
 	}
 }

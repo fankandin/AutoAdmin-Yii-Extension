@@ -52,11 +52,6 @@ $main['components'] = array(
 		//...
 ~~~
 
-We recommend using a separate config for AutoAdmin. It can be easy made by creating a folder (e.g. _[/www/_admin]_) with a copy of _.htaccess_ (with the same ModRewrite rules and perhaps HTTP authorization instructions) and _index.php_ which refers to a separate Yii configuration file. In that case you'll be able to address the AutoAdmin CMS with the URL _http://www.your_site.com/_admin/_ in your browser (*[_admin]* is the just folder with a copy of index.php).
-
-**Note** that if you use a separate www-folder as an entering point (e.g. _[/www/_admin]_) with an edited copy of index.php and a full copy of .htaccess, you should replace _'/<module:autoadmin>'_ with _'/'_ in the _urlManager_ rules.
-_Of course the same effect you can reach by editing the main index.php. But we try to make AutoAdmin be independent and vise versa._
-
 After all, your common AutoAdmin file structure should be something like this (recommended case):
 ~~~
  - protected/
@@ -85,10 +80,6 @@ After all, your common AutoAdmin file structure should be something like this (r
  - - - - views/
  - www/
  - - ...
- - - _admin/
- - - - assets/
- - - - .htaccess
- - - - index.php 
 ~~~
 
 ###Authentication system
@@ -97,7 +88,7 @@ Optionally you can use the built-in AutoAdmin's shared access system.
 
 Firstly import SQL dump which you can find in _[autoAdmin/schemas]_ of the distributive directory. It's recommended to do it in a separate database (if you have such a possibility).
 
-Update the config:
+Add this params to the config:
 ~~~
 [php]
 $main['modules'] = array(
@@ -110,7 +101,7 @@ $main['modules'] = array(
 );
 ~~~
 
-Create a dedicated user for imported with the dump AutoAdmin's service DB and grant him approriate access rights. If you use the only, common DB, just clone settings from a primary connection to "dbAdmin".
+Create a dedicated user for service DB (imported from distributive dump) and grant him approriate access rights. If you use the only, common DB, just clone settings from a primary connection to "dbAdmin".
 
 ~~~
 [php]
