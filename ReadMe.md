@@ -311,5 +311,4 @@ English, russian.
 ##What's next?
 
 * Gii-like auto-generator of interfaces.
-* New field types (WYSIWYG is being ported).
 * Built-in interfaces to read all logs (now you have to list it in DB directly).
