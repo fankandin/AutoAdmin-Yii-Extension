@@ -15,6 +15,12 @@ The extension uses PDO interfaces and was tested on MySQL and PostgreSQL databas
 
 ##Setup
 
+###Quick start
+
+You may download the special [exemplary pack](http://palamarchuk.info/download/AutoAdmin_exemplary_distributive.zip) which is a very good solution for **quick start**. It contains full directories structure, configs, controllers and SQL dump.
+
+###Manual start
+
 _*Note:* There are several enhancements in version 1.1 that have simplified setup process. So for setup of previous versions see an appropriate ReadMe._
 
 There are only two steps to install the AutoAdmin extension:
@@ -107,11 +113,19 @@ Create a dedicated user for service DB (imported from distributive dump) and gra
 [php]
 $main['components'] = array(
 		//...
+	'db' => array(
+		'class'=>'CDbConnection',
+		'connectionString' => 'mysql:host=localhost;dbname=yourdb',
+		'username' => 'yourlogin_that_can_edit',
+		'password' => 'freepussyriot',
+		'charset' => 'utf8',
+			//...
+	),
 	'dbAdmin' => array(
 		'class'=>'CDbConnection',
 		'connectionString' => 'mysql:host=localhost;dbname=yourdb_autoadmin',
 		'username' => 'yourlogin_aa',
-		'password' => 'root',
+		'password' => 'freepussyriot',
 		'charset' => 'utf8',
 			//...
 	),

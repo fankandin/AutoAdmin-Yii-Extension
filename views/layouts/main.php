@@ -13,7 +13,7 @@
 
 <div id="head">
 	<div id="logo"><a href="/_admin/"></a></div>
-	<div id="site-name"><?=Yii::app()->name?></div>
+	<div id="site-name"><?php echo Yii::app()->name;?></div>
 	<div id="cms-name">[Powered by: AutoAdmin CMS&trade;]</div>
 </div>
 <?php

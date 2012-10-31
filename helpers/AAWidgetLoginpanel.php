@@ -41,7 +41,7 @@ final class AAWidgetLoginpanel extends CWidget
 		 */
 		?>
 		<div id="copyright">
-			&copy; 2003-<?=date('Y')?> AutoAdmin CMS Framework
+			&copy; 2003-<?php echo date('Y');?> AutoAdmin CMS Framework
 			<br/>authored by <a target="_blank" href="http://www.palamarchuk.info/">Alexander Palamarchuk</a>
 		</div>
 		<?php
