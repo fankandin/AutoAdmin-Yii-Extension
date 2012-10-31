@@ -2,7 +2,7 @@
 /**
  * 
  * AutoAdmin. Flexible DataBase Management System.
- * @version 1.03a (Yii Framework Edition)
+ * @version 1.1.4 (Yii Framework Edition)
  * @author Alexander Palamarchuk <a@palamarchuk.info>. 2003-2012
  * @copyright Alexander Palamarchuk <a@palamarchuk.info>. 2003-2012
  * 
@@ -708,7 +708,7 @@ class AutoAdmin extends CWebModule
 	 */
 	protected function insert()
 	{
-		if(!isset($_POST[self::INPUT_PREFIX]))
+		if(!isset($_POST[self::INPUT_PREFIX]) && !isset($_FILES[self::INPUT_PREFIX]))
 			throw new CHttpException(400);
 		$affected = 0;
 
@@ -887,7 +887,7 @@ class AutoAdmin extends CWebModule
 			if(!empty($_POST['isChangedAA'][$field->name]) || !empty($_POST['isChangedAA']["{$field->name}_new"]))
 				$field->isChanged = true;
 			if(!$field->isReadonly)
-				$field->loadFromForm($_POST[self::INPUT_PREFIX]);
+				$field->loadFromForm(isset($_POST[self::INPUT_PREFIX]) ? $_POST[self::INPUT_PREFIX] : array());
 		}
 	}
 

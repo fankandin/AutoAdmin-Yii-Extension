@@ -2,7 +2,7 @@
 $actionURL = AAHelperUrl::update($baseURL, array('searchQ', 'searchBy'));
 $getParams = AAHelperUrl::uriToParamsArray($actionURL);
 if($getParams)
-	$actionURL = HelperUrl::update($actionURL, array_keys($getParams));
+	$actionURL = AAHelperUrl::update($actionURL, array_keys($getParams));
 echo CHtml::form($actionURL, 'get', array('id'=>'search-panel'));
 foreach($getParams as $param=>$value)
 	echo CHtml::hiddenField($param, $value);
