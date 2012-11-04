@@ -9,7 +9,7 @@ AutoAdmin includes built-in module to provide shared access to interfaces with d
 
 ##Requirements
 
-Yii 1.1 or above (AutoAdmin requires jQuery 1.7.1 and jQuery UI 1.8).
+PHP 5.3, Yii 1.1x
 
 The extension uses PDO interfaces and was tested on MySQL and PostgreSQL databases.
 
@@ -263,16 +263,40 @@ $this->module->foreignLink('spheres', array(
 
 Much more examples you can find in [the AutoAdmin showroom](http://palamarchuk.info/autoadmin/).
 
-###Field types
-You can easily develope custom field types. A Field class have to inherite AAField and redefine methods you want to make custom.
+###Fields configuration
+Data fields configurations must be set by passing a special-formatted array as an argument to the _AutoAdmin::fieldsConf()_ function.
+~~~
+[php]
+	$this->module->fieldsConf(array(
+		array([SQL field name], [AutoAdmin field type], [Form label], array([options])),
+		//...
+	));
+~~~
 
-AutoAdmin includes the following types:
+AutoAdmin provides various built-in types. Most of them accept the following standart options:
+
+ * _show_: Data from a field should be displayed in the list mode.
+ * _search_: A field can be searched by in the list mode.
+ * _null_: A field can contain the NULL value.
+ * _default_: Field's default value.
+ * _bind_: The list query will be constrained with _WHERE ... AND field-name=bind-value_. The _bind-value_ is the value of this option.
+ * _bindBy_: The list query will be constrained with _WHERE ... AND field-name=bind-value_. The _bind-value_ is a value passed by a parent interface in a parameter named as PrimaryKey field name from a parent interface. Usually it just has _'id'_ value.
+ * _default_: Field's default value.
+ * _pattern_: A regexp pattern as input parameter for HTML 5.
 
 #### string
 Standart text strings. Usually used with VARCHAR SQL type.
 
+Additional options
+
+* _maxlength_: The maximum length of a string.
+
 #### text
 Textareas for HTML-formatted texts. Usually used with TEXT type.
+
+Additional options
+
+* _directoryPath_: HTML-oriented diectory path to upload images to. Won't be stored as part of a value in DB.
 
 #### tinytext
 Textareas for short texts without complicated formatting. Usually used with TEXT type.
@@ -282,10 +306,24 @@ TineMCE visual text editor. Usually used with TEXT type.
 Note: to use this field you need to install [TineMCE extension](http://www.yiiframework.com/extension/tinymce).
 
 #### num
-Numbers - integer and decimal. Usually used with INTEGER and DECIMAL (NUMERIC, FLOAT etc.) types.
+Numbers - integer or decimal. Usually used with INTEGER and DECIMAL (NUMERIC, FLOAT etc.) types.
+
+Additional options:
+
+* _max_: The maximum number.
+* _min_: The minimum number.
 
 #### enum
 Predefined sets of values. Usually used with ENUM type.
+
+Obligatory options:
+
+* _enum_: An array of 'SQL value'=>'Option label' pairs
+
+~~~
+[php]
+	..., 'enum'=>array('deg1'=>'I degree', 'deg2'=>'II degree', 'deg3'=>'III degree'), ...
+~~~
 
 #### date
 Dates. Usually used with DATE type.
@@ -302,20 +340,62 @@ Boolean checkbox (yes or no). Usually used with BOOLEAN type.
 #### password
 For passwords. Will be hashed.
 
-#### file
-To upload files in public areas and give links to them. Uses database to store path to file only.
+Additional options:
+
+* _maxlength_: The maximum password length.
 
 #### image
 To upload images. Uses database to store path to file only.
 
+Obligatory options:
+
+* _directoryPath_: HTML-oriented diectory path to upload images to. Won't be stored as part of a value in DB.
+
+Additional options:
+
+* _description_: Additional info for an upload form.
+* _subDirectoryPath_: Relative directory path after _directoryPath_. Will be stored as part of a value in DB. Used for dynamic subdirectories.
+* _popup_: The boolean parameter used to show images by popuping them instead of inline displaying in the listmode.
+
+~~~
+[php]
+	..., 'directoryPath'=>'/i/flags/120', 'subDirectoryPath'=>date('Ym'), 'description'=> '120x80 px'
+~~~
+
+#### file
+To upload files in public areas and give links to them. Uses database to store path to file only.
+
+Obligatory options:
+
+* _directoryPath_: HTML-oriented diectory path to upload images to. Won't be stored as part of a value in DB.
+
+Additional options:
+
+* _description_: Additional info for an upload form.
+* _subDirectoryPath_: Relative directory path after _directoryPath_. Will be stored as part of a value in DB. Used for dynamic subdirectories.
+
 #### foreign
 For values from other tables which are linked with the field through a foreign key (you may use virtual connection like as in MyISAM).
+
+Obligatory options:
+* _foreign_: Describes one-to-many connections.
+~~~
+[php]
+	..., 'foreign', array(
+		'table'	=> 'continents',
+			'pk'		=> 'id',	//foreign primary key
+			'select'	=> array('name_en'),	//foreign fields to select
+			'order'		=> 'name_en',	//foreign fields to order by
+		), ...
+~~~
 
 ###Spatial field types
 You can manage spatial SQL data in AutoAdmin after installing [the AutoAdminGIS extension](http://www.yiiframework.com/extension/autoadmingis). After that the following field types will be accessible: **gispoint**, **gislinestring**, **gispolygon**. For more information see [AutoAdminGIS page](http://www.yiiframework.com/extension/autoadmingis).
 
 ###Custom field types
 AudoAdmin is an extendable system. Particularly you can create your own field types by programming classes that implement *AAIField* interface.
+
+You may also inherite built-in field-type classes and modify theirs behaviour, add custom options etc.
 
 Complicated content-management tasks may require complex logic custom fields need. In that case you can create a subextension for AutoAdmin. An example of such development is [the AutoAdminGIS extension](http://www.yiiframework.com/extension/autoadmingis).
 

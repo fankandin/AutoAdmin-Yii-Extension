@@ -1,0 +1,6 @@
+#table-select {border-collapse: collapse; margin: 15px 0 15px 15px; border-bottom: 2px solid #999999;}
+#table-select thead th {padding: 18px 7px 11px; font-size: 115%; background-color: #e0e0e0; border-top: 4px double #ccc; border-bottom: 3px solid #ccc; border-left: #f0f0f0 1px solid;}
+#table-select tbody td {padding: 7px; border-bottom: 1px solid #ddd; border-left: #f0f0f0 1px solid;}
+#table-select tbody tr:nth-child(odd) td {}
+#table-select tbody tr:nth-child(even) td {background-color: #f0f0f0; border-left-color: #fff;}
+#table-select thead tr th:first-child, #table-select tbody tr td:first-child {border-left: none;}

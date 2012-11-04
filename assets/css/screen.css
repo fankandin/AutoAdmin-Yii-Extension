@@ -65,12 +65,15 @@ form.list {margin: 0;}
 
 #logout {clear: both; border-top: 3px double #ddd; border-bottom: 1px double #ddd; background: #f0f0f0; text-align: right; margin-top: 25px; padding: 7px 10px 7px 0;}
 #logout-link {background: url('../images/exit.png') no-repeat no-repeat right; display: inline-block; padding-right: 20px;}
-#access-link {background: url('../images/access.png') no-repeat no-repeat left; display: inline-block; padding-left: 18px; margin-top: 10px; vertical-align: middle;}
+#access-link, #generator-link {background-repeat: no-repeat; background-position: left center; display: inline-block; padding-left: 18px; margin-top: 10px; vertical-align: middle;}
+#access-link {background-image: url('../images/access.png');}
+#generator-link {background-image: url('../images/generator.png');}
 #copyright {text-align: right; clear: both; margin-top: 15px; padding-right: 5px; font-size: 85%; color: #999;}
 #copyright a {color: #acc6e2; font-weight: normal;}
 #footer {border-top: 1px dashed #ADADAD; padding: 10px; margin-top: 40px;}
 
-.sourcecode .code {display: none; margin: 5px 30px; padding: 5px 10px; border: 1px solid #ccc; background-color: #f8f8f8;}
+.code {margin: 5px 30px; padding: 5px 10px; border: 1px solid #ccc; background-color: #f8f8f8;}
+.sourcecode .code {display: none;}
 .sourcecode a, .sourcecode a:visited {color: #398138; background: url('../images/plus.png') no-repeat 0 center #f8f8f8; display: inline-block; margin: 10px 20px 5px 20px; padding: 3px 6px 5px 20px; cursor: pointer;}
 .sourcecode a:hover {color: #DC3737;}
 .sourcecode a.opened, .sourcecode a.opened:visited {color: #DC3737; background-image: url('../images/minus.png');}

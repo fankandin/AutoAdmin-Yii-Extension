@@ -174,6 +174,7 @@ class AutoAdmin extends CWebModule
 		$this->controllerMap['aafile'] = array('class'=>'ext.autoAdmin.controllers.AAFileController');
 		$this->controllerMap['aaajax'] = array('class'=>'ext.autoAdmin.controllers.AAAjaxController');
 		$this->controllerMap['aaauth'] = array('class'=>'ext.autoAdmin.controllers.AAAuthController');
+		$this->controllerMap['aagenerator'] = array('class'=>'ext.autoAdmin.controllers.AAGeneratorController');
 		self::$assetPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.autoAdmin.assets'));
 
 		$this->cache = new AACache();

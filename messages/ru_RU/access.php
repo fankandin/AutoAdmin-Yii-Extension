@@ -29,8 +29,8 @@ return array(
 	'Additional information about user' => 'Дополнительная информация о пользователе',
 	'<b>Master</b> can do everything. <b>Administrator</b> can do all but to create new Masters. <b>User</b> is a plain user whose rights can be restricted either by Master and Administrator.'
 		=> '<b>Владелец</b> может делать всё что угодно. <b>Администратор</b> может делать всё, кроме создания новых Владельцев. <b>Пользователь</b> &mdash; рядовой пользователь системы, чьие права могут быть ограничены как Владельцами, так и Администраторами.',
-	'You\'ve been entered as <b>{userName}</b>. It\'s nice to see you!' => 'Вы вошли как <b>{userName}</b>. Рады Вас видеть!',
-	'You\'ve been entered as <b>{userName}</b>' => 'Вы вошли как <b>{userName}</b>',
+	'You\'ve entered as <b>{userName}</b>. It\'s nice to see you!' => 'Вы вошли как <b>{userName}</b>. Рады Вас видеть!',
+	'You\'ve entered as <b>{userName}</b>' => 'Вы вошли как <b>{userName}</b>',
 	'logout' => 'выйти',
 	'Panel\'s users managing' => 'Управление пользователями панели',
 	//
@@ -54,4 +54,5 @@ return array(
 	'All' => 'Все',
 	'Following interfaces have been added' => 'Следующие интерфейсы были добавлены',
 	'Access denied' => 'Доступ запрещён',
+	'You do not have permissions to access' => 'Не достаточно прав для доступа',
 );

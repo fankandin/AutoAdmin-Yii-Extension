@@ -64,7 +64,7 @@ class AAAuthController extends CExtController
 		if(Yii::app()->user->isGuest && $this->isRootDefined())
 			Yii::app()->request->redirect('../login/');
 		elseif(!Yii::app()->user->isGuest && Yii::app()->user->level == 'user')
-			throw new CHttpException(403);
+			throw new CHttpException(403, Yii::t('AutoAdmin.access', 'You do not have permissions to access'));
 		
 		$this->module->dbConnection = 'dbAdmin';
 		$this->module->dbSchema = '';	//We must set to null the default schema, because of all the admin tables are named with AutoAdminAccess::sqlAdminTableName()
@@ -120,7 +120,7 @@ class AAAuthController extends CExtController
 	public function actionSections()
 	{
 		if(Yii::app()->user->isGuest || !in_array(Yii::app()->user->level, array('root', 'admin')))
-			throw new CHttpException(403);
+			throw new CHttpException(403, Yii::t('AutoAdmin.access', 'You do not have permissions to access'));
 			
 		$this->module->dbConnection = 'dbAdmin';
 		$this->module->dbSchema = '';
@@ -148,7 +148,7 @@ class AAAuthController extends CExtController
 	public function actionInterfaces()
 	{
 		if(Yii::app()->user->isGuest || !in_array(Yii::app()->user->level, array('root', 'admin')))
-			throw new CHttpException(403);
+			throw new CHttpException(403, Yii::t('AutoAdmin.access', 'You do not have permissions to access'));
 		$bk = Yii::app()->request->getParam('bk', array('id'=>null));
 		$sectionID = $bk['id'];
 
@@ -224,7 +224,7 @@ class AAAuthController extends CExtController
 	public function actionRights()
 	{
 		if(Yii::app()->user->isGuest || !in_array(Yii::app()->user->level, array('root', 'admin')))
-			throw new CHttpException(403);
+			throw new CHttpException(403, Yii::t('AutoAdmin.access', 'You do not have permissions to access'));
 		$bkp = Yii::app()->request->getParam('bkp', array(0=>array('id'=>null), 1=>array('id'=>null)));
 		$bk = Yii::app()->request->getParam('bk', array('id'=>null));
 		$userID = $bkp[0]['id'];
