@@ -1,6 +1,6 @@
-AutoAdmin is a "CMS framework". It's a perfect solution for web projects with **free designed databases**. It really does for portals as well as for "turnkey websites". Easy-to-Learn and easy-to-use.
+The AutoAdmin is a "CMS framework". It's a perfect solution for web projects with **free designed databases**. It really does for portals as well as for "turnkey websites". Easy-to-Learn and easy-to-use.
 
-AutoAdmin includes built-in module to provide shared access to interfaces with different rights.
+The AutoAdmin includes built-in module to provide shared access to interfaces with different rights.
 
 ##Links
 
@@ -26,7 +26,7 @@ _*Note:* There are several enhancements in version 1.1 that have simplified setu
 There are only two steps to install the AutoAdmin extension:
 
 1. Put the distributive files into _[protected/extensions]_ folder of your Yii application.
-2. Create module folder _[autoadmin]_ in _[protected/modules]_ directory using a standart Yii module structure, but without module class AutoAdminModule.php (which inherites _CWebModule_) - it will be included from the extension. 
+2. Create module folder _[autoadmin]_ in _[protected/modules]_ directory using a standart Yii module structure, but without module class file _AutoAdminModule.php_ (which inherites _CWebModule_) - it will be included from the extension. 
 
 ###Yii config setup
 
@@ -35,7 +35,7 @@ Set necessary parameters:
 [php]
 <?php
 //In this example we read the main config.
-//Note if you use fully separate config just set approriate sections in the returning array.
+//Note if you use a fully separate config just set appropriate sections in the returning array.
 $main = require(dirname(__FILE__).'/main.php');
 
 $main['modules'] = array(
@@ -107,7 +107,7 @@ $main['modules'] = array(
 );
 ~~~
 
-Create a dedicated user for service DB (imported from distributive dump) and grant him approriate access rights. If you use the only, common DB, just clone settings from a primary connection to "dbAdmin".
+Create a dedicated user for service DB (imported from distributive dump) and grant him appropriate access rights. If you use the only, common DB, just clone settings from a primary connection to "dbAdmin".
 
 ~~~
 [php]
@@ -132,7 +132,7 @@ $main['components'] = array(
 		//...
 ~~~
 
-If you use different DB schemas, you may configure them using special params:
+If you use different DB schemes, you may configure them using special params:
 ~~~
 [php]
 $main['modules'] = array(
@@ -273,6 +273,10 @@ Data fields configurations must be set by passing a special-formatted array as a
 	));
 ~~~
 
+To avoid "monkey-coding" you can use the AutoAdmin Code Generator to generate default interfaces (Yii actions) based on SQL tables service info. To use the Generator go to the "_/autoadmin/aagenerator/_" URL or just click on the link in the right bottom corner of any page. The feature requires the root access level (or disabling the authentication system).
+
+![AutoAdmin Code Generator](http://palamarchuk.info/i/autoadmin/autoadmin_gen1.png "")
+
 AutoAdmin provides various built-in types. Most of them accept the following standart options:
 
  * _show_: Data from a field should be displayed in the list mode.
@@ -285,7 +289,7 @@ AutoAdmin provides various built-in types. Most of them accept the following sta
  * _pattern_: A regexp pattern as input parameter for HTML 5.
 
 #### string
-Standart text strings. Usually used with VARCHAR SQL type.
+Classical text strings. Usually used with VARCHAR SQL type.
 
 Additional options
 
@@ -304,6 +308,8 @@ Textareas for short texts without complicated formatting. Usually used with TEXT
 #### wysiwig
 TineMCE visual text editor. Usually used with TEXT type.
 Note: to use this field you need to install [TineMCE extension](http://www.yiiframework.com/extension/tinymce).
+
+*This field is currently experimental.*
 
 #### num
 Numbers - integer or decimal. Usually used with INTEGER and DECIMAL (NUMERIC, FLOAT etc.) types.
@@ -359,7 +365,7 @@ Additional options:
 
 ~~~
 [php]
-	..., 'directoryPath'=>'/i/flags/120', 'subDirectoryPath'=>date('Ym'), 'description'=> '120x80 px'
+	..., 'directoryPath'=>'/i/flags/120', 'subDirectoryPath'=>date('Ym'), 'description'=> '120x80px'
 ~~~
 
 #### file
@@ -390,19 +396,18 @@ Obligatory options:
 ~~~
 
 ###Spatial field types
-You can manage spatial SQL data in AutoAdmin after installing [the AutoAdminGIS extension](http://www.yiiframework.com/extension/autoadmingis). After that the following field types will be accessible: **gispoint**, **gislinestring**, **gispolygon**. For more information see [AutoAdminGIS page](http://www.yiiframework.com/extension/autoadmingis).
+You can manage spatial SQL data in the AutoAdmin after installing [the AutoAdminGIS extension](http://www.yiiframework.com/extension/autoadmingis). After that the following field types will be accessible: **gispoint**, **gislinestring**, **gispolygon**. For more information see [AutoAdminGIS page](http://www.yiiframework.com/extension/autoadmingis).
 
 ###Custom field types
 AudoAdmin is an extendable system. Particularly you can create your own field types by programming classes that implement *AAIField* interface.
 
-You may also inherite built-in field-type classes and modify theirs behaviour, add custom options etc.
+You may also inherit built-in field-type classes and modify theirs behavior, add custom options etc.
 
-Complicated content-management tasks may require complex logic custom fields need. In that case you can create a subextension for AutoAdmin. An example of such development is [the AutoAdminGIS extension](http://www.yiiframework.com/extension/autoadmingis).
+Complicated content-management tasks may require complex logic custom fields need. In that case you can create a sub-extension for the AutoAdmin. An example of such development is [the AutoAdminGIS extension](http://www.yiiframework.com/extension/autoadmingis).
 
 ##Supported languages
-English, russian.
+English, Russian.
 
 ##What's next?
 
-* Gii-like auto-generator of interfaces.
 * Built-in interfaces to read all logs (now you have to list it in DB directly).
