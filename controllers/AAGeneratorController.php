@@ -17,6 +17,7 @@ class AAGeneratorController extends CExtController
 
 		$generator = new AAGenerator($this->module->dbSchema);
 		$this->pageTitle = Yii::t('AutoAdmin.generator', 'SQL table selection');
+		$this->breadcrumbs[] = $this->pageTitle;
 		$this->render($this->module->viewsPath.'generatorTableSelect', array('tables'=>$generator->getTables()));
 	}
 
@@ -35,8 +36,9 @@ class AAGeneratorController extends CExtController
 		elseif(strpos($table, '.')!==false || !in_array($table, $generator->getTableNames()))	//don't allow to add schemas ans DB names in table names
 			throw new CHttpException(400, Yii::t('AutoAdmin.generator', 'Incorrect table "{table}"', array('{table}'=>$table)));
 
-		$this->breadcrumbs[Yii::t('AutoAdmin.generator', 'SQL table selection')] = $this->createUrl('aagenerator/index');
 		$this->pageTitle = Yii::t('AutoAdmin.generator', 'Creation interface for the table "{table}"', array('{table}'=>$table));
+		$this->breadcrumbs[Yii::t('AutoAdmin.generator', 'SQL table selection')] = $this->createUrl('aagenerator/index');
+		$this->breadcrumbs[] = $this->pageTitle;
 		
 		$this->render($this->module->viewsPath.'generatorTableForm', array(
 			'tableName'=>$table,
