@@ -5,7 +5,7 @@ Yii::app()->clientScript
 	->registerCssFile(AutoAdmin::$assetPath.'/lightbox/css/lightbox.css')
 	->registerScriptFile(AutoAdmin::$assetPath.'/lightbox/lightbox.js', CClientScript::POS_END);
 
-if(empty($this->breadcrumbs))
+if(empty($this->breadcrumbs) && $this->pageTitle && !$iframeMode)
 	$this->breadcrumbs = array($this->pageTitle);
 
 $urlEdit = AAHelperUrl::addParam($baseURL, 'action', 'edit');
@@ -282,5 +282,6 @@ if(in_array('add', $rights))
 <?php
 if(!empty($partialViews['down']))
 	$this->renderPartial($partialViews['down'], $clientData);
-$this->widget('AAWidgetLoginpanel', array());
+if(!$iframeMode)
+	$this->widget('AAWidgetLoginpanel', array());
 ?>

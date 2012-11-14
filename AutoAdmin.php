@@ -256,7 +256,7 @@ class AutoAdmin extends CWebModule
 		$this->_viewData = array(
 			'getParams'		=> $_GET,
 			'viewsPath'		=> $this->viewsPath,
-			'iframeMode'	=> $this->_iframeMode,
+			'iframeMode'	=> (bool)$this->_iframeMode,
 		);
 
 		if(parent::beforeControllerAction($controller, $action))

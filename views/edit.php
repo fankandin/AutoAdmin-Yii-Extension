@@ -5,7 +5,7 @@ Yii::app()->clientScript
 
 $url = AAHelperUrl::replaceParam($baseURL, 'action', ($manageAction == 'edit' ? 'update' : 'insert'));
 
-if(empty($this->breadcrumbs))
+if(empty($this->breadcrumbs) && !$iframeMode)
 	$this->breadcrumbs[$this->pageTitle] = AAHelperUrl::stripParam($url, array('action', 'id'));
 else
 {
@@ -127,6 +127,6 @@ echo CHtml::submitButton(Yii::t('AutoAdmin.common', 'Save'), array('name'=>null)
 echo CHtml::closeTag('form');
 if(!empty($partialViews['down']))
 	$this->renderPartial($partialViews['down'], $clientData);
-if(empty($iframeMode))
+if(!$iframeMode)
 	$this->widget('AAWidgetLoginpanel', array());
 ?>
