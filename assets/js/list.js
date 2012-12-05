@@ -12,7 +12,7 @@ function openPopupWindow()
 	admwnd.focus();
 }
 
-var i =0;
+var i = 0;
 function enlightRow()
 {
 	var $this = $(this);
@@ -28,6 +28,9 @@ function enlightRow()
 $(document).ready(function(){
 	$('#data-list td.control .popup').click(openPopupWindow);
 	$('#data-list tr').click(enlightRow);
+	$('#data-list .t-file span.select').click(function() {
+		window.prompt($(this).attr('title'), $(this).parent().find('a.file').attr('href'));
+	});
 	$('#search-panel input[type=reset]').click(function() {
 		var $form = $(this.form);
 		$form.find('[name=searchBy], [name=searchQ]').attr('disabled', true);

@@ -17,4 +17,6 @@ return array(
 	'File to upload' => 'Загружаемый файл',
 	'Error:' => 'Ошибка:',
 	'Popup image' => 'Показать в новом окне',
+	'The file does not exist' => 'Файл не существует',
+	'Press <Ctrl-C> / <Cmd-C> to copy' => 'Нажмите <Ctrl-C> / <Cmd-C> чтобы скопировать',
 );

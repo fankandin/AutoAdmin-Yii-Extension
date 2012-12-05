@@ -57,5 +57,8 @@
 
 .t-foreign {font-size: 90%; color: #555;}
 
-.t-file .file {background-repeat: no-repeat; displat: table-cell; padding-left: 20px; min-height: 16px;}
+.t-file .file {background-repeat: no-repeat; displat: table-cell; padding-left: 20px; min-height: 16px; font-weight: normal;}
+.t-file span.error {background: url('../images/warning.png') no-repeat; width: 16px; height: 16px; margin-left: 12px; display: inline-block; vertical-align: middle;}
+.t-file span.size {color: #ccc; font-style: italic; margin-left: 12px; display: inline-block;}
+.t-file span.select {background: url('../images/select.png') no-repeat; width: 16px; height: 16px; margin-left: 12px; display: inline-block; vertical-align: middle; cursor: pointer;}
 .file.ext {font-size: 90%; font-style: italic; cursor: pointer;}

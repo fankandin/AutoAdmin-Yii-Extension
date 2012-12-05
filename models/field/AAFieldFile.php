@@ -35,11 +35,18 @@ class AAFieldFile extends AAField implements AAIField
 			$ext = mb_substr(mb_strrchr($this->value, '.'), 1);
 			if(!$ext)
 				$ext = '';
-			$spanOptions = array('class'=>'file'.($ext ? " ext-{$ext}" : ''));
-			if(in_array($ext, array('jpg', 'gif', 'png')))
-				return CHtml::link($this->value, "{$this->options['directoryPath']}/{$this->value}", $spanOptions);
+			$linkOpts = array('class'=>'file'.($ext ? " ext-{$ext}" : ''));
+			$pubDir = $this->options['directoryPath'];
+			if($this->options['subDirectoryPath'])
+				$pubDir .= '/'.$this->options['subDirectoryPath'];
+			$html = CHtml::link("{$pubDir}/{$this->value}", "{$pubDir}/{$this->value}", $linkOpts);
+			$html .= CHtml::tag('span', array('class'=>'select', 'title'=>Yii::t('AutoAdmin.form', 'Press <Ctrl-C> / <Cmd-C> to copy')), '');
+			$fileSrc = AAHelperFile::srcToPath("{$pubDir}/{$this->value}");
+			if(!file_exists($fileSrc))
+				$html .= CHtml::tag('span', array('class'=>'error', 'title'=>Yii::t('AutoAdmin.form', 'The file does not exist')));
 			else
-				return CHtml::tag('span', $spanOptions, $this->value);
+				$html .= CHtml::tag('span', array('class'=>'size'), sprintf('(%s&nbsp;MB)', round(filesize($fileSrc)/1024/1024, 2)));
+			return $html;
 		}
 		else
 			return null;
