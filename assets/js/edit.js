@@ -80,7 +80,13 @@ function snapshotInputValue()
 function markChangedField()
 {
 	var $this = $(this);
-	if(snapshotInputData[$this.attr('name')] != ($this.attr('type')=='checkbox' ? $this.attr('checked') : $this.val()))
+	var changed = false;
+	var $parentDiv = $('#AA_content').parents('.item');
+	if($parentDiv.hasClass('block_wysiwig') && $parentDiv.find('iframe').contents().find('body').html() != snapshotInputData[$this.attr('name')])
+		changed = true;
+	else if(snapshotInputData[$this.attr('name')] != ($this.attr('type')=='checkbox' ? $this.attr('checked') : $this.val()))
+		changed = true;
+	if(changed)
 		$(this.form).append('<input type="hidden" name="isChanged'+ $this.attr('name') +'" value="1"/>');
 }
 

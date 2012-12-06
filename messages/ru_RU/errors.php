@@ -36,5 +36,5 @@ return array(
 	'Incorrect breadcrumbs level.' => 'Некорректный уровень хлебных крошек.',
 	'AutoAdmin cannot configure an automatic Action for the foreign interface on "{outAlias}": there is no selectable fields in the parent interface' => 'AutoAdmin не может сконфигурировать автоматическое Действие для foreign-интерфейса на {outAlias}: отсутствуют подходящие для листинговой выборки поля.',
 	'There are no fields with the name {name} in the passed field configuration array' => 'Не существует полей с именем {name} в переданном конфигурационном массиве',
-	'You try to use WYSIWIG field, but the TinyMCE extension not found. Please download it from http://www.yiiframework.com/extension/tinymce and install.' => 'Вы пытаетесь использовать поле WYSIWIG, однако расширение TinyMCE не найдено. Пожалуйста, загрузите его со страницы http://www.yiiframework.com/extension/tinymce и установите.',
+	'You try to use WYSIWIG field, but the TinyMCE directory is not found. Please download the "TinyMCE jQuery package" (from http://www.tinymce.com/download/download.php) and unpack it to [/js/] directory of your DocumentRoot.' => 'Вы пытаетесь использовать поле WYSIWIG, однако расширение TinyMCE не найдено. Пожалуйста, загрузите TinyMCE jQuery package (http://www.tinymce.com/download/download.php) и распакуйте его в директорию [/js/] вашего DocumentRoot.',
 );
