@@ -54,7 +54,7 @@ class AAFieldWysiwig extends AAFieldText
 		if(file_exists(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.Yii::app()->modules['autoadmin']['wwwDirName'].$tinyMceJsPath.str_replace('/', DIRECTORY_SEPARATOR, '/jscripts/tiny_mce/langs/'.$lang.'.js')))
 			$tinyMceOpts['language'] = $lang;
 		//A user can override any TinyMCE options
-		if(!isset($this->options['tinyMCE']['dir']) && is_array(($this->options['tinyMCE']['dir'])))
+		if(isset($this->options['tinyMCE']['dir']) && is_array(($this->options['tinyMCE']['dir'])))
 			$tinyMceOpts = array_merge($tinyMceOpts, $this->options['tinyMCE']['dir']);
 
 		Yii::app()->clientScript->registerScript("js_{$inputID}", '$(function() {$(\'[id="'.$inputID.'"]\').tinymce('.CJSON::encode($tinyMceOpts).');});');
