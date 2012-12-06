@@ -307,9 +307,21 @@ Textareas for short texts without complicated formatting. Usually used with TEXT
 
 #### wysiwig
 TineMCE visual text editor. Usually used with TEXT type.
-Note: to use this field you need to install [TineMCE extension](http://www.yiiframework.com/extension/tinymce).
+To use this field you need to download the ["TinyMCE jQuery package"](http://www.tinymce.com/download/download.php), then unpack it to [/js/] directory of your DocumentRoot. If you use another JS directory you can set it up in options, as well as documented TinyMCE options (overriding the default ones):
 
-*This field is currently experimental.*
+~~~
+[php]
+	...
+	array('content', 'wysiwig', 'Page content', array('show', 'null', 'directoryPath'=>'/i/articles/', 'subDirectoryPath'=>date('Y-m'),
+			'tinyMCE'=>array(
+				'dir'=>'/js/tinymce',
+				'options'=>array(
+					//Documented TineMCE options which you can override individually
+					'plugins' => 'pagebreak,style,layer,table,save,advhr,advimage',
+				),
+			),
+		)),
+~~~
 
 #### num
 Numbers - integer or decimal. Usually used with INTEGER and DECIMAL (NUMERIC, FLOAT etc.) types.
