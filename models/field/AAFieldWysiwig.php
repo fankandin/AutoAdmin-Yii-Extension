@@ -43,19 +43,15 @@ class AAFieldWysiwig extends AAFieldText
 			'theme_advanced_toolbar_location' => 'top',
 			'theme_advanced_toolbar_align' => 'left',
 			'theme_advanced_statusbar_location' => 'bottom',
-			'theme_advanced_resizing : true,
-
-			//Example content CSS (should be your site CSS)
-			//content_css'=>'css/content.css',
-			//Drop lists for link/image/media/template dialogs
+			'theme_advanced_resizing' => true,
 		);
 		//If the current language is presented in the TinyMCE distributive, use it
 		list($lang,) = explode('_', Yii::app()->language);
 		if(file_exists(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.Yii::app()->modules['autoadmin']['wwwDirName'].$tinyMceJsPath.str_replace('/', DIRECTORY_SEPARATOR, '/jscripts/tiny_mce/langs/'.$lang.'.js')))
 			$tinyMceOpts['language'] = $lang;
 		//A user can override any TinyMCE options
-		if(isset($this->options['tinyMCE']['dir']) && is_array(($this->options['tinyMCE']['dir'])))
-			$tinyMceOpts = array_merge($tinyMceOpts, $this->options['tinyMCE']['dir']);
+		if(isset($this->options['tinyMCE']['options']) && is_array(($this->options['tinyMCE']['options'])))
+			$tinyMceOpts = array_merge($tinyMceOpts, $this->options['tinyMCE']['options']);
 
 		Yii::app()->clientScript->registerScript("js_{$inputID}", '$(function() {$(\'[id="'.$inputID.'"]\').tinymce('.CJSON::encode($tinyMceOpts).');});');
 		return ob_get_clean();
