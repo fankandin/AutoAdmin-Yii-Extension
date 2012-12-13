@@ -826,11 +826,10 @@ class AutoAdmin extends CWebModule
 				$this->processQueryError($e);
 				$this->_db->transactionRollback($transaction);
 			}
-		
+	
 			if($affected)
 			{
 				$this->cache->updateDependency();
-
 				if($this->logMode)
 					$this->_access->log('UPDATE', array('pk'=>$pk, 'values'=>$values));
 			}
@@ -874,6 +873,12 @@ class AutoAdmin extends CWebModule
 		{
 			$this->processQueryError($e);
 			$this->_db->transactionRollback($transaction);
+		}
+		if($affected)
+		{
+			$this->cache->updateDependency();
+			if($this->logMode)
+				$this->_access->log('DELETE', array('pk'=>$this->_data->pk));
 		}
 		return $affected;
 	}

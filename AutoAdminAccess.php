@@ -191,7 +191,8 @@ class AutoAdminAccess
 
 	/**
 	 * Logs unconditioned text message which is linked to a current user's session.
-	 * @param string $message 
+	 * @param string $message Message
+	 * @param mixed $data Data linked with this log record
 	 */
 	public function log($message, $data)
 	{

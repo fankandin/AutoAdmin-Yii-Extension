@@ -41,9 +41,9 @@ class AACache
 	 */
 	public function updateDependency($tag=null)
 	{
-		if(!$tag && in_array($tag, $this->_tags))
+		if($tag && in_array($tag, $this->_tags))
 			Yii::app()->setGlobalState($tag, time());
-		elseif($tag)
+		elseif(!$tag)
 		{
 			foreach($this->_tags as $tag)
 				Yii::app()->setGlobalState($tag, time());
