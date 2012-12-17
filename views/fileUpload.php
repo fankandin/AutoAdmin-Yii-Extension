@@ -3,6 +3,7 @@ if(empty($uploadedFileAbs))
 {
 	echo CHtml::form('./?action=upload', 'post', array('enctype'=>'multipart/form-data'));
 	echo CHtml::hiddenField(AutoAdmin::INPUT_PREFIX."[upload][field]", $field);
+	echo CHtml::hiddenField(AutoAdmin::INPUT_PREFIX."[upload][callback]", $callback);
 	?>
 	<h1><?php echo Yii::t('AutoAdmin.form', 'File upload')?></h1>
 	<div class="item">
@@ -41,7 +42,7 @@ else
 	ob_end_clean();
 	?>
 <script type="text/javascript">
-	window.opener.aaInsert('<?php echo $code?>', window.opener.$('#editform').find('[name="<?php echo $fieldName?>"]'));
+	window.opener['<?php echo $callback?>']('<?=$fieldName?>', '<?=$code?>');
 	window.close();
 </script>
 	<?php

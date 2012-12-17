@@ -66,7 +66,7 @@ function aaTextEditorButtonClick()
 	switch(value)
 	{
 		case 'img':
-			aaImgUploadWindow($textEditor);
+			aaImgUploadWindow($textEditor, 'aaImgUploadCallback');
 			break;
 		case 'link':
 			aaInsertUrl($textEditor);
@@ -214,13 +214,6 @@ function aaMozWrap($textEditor, tag, params)
 function aaStoreCaret(textEl) {
 	if(textEl.createTextRange)
 		textEl.caretPos = document.selection.createRange().duplicate();
-}
-
-function aaImgUploadWindow($textEditor)
-{
-	var wtop = (screen.height/2)-(160/2)-20;
-	var wleft = (screen.width/2)-(500/2);
-	window.open('./?action=upload&field='+$textEditor.attr('name'), 'imguploadWindow'+Math.floor(Math.random()*10),'top='+wtop+', left='+wleft+',titlebar=no,toolbar=no,width=500,height=220,directories=no,status=no,scrollbars=no, resize=no,menubar=no');
 }
 
 function tabKeyHandler(e)
