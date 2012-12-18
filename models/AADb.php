@@ -304,10 +304,15 @@ class AADb
 		}
 		foreach($this->_data->fields as $field)
 		{
-			if($field->bind)
+			if(!is_null($field->bind))
 			{
-				$qWhere[] = "{$this->tableName}.{$field->name} = :bk_{$field->name}";
-				$qParams[":bk_{$field->name}"] = $field->bind;
+				if($field->bind == 'NULL')
+					$qWhere[] = "{$this->tableName}.{$field->name} IS NULL";
+				else
+				{
+					$qWhere[] = "{$this->tableName}.{$field->name} = :_bind_{$field->name}";
+					$qParams[":_bind_{$field->name}"] = $field->bind;
+				}
 			}
 		}
 		if($qWhere)

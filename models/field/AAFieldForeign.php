@@ -83,7 +83,8 @@ class AAFieldForeign extends AAField implements AAIField
 		echo CHtml::tag('br');
 		$tagOptions['id'] = $inputID;
 		$value = (!is_null($this->value) ? $this->value : $this->defaultValue);
-
+		if($value instanceof CDbExpression)
+			$value = '';
 		if(!$this->isReadonly && $this->getPossibleValuesCount() <= $this->options['limit'])
 		{
 			if(!$this->allowNull)
