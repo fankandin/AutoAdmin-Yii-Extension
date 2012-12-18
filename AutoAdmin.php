@@ -542,12 +542,21 @@ class AutoAdmin extends CWebModule
 						if($field->options['subDirectoryPath'])
 							$uploadDir .= '/'.$field->options['subDirectoryPath'];
 						
-						$viewData['uploadedFileName'] = AAHelperFile::uploadFile('uploadFile', $uploadDir);
-						$viewData['uploadedFileAbs'] = Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.Yii::app()->modules['autoadmin']['wwwDirName'].str_replace('/', DIRECTORY_SEPARATOR, $uploadDir).DIRECTORY_SEPARATOR.$viewData['uploadedFileName'];
-						$viewData['uploadedFileSrc'] = "{$uploadDir}/{$viewData['uploadedFileName']}";
-						$viewData['alt'] = !empty($upload['alt']) ? $upload['alt'] : '';
-						$viewData['fieldName'] = $field->formInputName();
-						$viewData['callback'] = $upload['callback'];
+						try
+						{
+							$viewData['uploadedFileName'] = AAHelperFile::uploadFile('uploadFile', $uploadDir);
+							$viewData['uploadedFileAbs'] = Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.Yii::app()->modules['autoadmin']['wwwDirName'].str_replace('/', DIRECTORY_SEPARATOR, $uploadDir).DIRECTORY_SEPARATOR.$viewData['uploadedFileName'];
+							$viewData['uploadedFileSrc'] = "{$uploadDir}/{$viewData['uploadedFileName']}";
+							$viewData['alt'] = !empty($upload['alt']) ? $upload['alt'] : '';
+							$viewData['fieldName'] = $field->formInputName();
+							$viewData['callback'] = $upload['callback'];
+						}
+						catch(AAException $e)
+						{
+							$viewData['formError'] = $e->getMessage();
+							$this->_controller->render($this->viewsPath.'fileUpload', $viewData);
+							break;
+						}
 					}
 				}
 				$this->_controller->layout = 'ext.autoAdmin.views.layouts.fileUpload';
@@ -894,10 +903,17 @@ class AutoAdmin extends CWebModule
 	{
 		foreach($this->_data->fields as &$field)
 		{
-			if(!empty($_POST['isChangedAA'][$field->name]) || !empty($_POST['isChangedAA']["{$field->name}_new"]))
-				$field->isChanged = true;
-			if(!$field->isReadonly)
-				$field->loadFromForm(isset($_POST[self::INPUT_PREFIX]) ? $_POST[self::INPUT_PREFIX] : array());
+			try
+			{
+				if(!empty($_POST['isChangedAA'][$field->name]) || !empty($_POST['isChangedAA']["{$field->name}_new"]))
+					$field->isChanged = true;
+				if(!$field->isReadonly)
+					$field->loadFromForm(isset($_POST[self::INPUT_PREFIX]) ? $_POST[self::INPUT_PREFIX] : array());
+			}
+			catch(AAException $e)
+			{
+				$this->processFormError($field, $e->getMessage());
+			}
 		}
 	}
 

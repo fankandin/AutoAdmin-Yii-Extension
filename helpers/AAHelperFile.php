@@ -74,4 +74,17 @@ class AAHelperFile
 			throw new AAException(Yii::t('AutoAdmin.errors', 'The file ({filename}) cannot be copied', array('{filename}'=>$newfname)));
 		return $newfname;
 	}
+
+	/**
+	 * Gets the system setting of MAX_FILE_SIZE for uploaded files.
+	 * @return int Maximum size for uploaded files in bytes.
+	 */
+	public static function maxUploadFileSize()
+	{
+		$maxfilesize = ini_get('upload_max_filesize');
+		$letter = substr($maxfilesize, -1);
+		if(!is_numeric($letter))
+			$maxfilesize *= ($letter == 'M' ? 1048576 : ($letter == 'K' ? 1024 : ($letter == 'G' ? 1073741824 : 1)));
+		return $maxfilesize;
+	}
 }

@@ -1,9 +1,16 @@
 <?php
-if(empty($uploadedFileAbs))
+if(empty($uploadedFileAbs) || !empty($formError))
 {
 	echo CHtml::form('./?action=upload', 'post', array('enctype'=>'multipart/form-data'));
+	echo CHtml::hiddenField('MAX_FILE_SIZE', AAHelperFile::maxUploadFileSize());
 	echo CHtml::hiddenField(AutoAdmin::INPUT_PREFIX."[upload][field]", $field);
 	echo CHtml::hiddenField(AutoAdmin::INPUT_PREFIX."[upload][callback]", $callback);
+	if(!empty($formError))
+	{
+		?>
+		<p class="error"><?php echo Yii::t('AutoAdmin.form', 'Error:').' '.$formError['message']?></p>
+		<?php
+	}
 	?>
 	<h1><?php echo Yii::t('AutoAdmin.form', 'File upload')?></h1>
 	<div class="item">
