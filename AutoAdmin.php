@@ -526,7 +526,10 @@ class AutoAdmin extends CWebModule
 			{
 				if(!$this->_access->checkRight('edit'))
 					$this->blockAccess();
-				$viewData = array('field'=>Yii::app()->request->getParam('field'));
+				$viewData = array(
+					'field'=>Yii::app()->request->getParam('field'),
+					'callback'=>Yii::app()->request->getParam('callback'),
+				);
 				if(!empty($_POST[self::INPUT_PREFIX]['upload']) && !empty($_FILES[self::INPUT_PREFIX]['name']['uploadFile']))
 				{
 					$upload = $_POST[self::INPUT_PREFIX]['upload'];
@@ -544,6 +547,7 @@ class AutoAdmin extends CWebModule
 						$viewData['uploadedFileSrc'] = "{$uploadDir}/{$viewData['uploadedFileName']}";
 						$viewData['alt'] = !empty($upload['alt']) ? $upload['alt'] : '';
 						$viewData['fieldName'] = $field->formInputName();
+						$viewData['callback'] = $upload['callback'];
 					}
 				}
 				$this->_controller->layout = 'ext.autoAdmin.views.layouts.fileUpload';

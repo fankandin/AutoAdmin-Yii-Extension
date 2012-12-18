@@ -97,6 +97,18 @@ function checkboxNewPassword()
 	$input.attr('disabled', !$this.attr('checked'));
 }
 
+function aaImgUploadWindow($textEditor, callback)
+{
+	var wtop = (screen.height/2)-(160/2)-20;
+	var wleft = (screen.width/2)-(500/2);
+	window.open('./?action=upload&callback='+callback+'&field='+$textEditor.attr('name'), 'imguploadWindow'+Math.floor(Math.random()*10),'top='+wtop+', left='+wleft+',titlebar=no,toolbar=no,width=500,height=220,directories=no,status=no,scrollbars=no, resize=no,menubar=no');
+}
+
+function aaImgUploadCallback(fieldName, code)
+{
+	aaInsert(code, $('#editform').find('[name="'+ fieldName +'"]'));
+}
+
 $(document).ready(function(){
 	var $form = $('#editform');
 	filteredInputs($form).each(snapshotInputValue);

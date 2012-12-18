@@ -4,6 +4,7 @@ return array(
 	'<span class="warning">Replace</span> password' => '<span class="warning">Заменить</span> пароль',
 	'<b class="warning">Delete</b> the image' => '<b class="warning">Удалить</b> картинку',
 	'<b class="warning">Delete</b> the file' => '<b class="warning">Удалить</b> файл',
+	'Upload an image' => 'Загрузить картинку',
 	'Add an image' => 'Добавить картинку',
 	'New image' => 'Заменить картинку',
 	'New file' => 'Заменить файл',
