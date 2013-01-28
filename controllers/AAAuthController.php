@@ -87,7 +87,7 @@ class AAAuthController extends CExtController
 			array('email', 'string', Yii::t('AutoAdmin.access', 'E-mail'), array('null', 'maxlength'=>40)),
 			array('surname', 'string', Yii::t('AutoAdmin.access', 'Surname'), array('show', 'search', 'maxlength'=>21)),
 			array('firstname', 'string', Yii::t('AutoAdmin.access', 'First name'), array('show', 'maxlength'=>21)),
-			array('middlename', 'string', Yii::t('AutoAdmin.access', 'Middle name'), array('show', 'maxlength'=>21)),
+			array('middlename', 'string', Yii::t('AutoAdmin.access', 'Middle name'), array('show', 'null', 'maxlength'=>21)),
 			array('regdate', 'datetime', Yii::t('AutoAdmin.access', 'Registration date'), array('readonly', 'default'=>date('Y-m-d H:i:s'))),
 		);
 		$levelOpts =& AutoAdmin::fByNameOpts('level', $fieldsConf);
