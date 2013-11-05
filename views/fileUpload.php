@@ -39,9 +39,9 @@ else
 	{	//Flash
 		?>
 <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" <?php echo $img[3]?>>
-	<param name="movie" value="<?php echo $uploadedFileSrc?>"/>
+	<param name="movie" value="<?=$uploadedFileSrc?>"/>
 	<param name="quality" value="high"/>
-	<embed src="<?php echo $uploadedFileSrc?>" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" <?php echo $img[3]?>></embed>
+	<embed src="<?=$uploadedFileSrc?>" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" <?php echo $img[3]?>></embed>
 </object>
 		<?php
 	}
@@ -49,7 +49,7 @@ else
 	ob_end_clean();
 	?>
 <script type="text/javascript">
-	window.opener['<?php echo $callback?>']('<?=$fieldName?>', '<?=$code?>');
+	window.opener['<?=$callback?>']('<?=$fieldName?>', '<?=$code?>');
 	window.close();
 </script>
 	<?php

@@ -537,7 +537,7 @@ class AutoAdmin extends CWebModule
 					{
 						$field = $this->_data->getFieldByName($matches[1]);
 						if(!isset($field->options['directoryPath']))
-							throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "{paramName}" must be set for the field {fieldName}', array('parameter'=>'directoryPath', '{fieldName}'=>$field->name)));
+							throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "{paramName}" must be set for the field "{fieldName}"', array('parameter'=>'directoryPath', '{fieldName}'=>$field->name)));
 						$uploadDir = $field->options['directoryPath'];
 						if($field->options['subDirectoryPath'])
 							$uploadDir .= '/'.$field->options['subDirectoryPath'];

@@ -44,8 +44,8 @@ class AAHelperFile
 	 *
 	 * @param string $paramName Parameter name as it passed by a form.
 	 * @param string $fileBaseDir A base directory constant for the file (should be used in view scripts as prefix before $filePath from DB table).
+     * @throws AAException
 	 * @return string New file's name.
-	 * @throws CException 
 	 */
 	public static function uploadFile($paramName, $fileBaseDir)
 	{

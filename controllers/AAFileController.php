@@ -7,7 +7,6 @@ class AAFileController extends CExtController
 	public function actionImgupload()
 	{
 		$data = array();
-
 		$this->layout = 'ext.autoAdmin.views.layouts.fileUpload';
 		$data['fieldID'] = Yii::app()->request->getParam('fieldID', '');
 		$data['interface'] = Yii::app()->request->getParam('interface', '');
@@ -28,9 +27,8 @@ class AAFileController extends CExtController
 		$this->render('ext.autoAdmin.views.fileUpload', $data);
 	}
 
-	function copyImage($var, $uploadDir='/i/other')
+	protected function copyImage($var, $uploadDir='/i/other')
 	{
-		$newFileName = '';
 		$newFileName = mb_strtolower(mb_substr($_FILES[$var]['name'], 0, mb_strrpos($_FILES[$var]['name'], '.')));
 		$newFileName = AAHelperText::translite($newFileName);
 		$newFileName = str_replace(' ', '_', $newFileName);

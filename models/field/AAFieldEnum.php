@@ -11,7 +11,7 @@ class AAFieldEnum extends AAField implements AAIField
 	public function completeOptions()
 	{
 		if(!isset($this->options['enum']))
-			throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "{paramName}" must be set for the field {fieldName}', array('{paramName}'=>'enum', '{fieldName}'=>$this->name)));
+			throw new AAException(Yii::t('AutoAdmin.errors', 'The parameter "{paramName}" must be set for the field "{fieldName}"', array('{paramName}'=>'enum', '{fieldName}'=>$this->name)));
 		$this->options['enumValues'] = $this->options['enum'];
 	}
 
