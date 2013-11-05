@@ -314,7 +314,7 @@ class AAData
 	 */
 	public function setSearch($byIndex, $searchQuery)
 	{
-		if(isset($this->fields[$byIndex]) && $this->fields[$byIndex]->options['inSearch'] && $searchQuery !== '')
+		if(isset($this->fields[$byIndex]) && !empty($this->fields[$byIndex]->options['inSearch']) && $searchQuery !== '')
 		{
 			$this->searchOptions = array(
 				'field' => &$this->fields[$byIndex],
