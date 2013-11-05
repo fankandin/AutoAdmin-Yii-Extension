@@ -4,8 +4,11 @@ $getParams = AAHelperUrl::uriToParamsArray($actionURL);
 if($getParams)
 	$actionURL = AAHelperUrl::update($actionURL, array_keys($getParams));
 echo CHtml::form($actionURL, 'get', array('id'=>'search-panel'));
-foreach($getParams as $param=>$value)
-	echo CHtml::hiddenField($param, $value);
+foreach($getParams as $param=>$value) {
+	if(!in_array($param, array('page'))) {	// GET-params we want to exclude from action=""
+		echo CHtml::hiddenField($param, $value);
+	}
+}
 echo CHtml::label(Yii::t('AutoAdmin.common', 'Search').':', 'searchQ');
 echo CHtml::textField('searchQ', (isset($searchOptions['query']) && !is_array($searchOptions['query']) ? $searchOptions['query'] : ''), array('id'=>'searchQ'));
 
