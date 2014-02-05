@@ -232,7 +232,7 @@ class AutoAdmin extends CWebModule
 				throw new CHttpException(403);
 		}
 
-		if(Yii::app()->request->getQuery('foreign', null))
+		if(Yii::app()->request->getQuery('foreign'))
 		{
 			$this->_iframeMode = Yii::app()->request->getQuery('foreign');
 			$this->_controller->layout = 'ext.autoAdmin.views.layouts.iframe';
@@ -401,7 +401,15 @@ class AutoAdmin extends CWebModule
 			if(!$this->_data->fields)
 				throw new AAException(Yii::t('AutoAdmin.errors', 'Function setSubHref() can be called only after fieldsConf()'));
 
-			$this->subHref = $this->_controller->createUrl("{$this->_controller->id}/{$href}");
+			if(Yii::app()->request->getQuery('foreign')) {
+				$this->subHref = $this->_controller->createUrl("/{$this->_controller->id}");
+				$this->subHref = AAHelperUrl::replaceParam($this->subHref, 'foreign', $href);
+			}
+			else
+			{
+				$this->subHref = $this->_controller->createUrl("{$this->_controller->id}/{$href}");
+			}
+
 			//We have to store all parent "bk" sets. So we did it using "bkp" param as a stack.
 			$bk = Yii::app()->request->getParam('bk', array());
 			$bkp = Yii::app()->request->getParam('bkp', array());	//Parent interfaces' bindings
