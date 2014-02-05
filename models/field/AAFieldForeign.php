@@ -38,6 +38,14 @@ class AAFieldForeign extends AAField implements AAIField
 			foreach($this->options['foreign']['select'] as $fieldName)
 				$this->options['select'][$fieldName] = "{$this->options['tableAlias']}_$fieldName";
 		}
+		if(!empty($this->options['foreign']['conditions']))
+		{
+			$this->options['conditions'] = $this->options['foreign']['conditions'];
+			if(!empty($this->options['foreign']['params'])) {
+				$this->options['params'] = $this->options['foreign']['params'];
+			}
+		}
+
 		if(!empty($this->options['foreign']['searchBy']))
 			$this->options['searchBy'] = $this->options['foreign']['searchBy'];
 		elseif($this->options['select'])
