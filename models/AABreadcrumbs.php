@@ -112,7 +112,7 @@ class AABreadcrumbs
 					{
 						foreach($params as $key=>$value)
 						{
-							if(preg_match("/^{$param}\[/i", $key))
+							if(preg_match("/^{$param}\\[/i", $key))
 							{
 								unset($params[$key]);
 								continue 2;
