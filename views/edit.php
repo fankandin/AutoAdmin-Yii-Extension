@@ -105,7 +105,7 @@ if(!empty($iframes))
 				<?php
 				echo CHtml::tag('iframe', array(
 					'src' => AAHelperUrl::update(Yii::app()->request->requestUri, 
-						array('id', 'action'),
+						array('id', 'action', 'page'),
 						array(
 								'foreign'	=> $iframe['action'],
 								'bkp'		=> $bkp,
