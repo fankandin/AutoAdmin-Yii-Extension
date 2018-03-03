@@ -2,24 +2,23 @@ The AutoAdmin is a "CMS framework". It's a perfect solution for web projects wit
 
 The AutoAdmin includes built-in module to provide shared access to interfaces with different rights.
 
-##Links
+## Links
 
-* [Try the Demo](http://palamarchuk.info/autoadmin/)
-* [Yii AutoAdmin Extension on GitHub](https://github.com/vintage-dreamer/AutoAdmin-Yii-Extension)
+* [Yii AutoAdmin Extension on GitHub](https://github.com/fankandin/AutoAdmin-Yii-Extension)
 
-##Requirements
+## Requirements
 
 PHP 5.3, Yii 1.1x
 
 The extension uses PDO interfaces and was tested on MySQL and PostgreSQL databases.
 
-##Setup
+## Setup
 
-###Quick start
+### Quick start
 
-You may download the special [exemplary pack](http://palamarchuk.info/download/AutoAdmin_exemplary_distributive.zip) which is a very good solution for **quick start**. It contains full directories structure, configs, controllers and SQL dump.
+You may download the special [exemplary pack](https://github.com/fankandin/AutoAdmin-Yii-Extension/blob/master/readme/AutoAdmin_exemplary_distributive.zip) which is a very good solution for **quick start**. It contains full directories structure, configs, controllers and SQL dump.
 
-###Manual start
+### Manual start
 
 _*Note:* There are several enhancements in version 1.1 that have simplified setup process. So for setup of previous versions see an appropriate ReadMe._
 
@@ -28,12 +27,10 @@ There are only two steps to install the AutoAdmin extension:
 1. Put the distributive files into _[protected/extensions]_ folder of your Yii application.
 2. Create module folder _[autoadmin]_ in _[protected/modules]_ directory using a standart Yii module structure, but without module class file _AutoAdminModule.php_ (which inherites _CWebModule_) - it will be included from the extension. 
 
-###Yii config setup
+### Yii config setup
 
 Set necessary parameters:
-~~~
-[php]
-<?php
+```php
 //In this example we read the main config.
 //Note if you use a fully separate config just set appropriate sections in the returning array.
 $main = require(dirname(__FILE__).'/main.php');
@@ -56,10 +53,10 @@ $main['components'] = array(
 			'/<module:autoadmin>/<controller:\w+>/<action:\w+>' => 'autoadmin/<controller>/<action>',
 		)
 		//...
-~~~
+```
 
 After all, your common AutoAdmin file structure should be something like this (recommended case):
-~~~
+```
  - protected/
  - - ...
  - - extensions/
@@ -86,17 +83,16 @@ After all, your common AutoAdmin file structure should be something like this (r
  - - - - views/
  - www/
  - - ...
-~~~
+```
 
-###Authentication system
+### Authentication system
 
 Optionally you can use the built-in AutoAdmin's shared access system.
 
 Firstly import SQL dump which you can find in _[autoAdmin/schemas]_ of the distributive directory. It's recommended to do it in a separate database (if you have such a possibility).
 
 Add this params to the config:
-~~~
-[php]
+```php
 $main['modules'] = array(
 	'autoadmin'=>array(
 		//...
@@ -105,12 +101,11 @@ $main['modules'] = array(
 		'logMode' => false,	//Switch log mode
 	),
 );
-~~~
+```
 
 Create a dedicated user for service DB (imported from distributive dump) and grant him appropriate access rights. If you use the only, common DB, just clone settings from a primary connection to "dbAdmin".
 
-~~~
-[php]
+```php
 $main['components'] = array(
 		//...
 	'db' => array(
@@ -130,11 +125,10 @@ $main['components'] = array(
 			//...
 	),
 		//...
-~~~
+```
 
 If you use different DB schemes, you may configure them using special params:
-~~~
-[php]
+```php
 $main['modules'] = array(
 	'autoadmin'=>array(
 		//...
@@ -142,28 +136,25 @@ $main['modules'] = array(
 		'dbAdminSchema' => 'autoadmin',
 	),
 );
-~~~
+```
 
 At first time you enter AutoAdmin you'll be forwarded to the special form to create root (and other) users.
 
 Create actions (AutoAdmin interfaces) and only then grant personal rights to users on them. Use the link in the right bottom corner:
 
-![The link to access sharing interfaces](http://palamarchuk.info/i/autoadmin/autoadmin_shared1.png "")
+![The link to access sharing interfaces](https://github.com/fankandin/AutoAdmin-Yii-Extension/blob/master/readme/autoadmin_shared1.png "")
 
-![Manipulating with interfaces' sharing](http://palamarchuk.info/i/autoadmin/autoadmin_shared2.jpg "")
+![Manipulating with interfaces' sharing](https://github.com/fankandin/AutoAdmin-Yii-Extension/blob/master/readme/autoadmin_shared2.jpg "")
 
-##Usage
+## Usage
 
-You may try real working AutoAdmin CMS [here](http://palamarchuk.info/autoadmin/). In this "showroom" you'll find several good examples of interfaces with source PHP and SQL code.
-
-###Trivial interface
+### Trivial interface
 Let's suppose you have the SQL table:
 
-![SQL structure](http://palamarchuk.info/i/autoadmin/autoadmin_trivial1_sql.png "")
+![SQL structure](https://github.com/fankandin/AutoAdmin-Yii-Extension/blob/master/readme/autoadmin_trivial1_sql.png "")
 
 Then your AutoAdmin action would be like this:
-~~~
-[php]
+```php
 class SportController extends Controller
 {
 	public function actionContinents()
@@ -198,14 +189,13 @@ class SportController extends Controller
 		$this->module->process();
  	}
 }
-~~~
-![Illustration of the trivial interface](http://palamarchuk.info/i/autoadmin/autoadmin_sh1.jpg "")
+```
+![Illustration of the trivial interface](https://github.com/fankandin/AutoAdmin-Yii-Extension/blob/master/readme/autoadmin_sh1.jpg "")
 
-###Complicated interface
-![SQL structure](http://palamarchuk.info/i/autoadmin/autoadmin_compl1_sql.png "")
+### Complicated interface
+![SQL structure](https://github.com/fankandin/AutoAdmin-Yii-Extension/blob/master/readme/autoadmin_compl1_sql.png "")
 
-~~~
-[php]
+```php
 public function actionTeams()
 {
 	$this->module->tableName('teams');	//SQL table name
@@ -242,12 +232,11 @@ public function actionTeams()
 
 	$this->module->process();	//Initiate main processing
 }
-~~~
-![Illustration of the complicated interface](http://palamarchuk.info/i/autoadmin/autoadmin_sh2.jpg "")
+```
+![Illustration of the complicated interface](https://github.com/fankandin/AutoAdmin-Yii-Extension/blob/master/readme/autoadmin_sh2.jpg "")
 
-###Many to many link
-~~~
-[php]
+### Many to many link
+```php
 $this->module->foreignLink('spheres', array(
 	'label'			=> 'The spheres of activity',	//Iframe title
 	'show'			=> true,	//Show in List mode
@@ -258,24 +247,21 @@ $this->module->foreignLink('spheres', array(
 	'targetTable'	=> 'spheres',	//External table on the other side of many-to-many
 	'targetFields'	=> array('title_en'),	//Fields to select for listing
 ));
-~~~
-![Illustration of many-to-many interface](http://palamarchuk.info/i/autoadmin/autoadmin_sh3.jpg "")
+```
+![Illustration of many-to-many interface](https://github.com/fankandin/AutoAdmin-Yii-Extension/blob/master/readme/autoadmin_sh3.jpg "")
 
-Much more examples you can find in [the AutoAdmin showroom](http://palamarchuk.info/autoadmin/).
-
-###Fields configuration
+### Fields configuration
 Data fields configurations must be set by passing a special-formatted array as an argument to the _AutoAdmin::fieldsConf()_ function.
-~~~
-[php]
+```php
 	$this->module->fieldsConf(array(
 		array([SQL field name], [AutoAdmin field type], [Form label], array([options])),
 		//...
 	));
-~~~
+```
 
 To avoid "monkey-coding" you can use the AutoAdmin Code Generator to generate default interfaces (Yii actions) based on SQL tables service info. To use the Generator go to the "_/autoadmin/aagenerator/_" URL or just click on the link in the right bottom corner of any page. The feature requires the root access level (or disabling the authentication system).
 
-![AutoAdmin Code Generator](http://palamarchuk.info/i/autoadmin/autoadmin_gen1.png "")
+![AutoAdmin Code Generator](https://github.com/fankandin/AutoAdmin-Yii-Extension/blob/master/readme/autoadmin_gen1.png "")
 
 AutoAdmin provides various built-in types. Most of them accept the following standart options:
 
@@ -309,8 +295,7 @@ Textareas for short texts without complicated formatting. Usually used with TEXT
 TineMCE visual text editor. Usually used with TEXT type.
 To use this field you need to download the ["TinyMCE jQuery package"](http://www.tinymce.com/download/download.php), then unpack it to [/js/] directory of your DocumentRoot. If you use another JS directory you can set it up in options, as well as documented TinyMCE options (overriding the default ones):
 
-~~~
-[php]
+```php
 	...
 	array('content', 'wysiwig', 'Page content', array('show', 'null', 'directoryPath'=>'/i/articles/', 'subDirectoryPath'=>date('Y-m'),
 			'tinyMCE'=>array(
@@ -321,7 +306,7 @@ To use this field you need to download the ["TinyMCE jQuery package"](http://www
 				),
 			),
 		)),
-~~~
+```
 
 #### num
 Numbers - integer or decimal. Usually used with INTEGER and DECIMAL (NUMERIC, FLOAT etc.) types.
@@ -338,10 +323,9 @@ Obligatory options:
 
 * _enum_: An array of 'SQL value'=>'Option label' pairs
 
-~~~
-[php]
+```php
 	..., 'enum'=>array('deg1'=>'I degree', 'deg2'=>'II degree', 'deg3'=>'III degree'), ...
-~~~
+```
 
 #### date
 Dates. Usually used with DATE type.
@@ -375,10 +359,9 @@ Additional options:
 * _subDirectoryPath_: Relative directory path after _directoryPath_. Will be stored as part of a value in DB. Used for dynamic subdirectories.
 * _popup_: The boolean parameter used to show images by popuping them instead of inline displaying in the listmode.
 
-~~~
-[php]
+```php
 	..., 'directoryPath'=>'/i/flags/120', 'subDirectoryPath'=>date('Ym'), 'description'=> '120x80px'
-~~~
+```
 
 #### file
 To upload files in public areas and give links to them. Uses database to store path to file only.
@@ -397,29 +380,24 @@ For values from other tables which are linked with the field through a foreign k
 
 Obligatory options:
 * _foreign_: Describes one-to-many connections.
-~~~
-[php]
+```php
 	..., 'foreign', array(
 		'table'	=> 'continents',
 			'pk'		=> 'id',	//foreign primary key
 			'select'	=> array('name_en'),	//foreign fields to select
 			'order'		=> 'name_en',	//foreign fields to order by
 		), ...
-~~~
+```
 
-###Spatial field types
+### Spatial field types
 You can manage spatial SQL data in the AutoAdmin after installing [the AutoAdminGIS extension](http://www.yiiframework.com/extension/autoadmingis). After that the following field types will be accessible: **gispoint**, **gislinestring**, **gispolygon**. For more information see [AutoAdminGIS page](http://www.yiiframework.com/extension/autoadmingis).
 
-###Custom field types
+### Custom field types
 AudoAdmin is an extendable system. Particularly you can create your own field types by programming classes that implement *AAIField* interface.
 
 You may also inherit built-in field-type classes and modify theirs behavior, add custom options etc.
 
 Complicated content-management tasks may require complex logic custom fields need. In that case you can create a sub-extension for the AutoAdmin. An example of such development is [the AutoAdminGIS extension](http://www.yiiframework.com/extension/autoadmingis).
 
-##Supported languages
+## Supported languages
 English, Russian.
-
-##What's next?
-
-* Built-in interfaces to read all logs (now you have to list it in DB directly).
